@@ -241,6 +241,21 @@ dialog .full{grid-column:1/-1}
 .opt .acts{display:flex;flex-wrap:wrap;gap:6px}
 .opt .acts .btn{padding:6px 10px;font-size:.82rem}
 .gallery.sm{grid-template-columns:repeat(auto-fill,minmax(min(100%,110px),1fr))}
+.otabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;background:var(--sunk);padding:4px;border-radius:10px}
+.otab{font:600 .9rem var(--body);border:0;background:none;color:var(--muted);padding:8px 4px;border-radius:7px;cursor:pointer;display:grid;gap:2px;min-width:0}
+.otab small{font:500 .72rem var(--body);color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.otab[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.otab .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--ok);margin-left:4px;vertical-align:middle}
+.opanel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:grid;gap:12px;min-width:0;overflow-wrap:anywhere}
+.ofacts{display:flex;flex-wrap:wrap;gap:8px}
+.ofact{background:var(--sunk);border-radius:8px;padding:8px 12px;display:grid;gap:2px;min-width:120px}
+.ofact span{font-size:.75rem;color:var(--muted)}.ofact b{font-size:1rem}
+.okey{margin:0;padding-left:20px;display:grid;gap:4px}
+.ask{background:var(--accent-soft);border-radius:10px;padding:10px 12px;font-size:.88rem}
+.ltile{display:grid;align-content:space-between;gap:6px;padding:10px;min-height:110px;text-decoration:none;color:var(--ink)}
+.ltile .lsrc{font:600 .72rem var(--body);color:var(--crit);text-transform:uppercase;letter-spacing:.04em}
+.ltile .lcap{font-size:.85rem;line-height:1.3}
+.ltile .lgo{font-size:.78rem;color:var(--accent);text-decoration:underline}
 .irows{display:grid;gap:6px}
 .irow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:6px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
 .irow input{font:400 .9rem var(--body);color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:6px 8px;min-width:0}
@@ -476,12 +491,12 @@ dialog .full{grid-column:1/-1}
   </div>
   <div style="display:grid;gap:10px">
     <h3>Vision options</h3>
-    <p class="note">Low is the must-dos and basics. Medium is what buyers expect, with a clear return. High is a premium feel that still pays back. Lux is the dream if money were no object and you were staying.</p>
-    <div class="opts" id="a-opts"></div>
+    <div class="otabs" role="tablist" aria-label="Vision options" id="a-otabs"></div>
+    <div id="a-opts"></div>
   </div>
   <div class="panel" style="display:grid;gap:12px">
-    <div class="galhead"><h3>Inspiration</h3><label class="btn ghost filebtn" id="up-vision-wrap">Add inspiration<input type="file" id="up-vision" accept="image/*" multiple></label></div>
-    <p class="note">Pinterest saves and other rooms you like, to steer the options.</p>
+    <div class="galhead"><h3>Inspiration</h3><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn ghost" id="a-addlink">Add a link</button><label class="btn ghost filebtn" id="up-vision-wrap">Upload a picture<input type="file" id="up-vision" accept="image/*" multiple></label></div></div>
+    <p class="note">Paste a link to a Pinterest pin or any web page you like. On Pinterest, open the pin, tap Share, then Copy link.</p>
     <div class="gallery sm" id="g-vision"></div>
   </div>
   <p class="note" id="a-upmsg" role="status"></p>
@@ -935,6 +950,8 @@ function route(){
   if(page==="history")renderHistory();
 }
 addEventListener("hashchange",()=>{route();scrollTo(0,0)});
+document.addEventListener("keydown",e=>{const t=e.target.closest&&e.target.closest("[data-otab]");if(!t||!["ArrowLeft","ArrowRight","Home","End"].includes(e.key))return;e.preventDefault();
+  const ks=LEVELS.map(l=>l[0]),i=ks.indexOf(t.dataset.otab),n=e.key==="Home"?0:e.key==="End"?ks.length-1:(i+(e.key==="ArrowRight"?1:-1)+ks.length)%ks.length;document.getElementById("otab-"+ks[n]).click()});
 
 (function(){const days=Math.ceil((new Date(2027,8,1)-new Date())/864e5);$("#countdown").textContent=days>0?days+" days":"Listing window open";
  const nm=nowMonth();document.querySelectorAll(".phase").forEach(p=>{if(nm>=p.dataset.start&&nm<=p.dataset.end)p.classList.add("now")})})();
@@ -1079,9 +1096,15 @@ function renderAreas(){
     const p=photosOf(a.slug);const ch=adoc(a.slug).chosen;const pic=(ch&&listOf(a.slug,"opt-"+ch)[0])||p.current[0]||p.vision[0];
     return `<a class="acard" href="#area-${esc(a.slug)}"><div class="thumb" ${pic?`style="background-image:url('${blob(pic.id)}')"`:""}>${pic?"":"No photos yet"}</div><div class="abody"><h3>${esc(a.name)}</h3><div class="ameta"><span>${loaded?od+" open":""}</span><span>${loaded?dn+" done":""}</span><span>${loaded&&cost?"about "+kmoney(cost):""}</span><span>${p.current.length} photos</span>${ch&&LVL[ch]?`<span>${LVL[ch][1]} vision</span>`:""}</div></div></a>`}).join("")}</div></div>`).join("");
 }
+function linkHost(u){try{return new URL(u).hostname.replace(/^www\./,"")}catch(_){return""}}
+const isImgUrl=u=>/\.(jpe?g|png|webp|gif|avif)(\?|#|$)/i.test(u)||/(^|\.)pinimg\.com$/i.test(linkHost(u));
+function linkTile(p,kind,i){const h=linkHost(p.url),pin=/pinterest\.|(^|\.)pin\.it$|pinimg\.com/i.test(h);
+  const rmb=acol?`<button type="button" data-rm="${kind}:${i}">Remove</button>`:"";
+  if(isImgUrl(p.url))return `<div class="tile"><img src="${esc(p.url)}" alt="${esc(p.caption||"Inspiration")}" loading="lazy" referrerpolicy="no-referrer" data-view="${kind}:${i}" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'ghostdrop',textContent:'Picture can\'t be shown here. Tap Open.'}))"><div class="tbar"><a href="${esc(p.url)}" target="_blank" rel="noopener">Open</a>${rmb}</div></div>`;
+  return `<div class="tile"><a class="ltile" href="${esc(p.url)}" target="_blank" rel="noopener"><span class="lsrc">${pin?"Pinterest":esc(h||"Link")}</span><span class="lcap">${esc(p.caption||"No note")}</span><span class="lgo">Open</span></a><div class="tbar"><span>${esc(p.addedAt?new Date(p.addedAt).toLocaleDateString("en-AU",{day:"numeric",month:"short"}):"")}</span>${rmb}</div></div>`}
 function gallery(list,kind){
   if(!list.length)return `<div class="ghostdrop">${kind==="vision"?"No inspiration yet.":kind==="current"?"No current photos yet. Use the button above to add some.":"No images yet."}</div>`;
-  return list.map((p,i)=>`<div class="tile"><img src="${blob(p.id)}" alt="${esc(p.caption||(kind==="current"?"Current photo":"Vision image"))}" loading="lazy" data-view="${kind}:${i}"><div class="tbar"><span>${esc(p.addedAt?new Date(p.addedAt).toLocaleDateString("en-AU",{day:"numeric",month:"short",year:"numeric"}):"")}</span>${assets?`<button type="button" data-rm="${kind}:${i}">Remove</button>`:""}</div></div>`).join("");
+  return list.map((p,i)=>p.url?linkTile(p,kind,i):`<div class="tile"><img src="${blob(p.id)}" alt="${esc(p.caption||(kind==="current"?"Current photo":"Vision image"))}" loading="lazy" data-view="${kind}:${i}"><div class="tbar"><span>${esc(p.addedAt?new Date(p.addedAt).toLocaleDateString("en-AU",{day:"numeric",month:"short",year:"numeric"}):"")}</span>${assets?`<button type="button" data-rm="${kind}:${i}">Remove</button>`:""}</div></div>`).join("");
 }
 function renderArea(){
   const a=AMAP[curArea];if(!a)return;
@@ -1090,7 +1113,7 @@ function renderArea(){
   document.querySelectorAll("[data-aedit]").forEach(b=>b.hidden=!w);
   const p=photosOf(a.slug);
   $("#g-vision").innerHTML=gallery(p.vision,"vision");$("#g-current").innerHTML=gallery(p.current,"current");
-  $("#up-vision-wrap").hidden=$("#up-current-wrap").hidden=!assets;
+  $("#up-vision-wrap").hidden=$("#up-current-wrap").hidden=!assets;$("#a-addlink").hidden=!w;
   const hasOpt=LEVELS.some(([k])=>optOf(a.slug,k).summary||listOf(a.slug,"opt-"+k).length);
   const st=[["Current photos",p.current.length>0,""],["Interview and description",!!d.descAgreed,"descAgreed"],["Vision options",hasOpt,""],["Vision chosen",!!(d.chosen&&LVL[d.chosen]),""],["Tasks agreed",!!d.tasksAgreed,"tasksAgreed"]];
   $("#a-steps").innerHTML=st.map(([l,ok,flag],i)=>`<li class="${ok?"ok":""}"><b>${ok?"✓":i+1}</b>${esc(l)}${flag&&w?` <button type="button" data-step="${flag}">${ok?"Undo":"Mark done"}</button>`:""}</li>`).join("");
@@ -1098,12 +1121,19 @@ function renderArea(){
   $("#a-chosen").innerHTML=ch?`<div class="secthead"><span class="tag t-have">${LVL[ch][1]} option chosen</span>${w?`<button type="button" class="linkbtn" data-oedit="choice">Edit changes</button>`:""}</div>
     <p class="pre">${esc(optOf(a.slug,ch).summary||"")}</p>${d.choiceNotes?`<p class="pre"><b>Changes:</b> ${esc(d.choiceNotes)}</p>`:""}<div class="gallery">${gallery(listOf(a.slug,"opt-"+ch),"opt-"+ch)}</div>`
     :'<p class="note">Not chosen yet. Once the options below are ready, pick one and it shows here.</p>';
-  $("#a-opts").innerHTML=LEVELS.map(([k,l,blurb])=>{const o=optOf(a.slug,k),sel=ch===k;
-    return `<div class="opt${sel?" sel":""}"><div class="secthead"><h4>${l}</h4>${sel?'<span class="tag t-have">Chosen</span>':""}</div><p class="note">${esc(blurb)}</p>
-    <p class="pre">${o.summary?esc(o.summary):'<span class="note">Not written yet.</span>'}</p>
-    ${o.cost||o.time?`<div class="note">${o.cost?"Cost "+esc(o.cost):""}${o.cost&&o.time?". ":""}${o.time?"Time "+esc(o.time):""}</div>`:""}
-    <div class="gallery sm">${gallery(listOf(a.slug,"opt-"+k),"opt-"+k)}</div>
-    ${w?`<div class="acts">${assets?`<label class="btn ghost filebtn">Add images<input type="file" data-up="opt-${k}" accept="image/*" multiple></label>`:""}<button type="button" class="btn ghost" data-oedit="${k}">Edit</button><button type="button" class="btn${sel?" ghost":""}" data-ochoose="${k}">${sel?"Unchoose":"Choose this"}</button></div>`:""}</div>`}).join("");
+  const tabKey="hd-otab-"+a.slug;let cur=ch||"low";try{cur=localStorage.getItem(tabKey)||cur}catch(_){}if(!LVL[cur])cur="low";
+  $("#a-otabs").innerHTML=LEVELS.map(([k,l])=>{const o=optOf(a.slug,k);return `<button type="button" class="otab" role="tab" id="otab-${k}" aria-controls="a-opts" aria-selected="${k===cur}" tabindex="${k===cur?0:-1}" data-otab="${k}"><span>${l}${ch===k?'<span class="dot" title="Chosen"></span>':""}</span><small>${esc(o.cost||"Not costed")}</small></button>`}).join("");
+  {const [k,l,blurb]=LVL[cur],o=optOf(a.slug,cur),sel=ch===k,key=Array.isArray(o.items)?o.items.filter(Boolean):[],imgs=listOf(a.slug,"opt-"+k);
+  const ready=o.summary||key.length||imgs.length;
+  $("#a-opts").setAttribute("aria-labelledby","otab-"+k);
+  $("#a-opts").innerHTML=`<div class="opanel${sel?" sel":""}" role="tabpanel"><div class="secthead"><h4 style="margin:0;font:700 1.1rem var(--display)">${l}${sel?' <span class="tag t-have">Chosen</span>':""}</h4></div>
+    <p class="note" style="margin:0">${esc(blurb)}</p>
+    <div class="ofacts"><div class="ofact"><span>Approx cost</span><b>${esc(o.cost||"Not set")}</b></div><div class="ofact"><span>Timeframe</span><b>${esc(o.time||"Not set")}</b></div></div>
+    ${o.summary?`<p class="pre" style="margin:0">${esc(o.summary)}</p>`:""}
+    ${key.length?`<div><b style="font-size:.9rem">Key things to be done</b><ul class="okey">${key.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`:""}
+    ${imgs.length?`<div class="gallery">${gallery(imgs,"opt-"+k)}</div>`:""}
+    ${ready?"":`<div class="ask">Not ready yet. When the photos and interview are done, ask Claude in the project: <b>"Make the vision options for ${esc(a.name)}"</b>. Claude writes all four options here, with images.</div>`}
+    ${w?`<div class="acts">${assets?`<label class="btn ghost filebtn">Add images<input type="file" data-up="opt-${k}" accept="image/*" multiple></label>`:""}<button type="button" class="btn ghost" data-oedit="${k}">Edit</button><button type="button" class="btn${sel?" ghost":""}" data-ochoose="${k}">${sel?"Unchoose":"Choose this"}</button></div>`:""}</div>`}
   const ts=tasks.filter(t=>t.area===a.slug).sort((x,y)=>(x.due||"9999").localeCompare(y.due||"9999"));
   const live=ts.filter(t=>t.status!=="dropped");
   $("#a-taskhead").textContent=loaded?`Tasks (${live.filter(open).length} open, ${live.filter(t=>t.status==="done").length} done, about ${kmoney(live.reduce((s,t)=>s+mid(t),0))})`:"Tasks";
@@ -1170,16 +1200,20 @@ document.addEventListener("click",async e=>{
     openT(k==="now"?"Now":"Goals for sale",[{k:"txt",l:k==="now"?"How the room is now":"What it needs to be for sale",t:"textarea",v:d[k]||a[k]}],async v=>{const n=JSON.parse(JSON.stringify(d));n[k]=v.txt;await saveArea(curArea,n)});return}
   const oe=e.target.closest("[data-oedit]");if(oe&&curArea){const k=oe.dataset.oedit,d=adoc(curArea);
     if(k==="choice"){openT("Changes to the chosen option",[{k:"txt",l:"What you'd change",t:"textarea",v:d.choiceNotes||""}],async v=>{const n=JSON.parse(JSON.stringify(d));n.choiceNotes=v.txt;await saveArea(curArea,n)});return}
-    const o=optOf(curArea,k);openT(LVL[k][1]+" option",[{k:"summary",l:"What this option includes",t:"textarea",v:o.summary||""},{k:"cost",l:"Rough cost",v:o.cost||""},{k:"time",l:"Rough time",v:o.time||""}],
-      async v=>{const n=JSON.parse(JSON.stringify(d));n.options=n.options||{};n.options[k]=Object.assign({},n.options[k]||{},v);await saveArea(curArea,n)});return}
+    const o=optOf(curArea,k);openT(LVL[k][1]+" option",[{k:"cost",l:"Approx cost",v:o.cost||""},{k:"time",l:"Timeframe",v:o.time||""},{k:"summary",l:"Description",t:"textarea",v:o.summary||""},{k:"items",l:"Key things to be done (one per line)",t:"textarea",v:(Array.isArray(o.items)?o.items:[]).join("\n")}],
+      async v=>{const n=JSON.parse(JSON.stringify(d));n.options=n.options||{};v.items=String(v.items||"").split("\n").map(x=>x.trim()).filter(Boolean);n.options[k]=Object.assign({},n.options[k]||{},v);await saveArea(curArea,n)});return}
+  const ot=e.target.closest("[data-otab]");if(ot&&curArea){try{localStorage.setItem("hd-otab-"+curArea,ot.dataset.otab)}catch(_){}renderArea();const nb=document.getElementById("otab-"+ot.dataset.otab);if(nb)nb.focus();return}
+  if(e.target.id==="a-addlink"&&curArea){const d=adoc(curArea);openT("Add an inspiration link",[{k:"url",l:"Link",v:""},{k:"caption",l:"What you like about it (optional)",v:""}],
+      async v=>{let u=String(v.url||"").trim();if(!u)throw "Paste a link first.";if(!/^https?:\/\//i.test(u))u="https://"+u;try{new URL(u)}catch(_){throw "That doesn't look like a web link."}
+        const l=listOf(curArea,"vision").concat([{url:u,caption:String(v.caption||"").trim(),addedAt:new Date().toISOString()}]);await saveArea(curArea,withList(curArea,"vision",l))});return}
   const oc=e.target.closest("[data-ochoose]");if(oc&&curArea){const k=oc.dataset.ochoose,n=JSON.parse(JSON.stringify(adoc(curArea)));n.chosen=n.chosen===k?"":k;try{await saveArea(curArea,n)}catch(err){$("#a-upmsg").textContent="Couldn't save that. Try again."}return}
   const sp=e.target.closest("[data-step]");if(sp&&curArea){const f=sp.dataset.step,n=JSON.parse(JSON.stringify(adoc(curArea)));n[f]=!n[f];try{await saveArea(curArea,n)}catch(err){$("#a-upmsg").textContent="Couldn't save that. Try again."}return}
-  const v=e.target.closest("[data-view]");if(v){const[k,i]=v.dataset.view.split(":");const p=listOf(curArea,k)[+i];if(p){$("#v-img").src=blob(p.id);$("#v-img").alt=p.caption||"";$("#v-cap").textContent=p.caption||"";$("#viewer").showModal()}return}
+  const v=e.target.closest("[data-view]");if(v){const[k,i]=v.dataset.view.split(":");const p=listOf(curArea,k)[+i];if(p){$("#v-img").src=p.url||blob(p.id);$("#v-img").alt=p.caption||"";$("#v-cap").textContent=p.caption||"";$("#viewer").showModal()}return}
   const rm=e.target.closest("[data-rm]");
   if(rm){
     if(armed!==rm){if(armed)armed.textContent="Remove";armed=rm;rm.textContent="Tap again to remove";return}
     armed=null;const[k,i]=rm.dataset.rm.split(":");const slug=curArea;const l=listOf(slug,k).slice();const gone=l[+i];if(!gone)return;l.splice(+i,1);
-    try{await saveArea(slug,withList(slug,k,l));try{await assets.delete(gone.id)}catch(_){}}catch(err){$("#a-upmsg").textContent="Couldn't remove that photo. Try again."}
+    try{await saveArea(slug,withList(slug,k,l));if(gone.id&&assets){try{await assets.delete(gone.id)}catch(_){}}}catch(err){$("#a-upmsg").textContent="Couldn't remove that photo. Try again."}
     return}
 });
 $("#v-close").addEventListener("click",()=>$("#viewer").close());
@@ -1270,7 +1304,7 @@ function openT(title,fields,save){
 }
 $("#tt-cancel").addEventListener("click",()=>tdlg.close());
 $("#tform").addEventListener("submit",async e=>{e.preventDefault();if(!tSave)return;const v={};tSave.fields.forEach((f,i)=>{if(f.k)v[f.k]=$("#tt-"+i).value.trim()});
-  $("#tt-save").disabled=true;try{await tSave.save(v);tdlg.close()}catch(err){$("#tt-msg").textContent=err===0?"Check the name: it can't be blank or match an existing group.":"Couldn't save. Try again."}finally{$("#tt-save").disabled=false}});
+  $("#tt-save").disabled=true;try{await tSave.save(v);tdlg.close()}catch(err){$("#tt-msg").textContent=typeof err==="string"?err:err===0?"Check the name: it can't be blank or match an existing group.":"Couldn't save. Try again."}finally{$("#tt-save").disabled=false}});
 
 /* DIY item rows */
 function irow(kind,it){
@@ -1506,7 +1540,7 @@ const HSKIP=new Set(["updated_at","updated_by","updated_by_name","created_at","c
 function hLabel(r){const d=r.new_data||r.old_data||{};return d.title||d.name||d.item||(d.num?"#"+d.num:"")||r.row_id||""}
 function hChanges(r){if(r.action!=="update"||!r.old_data||!r.new_data)return"";const ch=Object.keys(r.new_data).filter(k=>!HSKIP.has(k)&&JSON.stringify(r.new_data[k])!==JSON.stringify(r.old_data[k]));
   const ox=r.old_data.extra||{},nx=r.new_data.extra||{};Object.keys(Object.assign({},ox,nx)).forEach(k=>{if(JSON.stringify(ox[k])!==JSON.stringify(nx[k]))ch.push(k)});
-  const L={sort:"order",group_id:"group",now_text:"now",sale_text:"goals for sale",current_photos:"current photos",cost_low:"low estimate",cost_high:"high estimate",est_hours:"estimated hours",act_hours:"actual hours",after_ids:"waits on",contact_id:"contact",repeat_months:"repeat",next_made:"next repeat",desc_agreed:"description agreed",tasks_agreed:"tasks agreed",choice_notes:"choice notes",mats:"materials",conf:"confidence",have:"status"};
+  const L={sort:"order",group_id:"group",now_text:"now",sale_text:"goals for sale",current_photos:"current photos",cost_low:"low estimate",cost_high:"high estimate",est_hours:"estimated hours",act_hours:"actual hours",after_ids:"waits on",contact_id:"contact",repeat_months:"repeat",next_made:"next repeat",desc_agreed:"description agreed",tasks_agreed:"tasks agreed",choice_notes:"choice notes",mats:"materials",conf:"confidence",have:"status",vision:"inspiration"};
   return ch.length?"Changed "+[...new Set(ch.map(k=>L[k]||k.replace(/_/g," ")))].join(", "):""}
 async function renderHistory(){const ul=$("#histlist");try{const rows=await window.homeStore.history(200);
   if(!rows.length){ul.innerHTML='<li class="note">No changes yet.</li>';return}
