@@ -229,8 +229,8 @@ td.r,th.r{text-align:right}
 dialog .full{grid-column:1/-1}
 .tnum{font:500 .78rem var(--mono);color:var(--muted);margin-right:6px}
 .ttags{color:var(--accent)}
-.steps{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
-.steps li{display:flex;align-items:center;gap:6px;font-size:.82rem;padding:6px 10px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--muted)}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:4px}
+.steps li{display:flex;align-items:center;gap:5px;font-size:.76rem;padding:3px 9px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--muted)}
 .steps li.ok{border-color:var(--ok);color:var(--ok);background:var(--ok-soft)}
 .steps li b{font-family:var(--mono);font-weight:500}
 .steps button{background:none;border:0;padding:0;font:600 .75rem var(--body);color:var(--accent);cursor:pointer}
@@ -252,6 +252,26 @@ dialog .full{grid-column:1/-1}
 .ofact span{font-size:.75rem;color:var(--muted)}.ofact b{font-size:1rem}
 .okey{margin:0;padding-left:20px;display:grid;gap:4px}
 .ask{background:var(--accent-soft);border-radius:10px;padding:10px 12px;font-size:.88rem}
+.itabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;background:var(--sunk);padding:4px;border-radius:10px}
+.itab{font:600 .86rem var(--body);border:0;background:none;color:var(--muted);padding:8px 2px;border-radius:7px;cursor:pointer;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.itab small{font:500 .74rem var(--mono);margin-left:4px}
+@media (max-width:440px){.itab small{display:none}}
+.itab[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.ipanel{display:grid;gap:12px;min-width:0}
+.ihead{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.ihead .note{margin:0;flex:1 1 240px}
+.feel{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))}
+.feel>div{background:var(--sunk);border-radius:10px;padding:10px 12px;display:grid;gap:4px;align-content:start;overflow-wrap:anywhere}
+.feel b{font-size:.8rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.feel p{margin:0;font-size:.92rem;white-space:pre-wrap}
+.feel .empty{color:var(--muted);font-style:italic}
+.askc{display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:var(--accent-soft);border-radius:10px;padding:10px 12px}
+.askc p{margin:0;flex:1 1 240px;font-size:.88rem}
+.ivqa{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.ivqa li{display:grid;gap:2px;border-left:3px solid var(--line);padding-left:10px}
+.ivqa .qq{font-weight:600;font-size:.92rem}.ivqa .qans{white-space:pre-wrap;font-size:.92rem}
+.ivqa .linkbtn{justify-self:start;font-size:.8rem}
+.gate{background:var(--sunk);border-radius:10px;padding:10px 12px;font-size:.88rem;margin:0}
 .ltile{display:grid;align-content:space-between;gap:6px;padding:10px;min-height:110px;text-decoration:none;color:var(--ink)}
 .ltile .lsrc{font:600 .72rem var(--body);color:var(--crit);text-transform:uppercase;letter-spacing:.04em}
 .ltile .lcap{font-size:.85rem;line-height:1.3}
@@ -476,33 +496,27 @@ dialog .full{grid-column:1/-1}
     <h2 id="a-name"></h2>
   </div>
   <ol class="steps" id="a-steps" aria-label="Progress for this room"></ol>
-  <div class="two">
-    <div class="panel prose"><div class="secthead"><span class="eyebrow">Now</span><button type="button" class="linkbtn" data-aedit="now">Edit</button></div><p id="a-now" class="pre"></p></div>
-    <div class="panel prose"><div class="secthead"><span class="eyebrow">Goals for sale</span><button type="button" class="linkbtn" data-aedit="sale">Edit</button></div><p id="a-sale" class="pre"></p></div>
-  </div>
   <div class="panel" style="display:grid;gap:12px">
-    <div class="galhead"><h3>Current state</h3><label class="btn ghost filebtn" id="up-current-wrap">Add current photos<input type="file" id="up-current" accept="image/*" multiple></label></div>
-    <p class="note">Wide shots from each doorway or corner, plus close-ups of anything worn, broken or dated.</p>
-    <div class="gallery" id="g-current"></div>
+    <h3 style="margin:0">Images</h3>
+    <div class="itabs" role="tablist" aria-label="Images" id="a-itabs"></div>
+    <div class="ipanel" role="tabpanel" id="a-ipanel"></div>
   </div>
-  <div class="panel" style="display:grid;gap:12px">
-    <h3>The vision</h3>
-    <div id="a-chosen"></div>
+  <div class="panel prose" style="display:grid;gap:12px">
+    <div class="secthead"><h3 style="margin:0">Interview and style direction</h3></div>
+    <div id="a-iv"></div>
   </div>
-  <div style="display:grid;gap:10px">
-    <h3>Vision options</h3>
-    <div class="otabs" role="tablist" aria-label="Vision options" id="a-otabs"></div>
-    <div id="a-opts"></div>
-  </div>
-  <div class="panel" style="display:grid;gap:12px">
-    <div class="galhead"><h3>Inspiration</h3><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn ghost" id="a-addlink">Add a link</button><label class="btn ghost filebtn" id="up-vision-wrap">Upload a picture<input type="file" id="up-vision" accept="image/*" multiple></label></div></div>
-    <p class="note">Paste a link to a Pinterest pin or any web page you like. On Pinterest, open the pin, tap Share, then Copy link.</p>
-    <div class="gallery sm" id="g-vision"></div>
+  <div class="panel prose" style="display:grid;gap:12px">
+    <h3 style="margin:0">Summary and plan</h3>
+    <p class="gate" id="a-plangate"></p><button type="button" class="linkbtn" style="justify-self:start" id="a-pagree" data-step="descAgreed"></button>
+    <div class="two">
+      <div><div class="secthead"><span class="eyebrow">Now</span><button type="button" class="linkbtn" data-aedit="now">Edit</button></div><p id="a-now" class="pre"></p></div>
+      <div><div class="secthead"><span class="eyebrow">Goals for sale</span><button type="button" class="linkbtn" data-aedit="sale">Edit</button></div><p id="a-sale" class="pre"></p></div>
+    </div>
   </div>
   <p class="note" id="a-upmsg" role="status"></p>
   <div style="display:grid;gap:12px">
     <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center">
-      <h3 id="a-taskhead">Tasks</h3>
+      <div><h3 id="a-taskhead" style="margin:0">Tasks</h3><button type="button" class="linkbtn" id="a-tagree" data-step="tasksAgreed"></button></div>
       <button class="btn" id="a-add" type="button">Add task here</button>
     </div>
     <div id="a-tasks" class="tasks"></div>
@@ -1103,7 +1117,7 @@ function linkTile(p,kind,i){const h=linkHost(p.url),pin=/pinterest\.|(^|\.)pin\.
   if(isImgUrl(p.url))return `<div class="tile"><img src="${esc(p.url)}" alt="${esc(p.caption||"Inspiration")}" loading="lazy" referrerpolicy="no-referrer" data-view="${kind}:${i}" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'ghostdrop',textContent:'Picture can\'t be shown here. Tap Open.'}))"><div class="tbar"><a href="${esc(p.url)}" target="_blank" rel="noopener">Open</a>${rmb}</div></div>`;
   return `<div class="tile"><a class="ltile" href="${esc(p.url)}" target="_blank" rel="noopener"><span class="lsrc">${pin?"Pinterest":esc(h||"Link")}</span><span class="lcap">${esc(p.caption||"No note")}</span><span class="lgo">Open</span></a><div class="tbar"><span>${esc(p.addedAt?new Date(p.addedAt).toLocaleDateString("en-AU",{day:"numeric",month:"short"}):"")}</span>${rmb}</div></div>`}
 function gallery(list,kind){
-  if(!list.length)return `<div class="ghostdrop">${kind==="vision"?"No inspiration yet.":kind==="current"?"No current photos yet. Use the button above to add some.":"No images yet."}</div>`;
+  if(!list.length)return `<div class="ghostdrop">${kind==="vision"?"No inspiration yet.":kind==="current"?"No current photos yet. Use the button above to add some.":kind==="after"?"No after photos yet.":"No images yet."}</div>`;
   return list.map((p,i)=>p.url?linkTile(p,kind,i):`<div class="tile"><img src="${blob(p.id)}" alt="${esc(p.caption||(kind==="current"?"Current photo":"Vision image"))}" loading="lazy" data-view="${kind}:${i}"><div class="tbar"><span>${esc(p.addedAt?new Date(p.addedAt).toLocaleDateString("en-AU",{day:"numeric",month:"short",year:"numeric"}):"")}</span>${assets?`<button type="button" data-rm="${kind}:${i}">Remove</button>`:""}</div></div>`).join("");
 }
 function renderArea(){
@@ -1111,29 +1125,46 @@ function renderArea(){
   const d=adoc(a.slug),w=!!acol;
   $("#a-group").textContent=a.group;$("#a-name").textContent=a.name;$("#a-now").textContent=d.now||a.now;$("#a-sale").textContent=d.sale||a.sale;
   document.querySelectorAll("[data-aedit]").forEach(b=>b.hidden=!w);
-  const p=photosOf(a.slug);
-  $("#g-vision").innerHTML=gallery(p.vision,"vision");$("#g-current").innerHTML=gallery(p.current,"current");
-  $("#up-vision-wrap").hidden=$("#up-current-wrap").hidden=!assets;$("#a-addlink").hidden=!w;
+  const p=photosOf(a.slug),ch=d.chosen&&LVL[d.chosen]?d.chosen:"",feel=d.feel||{},iv=Array.isArray(d.interview)?d.interview.filter(x=>x&&(x.q||x.a)):[];
   const hasOpt=LEVELS.some(([k])=>optOf(a.slug,k).summary||listOf(a.slug,"opt-"+k).length);
-  const st=[["Current photos",p.current.length>0,""],["Interview and description",!!d.descAgreed,"descAgreed"],["Vision options",hasOpt,""],["Vision chosen",!!(d.chosen&&LVL[d.chosen]),""],["Tasks agreed",!!d.tasksAgreed,"tasksAgreed"]];
-  $("#a-steps").innerHTML=st.map(([l,ok,flag],i)=>`<li class="${ok?"ok":""}"><b>${ok?"✓":i+1}</b>${esc(l)}${flag&&w?` <button type="button" data-step="${flag}">${ok?"Undo":"Mark done"}</button>`:""}</li>`).join("");
-  const ch=d.chosen&&LVL[d.chosen]?d.chosen:"";
-  $("#a-chosen").innerHTML=ch?`<div class="secthead"><span class="tag t-have">${LVL[ch][1]} option chosen</span>${w?`<button type="button" class="linkbtn" data-oedit="choice">Edit changes</button>`:""}</div>
-    <p class="pre">${esc(optOf(a.slug,ch).summary||"")}</p>${d.choiceNotes?`<p class="pre"><b>Changes:</b> ${esc(d.choiceNotes)}</p>`:""}<div class="gallery">${gallery(listOf(a.slug,"opt-"+ch),"opt-"+ch)}</div>`
-    :'<p class="note">Not chosen yet. Once the options below are ready, pick one and it shows here.</p>';
-  const tabKey="hd-otab-"+a.slug;let cur=ch||"low";try{cur=localStorage.getItem(tabKey)||cur}catch(_){}if(!LVL[cur])cur="low";
-  $("#a-otabs").innerHTML=LEVELS.map(([k,l])=>{const o=optOf(a.slug,k);return `<button type="button" class="otab" role="tab" id="otab-${k}" aria-controls="a-opts" aria-selected="${k===cur}" tabindex="${k===cur?0:-1}" data-otab="${k}"><span>${l}${ch===k?'<span class="dot" title="Chosen"></span>':""}</span><small>${esc(o.cost||"Not costed")}</small></button>`}).join("");
-  {const [k,l,blurb]=LVL[cur],o=optOf(a.slug,cur),sel=ch===k,key=Array.isArray(o.items)?o.items.filter(Boolean):[],imgs=listOf(a.slug,"opt-"+k);
-  const ready=o.summary||key.length||imgs.length;
-  $("#a-opts").setAttribute("aria-labelledby","otab-"+k);
-  $("#a-opts").innerHTML=`<div class="opanel${sel?" sel":""}" role="tabpanel"><div class="secthead"><h4 style="margin:0;font:700 1.1rem var(--display)">${l}${sel?' <span class="tag t-have">Chosen</span>':""}</h4></div>
-    <p class="note" style="margin:0">${esc(blurb)}</p>
+  const liked=Object.values(feel).some(f=>f&&(f.likes||f.dislikes));
+  const st=[["Photos",p.current.length>0],["Likes",!!(d.style||iv.length||liked)],["Visions",hasOpt],["Chosen",!!ch],["Plan",!!d.descAgreed],["Tasks",!!d.tasksAgreed]];
+  $("#a-steps").innerHTML=st.map(([l,ok],i)=>`<li class="${ok?"ok":""}"><b>${ok?"✓":i+1}</b>${esc(l)}</li>`).join("");
+  $("#a-pagree").hidden=$("#a-tagree").hidden=!w;$("#a-pagree").textContent=d.descAgreed?"Undo agreed":"Mark plan agreed";$("#a-tagree").textContent=d.tasksAgreed?"Undo tasks agreed":"Mark tasks agreed";
+  /* image tabs */
+  const IT=[["before","Before",p.current.length],["inspiration","Inspiration",p.vision.length],["vision","Vision",LEVELS.filter(([k])=>optOf(a.slug,k).summary||listOf(a.slug,"opt-"+k).length).length],["after","After",listOf(a.slug,"after").length]];
+  let it="before";try{it=localStorage.getItem("hd-itab-"+a.slug)||it}catch(_){}if(!IT.some(x=>x[0]===it))it="before";
+  $("#a-itabs").innerHTML=IT.map(([k,l,n])=>`<button type="button" class="itab" role="tab" id="itab-${k}" aria-controls="a-ipanel" aria-selected="${k===it}" tabindex="${k===it?0:-1}" data-itab="${k}">${l}${n?`<small>${n}</small>`:""}</button>`).join("");
+  $("#a-ipanel").setAttribute("aria-labelledby","itab-"+it);
+  const fe=feel[it]||{},FQ={before:["What I like about it now","What I don't like"],inspiration:["What I like in these","What I'd avoid"],vision:["What I like in the visions","What I'd change"],after:["What worked","What I'd do differently"]}[it];
+  const feelBox=`<div class="feel"><div><b>${FQ[0]}</b><p class="${fe.likes?"":"empty"}">${esc(fe.likes||"Nothing noted yet.")}</p></div><div><b>${FQ[1]}</b><p class="${fe.dislikes?"":"empty"}">${esc(fe.dislikes||"Nothing noted yet.")}</p></div></div>${w?`<button type="button" class="linkbtn" style="justify-self:start" data-feel="${it}">Edit likes and dislikes</button>`:""}`;
+  const up=(kind,label,id)=>assets?`<label class="btn ghost filebtn">${label}<input type="file"${id?` id="${id}"`:""} data-up="${kind}" accept="image/*" multiple></label>`:"";
+  let ip="";
+  if(it==="before")ip=`<div class="ihead"><p class="note">Wide shots from each doorway or corner, plus close-ups of anything worn, broken or dated. Daylight is best.</p>${up("current","Add current photos","up-current")}</div><div class="gallery">${gallery(p.current,"current")}</div>${feelBox}`;
+  else if(it==="inspiration")ip=`<div class="ihead"><p class="note">Paste a link to a Pinterest pin or any page you like. On Pinterest, open the pin, tap Share, then Copy link.</p><div style="display:flex;gap:8px;flex-wrap:wrap">${w?`<button type="button" class="btn ghost" id="a-addlink">Add a link</button>`:""}${up("vision","Upload a picture","up-vision")}</div></div><div class="gallery sm">${gallery(p.vision,"vision")}</div>${feelBox}`;
+  else if(it==="after")ip=`<div class="ihead"><p class="note">Photos once the work is done, from the same spots as the Before photos, so you can compare and use them for the listing.</p>${up("after","Add after photos","")}</div><div class="gallery">${gallery(listOf(a.slug,"after"),"after")}</div>${feelBox}`;
+  else{
+    const tabKey="hd-otab-"+a.slug;let cur=ch||"low";try{cur=localStorage.getItem(tabKey)||cur}catch(_){}if(!LVL[cur])cur="low";
+    const [k,l,blurb]=LVL[cur],o=optOf(a.slug,cur),sel=ch===k,key=Array.isArray(o.items)?o.items.filter(Boolean):[],imgs=listOf(a.slug,"opt-"+k);
+    const ready=o.summary||key.length||imgs.length;
+    ip=`<div class="askc"><p>${hasOpt?"Claude made these from your Before photos, inspiration, likes and dislikes, and the interview. Add what you'd change below, then ask for a refresh.":"When the Before photos, likes and dislikes and interview are done, ask Claude to make the four options."} Low, Medium and High keep the room's footprint; Lux can change it.</p>${w?`<button type="button" class="btn" id="a-askclaude">${hasOpt?"Ask Claude to refine the visions":"Ask Claude to make the visions"}</button>`:""}<p class="note" id="a-askmsg" role="status" style="flex-basis:100%;margin:0" hidden></p></div>
+    ${ch?`<p class="note" style="margin:0"><b>${LVL[ch][1]} chosen.</b>${d.choiceNotes?" Changes: "+esc(d.choiceNotes):""} ${w?`<button type="button" class="linkbtn" data-oedit="choice">Edit changes</button>`:""}</p>`:""}
+    <div class="otabs" role="tablist" aria-label="Vision options" id="a-otabs">${LEVELS.map(([k2,l2])=>{const o2=optOf(a.slug,k2);return `<button type="button" class="otab" role="tab" id="otab-${k2}" aria-controls="a-opts" aria-selected="${k2===cur}" tabindex="${k2===cur?0:-1}" data-otab="${k2}"><span>${l2}${ch===k2?'<span class="dot" title="Chosen"></span>':""}</span><small>${esc(o2.cost||"Not costed")}</small></button>`}).join("")}</div>
+    <div id="a-opts" aria-labelledby="otab-${k}"><div class="opanel${sel?" sel":""}" role="tabpanel"><div class="secthead"><h4 style="margin:0;font:700 1.1rem var(--display)">${l}${sel?' <span class="tag t-have">Chosen</span>':""}</h4></div>
+    <p class="note" style="margin:0">${esc(blurb)}.${k==="lux"?" May change the layout.":" Same footprint, new fittings and finishes."}</p>
     <div class="ofacts"><div class="ofact"><span>Approx cost</span><b>${esc(o.cost||"Not set")}</b></div><div class="ofact"><span>Timeframe</span><b>${esc(o.time||"Not set")}</b></div></div>
     ${o.summary?`<p class="pre" style="margin:0">${esc(o.summary)}</p>`:""}
     ${key.length?`<div><b style="font-size:.9rem">Key things to be done</b><ul class="okey">${key.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`:""}
     ${imgs.length?`<div class="gallery">${gallery(imgs,"opt-"+k)}</div>`:""}
-    ${ready?"":`<div class="ask">Not ready yet. When the photos and interview are done, ask Claude in the project: <b>"Make the vision options for ${esc(a.name)}"</b>. Claude writes all four options here, with images.</div>`}
-    ${w?`<div class="acts">${assets?`<label class="btn ghost filebtn">Add images<input type="file" data-up="opt-${k}" accept="image/*" multiple></label>`:""}<button type="button" class="btn ghost" data-oedit="${k}">Edit</button><button type="button" class="btn${sel?" ghost":""}" data-ochoose="${k}">${sel?"Unchoose":"Choose this"}</button></div>`:""}</div>`}
+    ${ready?"":`<p class="note" style="margin:0">Not made yet.</p>`}
+    ${w?`<div class="acts">${up("opt-"+k,"Add images","")}<button type="button" class="btn ghost" data-oedit="${k}">Edit</button><button type="button" class="btn${sel?" ghost":""}" data-ochoose="${k}">${sel?"Unchoose":"Choose this"}</button></div>`:""}</div></div>${feelBox}`;
+  }
+  $("#a-ipanel").innerHTML=ip;
+  /* interview */
+  $("#a-iv").innerHTML=`<div><div class="secthead"><span class="eyebrow">Style direction</span>${w?`<button type="button" class="linkbtn" data-iv="style">Edit</button>`:""}</div><p class="pre${d.style?"":" note"}">${esc(d.style||"Not set yet. A line or two on the look you want, for example warm, light and calm with natural textures.")}</p></div>
+    <div><div class="secthead"><span class="eyebrow">Summary</span>${w?`<button type="button" class="linkbtn" data-iv="summary">Edit</button>`:""}</div><p class="pre${d.ivSummary?"":" note"}">${esc(d.ivSummary||"Written from the answers below once the interview is done.")}</p></div>
+    <div><div class="secthead"><span class="eyebrow">Questions and answers</span>${w?`<button type="button" class="linkbtn" data-qa="new">Add a question</button>`:""}</div>${iv.length?`<ol class="ivqa">${iv.map((x,i)=>`<li><span class="qq">${esc(x.q)}</span><span class="qans">${esc(x.a||"Not answered yet.")}</span>${w?`<button type="button" class="linkbtn" data-qa="${i}">Edit</button>`:""}</li>`).join("")}</ol>`:'<p class="note">No interview yet. Claude asks the questions in the project and records the answers here.</p>'}</div>`;
+  $("#a-plangate").textContent=ch?(d.descAgreed?"Agreed. Tasks below follow this plan.":`Based on the ${LVL[ch][1]} vision. Agree this, then the tasks are set from it.`):"This comes after a vision is chosen. Until then it's a rough first note.";
   const ts=tasks.filter(t=>t.area===a.slug).sort((x,y)=>(x.due||"9999").localeCompare(y.due||"9999"));
   const live=ts.filter(t=>t.status!=="dropped");
   $("#a-taskhead").textContent=loaded?`Tasks (${live.filter(open).length} open, ${live.filter(t=>t.status==="done").length} done, about ${kmoney(live.reduce((s,t)=>s+mid(t),0))})`:"Tasks";
@@ -1177,8 +1208,19 @@ async function addPhotos(kind,files){
   msg.textContent=failed?`${added.length} added. ${failed} couldn't be read or uploaded; save them as JPEG and try again.`:`${added.length} added.`;
 }
 document.addEventListener("change",e=>{const u=e.target.closest("input[data-up]");if(u){addPhotos(u.dataset.up,[...u.files]);u.value=""}});
-$("#up-vision").addEventListener("change",e=>{addPhotos("vision",[...e.target.files]);e.target.value=""});
-$("#up-current").addEventListener("change",e=>{addPhotos("current",[...e.target.files]);e.target.value=""});
+
+/* ask Claude for visions */
+let comments=null;
+function askText(slug){const a=AMAP[slug],d=adoc(slug),has=LEVELS.some(([k])=>optOf(slug,k).summary);
+  return `${has?"Refine":"Make"} the vision options for ${a.name} (${slug}). Use the Before photos, inspiration, likes and dislikes, style direction and interview on this room's page${has?", and what I'd change in the visions":""}. Low, Medium and High keep the footprint and change fittings and finishes only; Lux can change the footprint.`}
+async function askClaude(btn){const msg=$("#a-askmsg"),text=askText(curArea);msg.hidden=false;
+  try{if(comments&&await comments.canSendToClaude()==="available"){btn.disabled=true;msg.textContent="Sending…";
+      await comments.sendToClaude({anchor:await comments.anchorFor(btn),text});msg.textContent="Sent. Claude replies in the comment on this button, and the visions appear here when they're ready.";btn.disabled=false;return}}
+  catch(err){btn.disabled=false;if(err&&err.code==="rate_limited"){msg.textContent="Sent recently. Give it a moment before asking again.";return}}
+  try{await navigator.clipboard.writeText(text);msg.textContent="Claude can't be reached from here right now, so the request is copied. Paste it into the project chat."}
+  catch(_){msg.textContent="Paste this into the project chat: "+text}}
+document.addEventListener("keydown",e=>{const t=e.target.closest&&e.target.closest("[data-itab]");if(!t||!["ArrowLeft","ArrowRight","Home","End"].includes(e.key))return;e.preventDefault();
+  const ks=[...document.querySelectorAll("[data-itab]")].map(b=>b.dataset.itab),i=ks.indexOf(t.dataset.itab),n=e.key==="Home"?0:e.key==="End"?ks.length-1:(i+(e.key==="ArrowRight"?1:-1)+ks.length)%ks.length;document.getElementById("itab-"+ks[n]).click()});
 
 /* interactions */
 let armed=null;
@@ -1202,6 +1244,16 @@ document.addEventListener("click",async e=>{
     if(k==="choice"){openT("Changes to the chosen option",[{k:"txt",l:"What you'd change",t:"textarea",v:d.choiceNotes||""}],async v=>{const n=JSON.parse(JSON.stringify(d));n.choiceNotes=v.txt;await saveArea(curArea,n)});return}
     const o=optOf(curArea,k);openT(LVL[k][1]+" option",[{k:"cost",l:"Approx cost",v:o.cost||""},{k:"time",l:"Timeframe",v:o.time||""},{k:"summary",l:"Description",t:"textarea",v:o.summary||""},{k:"items",l:"Key things to be done (one per line)",t:"textarea",v:(Array.isArray(o.items)?o.items:[]).join("\n")}],
       async v=>{const n=JSON.parse(JSON.stringify(d));n.options=n.options||{};v.items=String(v.items||"").split("\n").map(x=>x.trim()).filter(Boolean);n.options[k]=Object.assign({},n.options[k]||{},v);await saveArea(curArea,n)});return}
+  const itb=e.target.closest("[data-itab]");if(itb&&curArea){try{localStorage.setItem("hd-itab-"+curArea,itb.dataset.itab)}catch(_){}renderArea();const nb=document.getElementById("itab-"+itb.dataset.itab);if(nb)nb.focus();return}
+  const fl=e.target.closest("[data-feel]");if(fl&&curArea){const k=fl.dataset.feel,d=adoc(curArea),f=(d.feel||{})[k]||{};
+    openT("Likes and dislikes: "+{before:"Before",inspiration:"Inspiration",vision:"Vision",after:"After"}[k],[{k:"likes",l:"What I like",t:"textarea",v:f.likes||""},{k:"dislikes",l:"What I don't like",t:"textarea",v:f.dislikes||""}],
+      async v=>{const n=JSON.parse(JSON.stringify(d));n.feel=n.feel||{};n.feel[k]={likes:v.likes,dislikes:v.dislikes};await saveArea(curArea,n)});return}
+  const ivb=e.target.closest("[data-iv]");if(ivb&&curArea){const k=ivb.dataset.iv,d=adoc(curArea),f=k==="style"?"style":"ivSummary";
+    openT(k==="style"?"Style direction":"Interview summary",[{k:"txt",l:k==="style"?"The look and feel you want":"Summary of the interview",t:"textarea",v:d[f]||""}],async v=>{const n=JSON.parse(JSON.stringify(d));n[f]=v.txt;await saveArea(curArea,n)});return}
+  const qab=e.target.closest("[data-qa]");if(qab&&curArea){const d=adoc(curArea),list=Array.isArray(d.interview)?d.interview.filter(x=>x&&(x.q||x.a)):[],i=qab.dataset.qa==="new"?-1:+qab.dataset.qa,x=list[i]||{};
+    openT(i<0?"Add a question":"Edit question",[{k:"q",l:"Question",v:x.q||""},{k:"a",l:"Answer",t:"textarea",v:x.a||""},{t:"note",v:"Clear both boxes and save to remove this question."}],
+      async v=>{const n=JSON.parse(JSON.stringify(d));const l=list.slice();if(!v.q&&!v.a){if(i>=0)l.splice(i,1)}else if(i<0)l.push({q:v.q,a:v.a});else l[i]={q:v.q,a:v.a};n.interview=l;await saveArea(curArea,n)});return}
+  if(e.target.id==="a-askclaude"&&curArea){askClaude(e.target);return}
   const ot=e.target.closest("[data-otab]");if(ot&&curArea){try{localStorage.setItem("hd-otab-"+curArea,ot.dataset.otab)}catch(_){}renderArea();const nb=document.getElementById("otab-"+ot.dataset.otab);if(nb)nb.focus();return}
   if(e.target.id==="a-addlink"&&curArea){const d=adoc(curArea);openT("Add an inspiration link",[{k:"url",l:"Link",v:""},{k:"caption",l:"What you like about it (optional)",v:""}],
       async v=>{let u=String(v.url||"").trim();if(!u)throw "Paste a link first.";if(!/^https?:\/\//i.test(u))u="https://"+u;try{new URL(u)}catch(_){throw "That doesn't look like a web link."}
@@ -1569,6 +1621,7 @@ async function renderHistory(){const ul=$("#histlist");try{const rows=await wind
   klcol.onSnapshot(snap=>{const d=snap.docs.find(x=>x.id==="openhome");checklist=d?d.data():{items:[]};renderChecklist()},()=>{});
   try{assets=window.claude&&await window.claude.use("assets")}catch(e){assets=null}
   render();
+  try{comments=window.claude&&await window.claude.use("comments")}catch(e){comments=null}
 })();
 })();
 </script>
