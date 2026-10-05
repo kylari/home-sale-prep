@@ -516,11 +516,7 @@ dialog .full{grid-column:1/-1}
   <div class="panel" style="display:grid;gap:14px">
     <h3 style="margin:0">Summary and plan</h3>
     <p class="gate" id="a-plangate"></p>
-    <div id="a-iv" class="two"></div>
-    <div class="two">
-      <div><div class="secthead"><span class="eyebrow">Now</span><button type="button" class="linkbtn" data-aedit="now">Edit</button></div><p id="a-now" class="pre"></p></div>
-      <div><div class="secthead"><span class="eyebrow">Goals for sale</span><button type="button" class="linkbtn" data-aedit="sale">Edit</button></div><p id="a-sale" class="pre"></p></div>
-    </div>
+    <div><div class="secthead" style="justify-content:flex-end"><button type="button" class="linkbtn" data-aedit="plan">Edit</button></div><p id="a-plan" class="pre" style="margin:0"></p></div>
     <button type="button" class="linkbtn" style="justify-self:start" id="a-pagree" data-step="descAgreed"></button>
   </div>
   <p class="note" id="a-upmsg" role="status"></p>
@@ -1138,12 +1134,12 @@ function gallery(list,kind){
 function renderArea(){
   const a=AMAP[curArea];if(!a)return;
   const d=adoc(a.slug),w=!!acol;
-  $("#a-group").textContent=a.group;$("#a-name").textContent=a.name;$("#a-now").textContent=d.now||a.now;$("#a-sale").textContent=d.sale||a.sale;
+  $("#a-group").textContent=a.group;$("#a-name").textContent=a.name;
   document.querySelectorAll("[data-aedit]").forEach(b=>b.hidden=!w);
   const p=photosOf(a.slug),ch=d.chosen&&LVL[d.chosen]?d.chosen:"",feel=d.feel||{};
   const hasOpt=LEVELS.some(([k])=>optOf(a.slug,k).summary||listOf(a.slug,"opt-"+k).length);
   const liked=["before","inspiration"].some(k=>feelItems(d,k).length);
-  const st=[["Photos",p.current.length>0],["Likes",!!(d.style||d.ivSummary||liked)],["Visions",hasOpt],["Chosen",!!ch],["Plan",!!d.descAgreed],["Tasks",!!d.tasksAgreed]];
+  const st=[["Photos",p.current.length>0],["Likes",liked],["Visions",hasOpt],["Chosen",!!ch],["Plan",!!d.descAgreed],["Tasks",!!d.tasksAgreed]];
   $("#a-steps").innerHTML=st.map(([l,ok],i)=>`<li class="${ok?"ok":""}"><b>${ok?"✓":i+1}</b>${esc(l)}</li>`).join("");
   $("#a-pagree").hidden=$("#a-tagree").hidden=!w;$("#a-pagree").textContent=d.descAgreed?"Undo agreed":"Mark plan agreed";$("#a-tagree").textContent=d.tasksAgreed?"Undo tasks agreed":"Mark tasks agreed";
   /* image tabs */
@@ -1178,8 +1174,7 @@ function renderArea(){
   }
   $("#a-ipanel").innerHTML=ip;
   /* interview */
-  $("#a-iv").innerHTML=`<div><div class="secthead"><span class="eyebrow">Style direction</span>${w?`<button type="button" class="linkbtn" data-iv="style">Edit</button>`:""}</div><p class="pre${d.style?"":" note"}">${esc(d.style||"Not set yet. A line or two on the look you want, for example warm, light and calm with natural textures.")}</p></div>
-    <div><div class="secthead"><span class="eyebrow">What we talked about</span>${w?`<button type="button" class="linkbtn" data-iv="summary">Edit</button>`:""}</div><p class="pre${d.ivSummary?"":" note"}">${esc(d.ivSummary||"A short summary of the chat about this room: how it's used, what bothers you, what to keep.")}</p></div>`;
+  $("#a-plan").textContent=planText(a,d);
   $("#a-plangate").textContent=ch?(d.descAgreed?"Agreed. Tasks below follow this plan.":`Based on the ${LVL[ch][1]} vision. Agree this, then the tasks are set from it.`):"This comes after a vision is chosen. Until then it's a rough first note.";
   const ts=tasks.filter(t=>t.area===a.slug).sort((x,y)=>(x.due||"9999").localeCompare(y.due||"9999"));
   const live=ts.filter(t=>t.status!=="dropped");
@@ -1225,6 +1220,7 @@ async function addPhotos(kind,files){
 }
 document.addEventListener("change",e=>{const u=e.target.closest("input[data-up]");if(u){addPhotos(u.dataset.up,[...u.files]);u.value=""}});
 
+function planText(a,d){if(d.plan)return d.plan;return [d.style?"Style: "+d.style:"",d.ivSummary||"",(d.now||a.now)?"Now: "+(d.now||a.now):"",(d.sale||a.sale)?"Goals for sale: "+(d.sale||a.sale):""].filter(Boolean).join("\n\n")}
 /* likes and dislikes */
 const FACE={like:'<path d="M7.5 12.5l3 3 6-6.5"/>',neutral:'<path d="M8 12h8"/>',dislike:'<path d="M8.5 8.5l7 7M15.5 8.5l-7 7"/>'};
 const FLAB={like:"Like",neutral:"Neutral",dislike:"Don't like"},FNEXT={like:"dislike",dislike:"neutral",neutral:"like"};
@@ -1268,6 +1264,7 @@ document.addEventListener("click",async e=>{
   const ia=e.target.closest("[data-iadd]");if(ia){const box=$("#e-"+ia.dataset.iadd);box.insertAdjacentHTML("beforeend",irow(ia.dataset.iadd,{}));box.lastElementChild.querySelector("input").focus();buyNote();return}
   const ir=e.target.closest("[data-irm]");if(ir){ir.closest(".irow").remove();buyNote();return}
   const ae=e.target.closest("[data-aedit]");if(ae&&curArea){const k=ae.dataset.aedit,a=AMAP[curArea],d=adoc(curArea);
+    if(k==="plan"){openT("Summary and plan",[{k:"txt",l:"Summary and plan",t:"textarea",v:planText(a,d)}],async v=>{const n=JSON.parse(JSON.stringify(d));n.plan=v.txt;await saveArea(curArea,n)});return}
     openT(k==="now"?"Now":"Goals for sale",[{k:"txt",l:k==="now"?"How the room is now":"What it needs to be for sale",t:"textarea",v:d[k]||a[k]}],async v=>{const n=JSON.parse(JSON.stringify(d));n[k]=v.txt;await saveArea(curArea,n)});return}
   const oe=e.target.closest("[data-oedit]");if(oe&&curArea){const k=oe.dataset.oedit,d=adoc(curArea);
     if(k==="choice"){openT("Changes to the chosen option",[{k:"txt",l:"What you'd change",t:"textarea",v:d.choiceNotes||""}],async v=>{const n=JSON.parse(JSON.stringify(d));n.choiceNotes=v.txt;await saveArea(curArea,n)});return}
