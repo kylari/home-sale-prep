@@ -1,0 +1,2475 @@
+{
+ "area_groups": [
+  {
+   "name": "Inside, ground floor",
+   "sort": 0
+  },
+  {
+   "name": "Inside, upper floor",
+   "sort": 1
+  },
+  {
+   "name": "Outside",
+   "sort": 2
+  },
+  {
+   "name": "General",
+   "sort": 3
+  }
+ ],
+ "areas": [
+  {
+   "slug": "entry",
+   "name": "Entry and staircase",
+   "group": "Inside, ground floor",
+   "sort": 1,
+   "now_text": "Tiled entry with curved timber stair. Bags, a console table and a coat stand crowd it.",
+   "sale_text": "Clear, bright first impression. Console with one lamp and a plant."
+  },
+  {
+   "slug": "kitchen",
+   "name": "Kitchen",
+   "group": "Inside, ground floor",
+   "sort": 2,
+   "now_text": "White cabinets, stone-look benches, gas cooktop. In reasonable shape.",
+   "sale_text": "Clear benches, three styled items. Keep as is."
+  },
+  {
+   "slug": "living",
+   "name": "Formal lounge",
+   "group": "Inside, ground floor",
+   "sort": 3,
+   "now_text": "Grey modular sofa, white coffee table, coastal artwork. Dark venetians.",
+   "sale_text": "Formal lounge. Keep the sofa, lighten the windows."
+  },
+  {
+   "slug": "family",
+   "name": "Family room",
+   "group": "Inside, ground floor",
+   "sort": 4,
+   "now_text": "Black leather lounges, timber TV unit, dog bed.",
+   "sale_text": "Relaxed family room facing the alfresco. Soften the leather."
+  },
+  {
+   "slug": "multipurpose",
+   "name": "Ethans room",
+   "group": "Inside, ground floor",
+   "sort": 5,
+   "now_text": "Sewing and craft table, storage drawers, bookcases, desk.",
+   "sale_text": "Home office or second living room. One job only."
+  },
+  {
+   "slug": "retreat",
+   "name": "Office",
+   "group": "Inside, ground floor",
+   "sort": 6,
+   "now_text": "Off the entry and garage. Used as storage and study.",
+   "sale_text": "Study or guest room."
+  },
+  {
+   "slug": "laundry",
+   "name": "Laundry",
+   "group": "Inside, ground floor",
+   "sort": 7,
+   "now_text": "Laundry beside the downstairs bathroom.",
+   "sale_text": "Clear benches, tidy baskets, nothing on the floor."
+  },
+  {
+   "slug": "downstairs-bathroom",
+   "name": "Downstairs bathroom",
+   "group": "Inside, ground floor",
+   "sort": 8,
+   "now_text": "Shower with framed screen, beige tiles, separate toilet.",
+   "sale_text": "Regrout, new fittings, crisp towels."
+  },
+  {
+   "slug": "garage",
+   "name": "Garage",
+   "group": "Inside, ground floor",
+   "sort": 9,
+   "now_text": "Full shelving, pallets, bikes, freezer, car.",
+   "sale_text": "Two clear car spaces and one tidy shelving wall."
+  },
+  {
+   "slug": "dining-gym",
+   "name": "Dining / gym",
+   "group": "Inside, ground floor",
+   "sort": 10,
+   "now_text": "",
+   "sale_text": ""
+  },
+  {
+   "slug": "rumpus",
+   "name": "Rumpus",
+   "group": "Inside, upper floor",
+   "sort": 1,
+   "now_text": "Grey sofa, drum kit, washing baskets, toys.",
+   "sale_text": "Kids' living room or media room."
+  },
+  {
+   "slug": "main-bedroom",
+   "name": "Main bedroom and sun room",
+   "group": "Inside, upper floor",
+   "sort": 2,
+   "now_text": "Large room with sun room alcove and a TV on a dresser.",
+   "sale_text": "Retreat feel. Bed, side tables, reading chairs in the sun room."
+  },
+  {
+   "slug": "ensuite",
+   "name": "Ensuite",
+   "group": "Inside, upper floor",
+   "sort": 3,
+   "now_text": "Double vanity, tiled corner spa with beige hob, framed shower.",
+   "sale_text": "Regrout, tapware, mirror, spa-like styling."
+  },
+  {
+   "slug": "walk-in-robe",
+   "name": "Walk-in robe",
+   "group": "Inside, upper floor",
+   "sort": 4,
+   "now_text": "Full to the top shelf, clothes and bags on the floor.",
+   "sale_text": "Half full, matching baskets, nothing on the floor."
+  },
+  {
+   "slug": "main-bathroom",
+   "name": "Main bathroom",
+   "group": "Inside, upper floor",
+   "sort": 5,
+   "now_text": "Bath, white vanity, beige feature tiles. Used for plants and laundry.",
+   "sale_text": "Clean, simple, spa-like."
+  },
+  {
+   "slug": "bedroom-2",
+   "name": "Bedroom 2",
+   "group": "Inside, upper floor",
+   "sort": 6,
+   "now_text": "Desk, music gear and personal items.",
+   "sale_text": "Bed, side tables, at most one desk, clear walls."
+  },
+  {
+   "slug": "bedroom-3",
+   "name": "Bedroom 3",
+   "group": "Inside, upper floor",
+   "sort": 7,
+   "now_text": "Desk, clothes rack, posters.",
+   "sale_text": "Bed, side tables, at most one desk, clear walls."
+  },
+  {
+   "slug": "bedroom-4",
+   "name": "Bedroom 4",
+   "group": "Inside, upper floor",
+   "sort": 8,
+   "now_text": "Desk, shelving, feature wall, posters.",
+   "sale_text": "Bed, side tables, at most one desk, clear walls."
+  },
+  {
+   "slug": "balcony",
+   "name": "Balcony",
+   "group": "Inside, upper floor",
+   "sort": 9,
+   "now_text": "Iron balustrade, tiled floor, large potted plant.",
+   "sale_text": "Two chairs and a small table for the view photo."
+  },
+  {
+   "slug": "front-yard",
+   "name": "Front yard",
+   "group": "Outside",
+   "sort": 1,
+   "now_text": "Rendered two-storey facade, slatted fence, cypress pines, lawn. Asphalt driveway cracked and stained.",
+   "sale_text": "Street appeal: clean render and fence, fixed driveway, sharp lawn and entry."
+  },
+  {
+   "slug": "back-yard",
+   "name": "Back yard",
+   "group": "Outside",
+   "sort": 2,
+   "now_text": "Two alfresco areas and garden. Mismatched tiles around the house. Few photos yet.",
+   "sale_text": "Outdoor rooms ready for summer, with tiles that read as one finish."
+  },
+  {
+   "slug": "side-yard",
+   "name": "Side yard",
+   "group": "Outside",
+   "sort": 3,
+   "now_text": "Gravel side path with slatted gate.",
+   "sale_text": "Tidy, edged, nothing stored along the house."
+  },
+  {
+   "slug": "pool",
+   "name": "Pool",
+   "group": "Outside",
+   "sort": 4,
+   "now_text": "Fenced in-ground pool with glass and tiled surrounds.",
+   "sale_text": "Sparkling water, clean waterline, certified fencing."
+  },
+  {
+   "slug": "general",
+   "name": "General",
+   "group": "General",
+   "sort": 1,
+   "now_text": "Whole-of-house and admin jobs: appraisals, compliance, quotes, house-wide cleans and styling buys.",
+   "sale_text": "Everything ready, certified and documented before photos."
+  }
+ ],
+ "contacts": [],
+ "tasks": [
+  {
+   "num": 15,
+   "title": "Get two or three agent appraisals and ask what buyers here pay extra for",
+   "area": "general",
+   "type": "Admin",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2026-12",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "tags": [
+    "Agent"
+   ],
+   "notes": "Do this once the plan is drafted and before any big spend. Their answers decide the 'if agents back it' tier.",
+   "id": "k001",
+   "extra": {}
+  },
+  {
+   "num": 33,
+   "title": "Electrician check of smoke alarms and compliance certificate",
+   "area": "general",
+   "type": "Admin",
+   "tier": "must",
+   "who": "Trade",
+   "status": "todo",
+   "due": "2027-03",
+   "cost_low": 150.0,
+   "cost_high": 400.0,
+   "actual": 0.0,
+   "tags": [
+    "Electrician",
+    "Smoke alarms"
+   ],
+   "notes": "Must be photoelectric, interconnected, in every bedroom, hallways linking bedrooms and every level. Cost is higher if alarms need upgrading.",
+   "id": "k002",
+   "extra": {}
+  },
+  {
+   "num": 32,
+   "title": "Early pool safety inspection to find any fixes",
+   "area": "pool",
+   "type": "Admin",
+   "tier": "must",
+   "who": "Trade",
+   "status": "todo",
+   "due": "2027-02",
+   "cost_low": 150.0,
+   "cost_high": 250.0,
+   "actual": 0.0,
+   "tags": [
+    "Pool"
+   ],
+   "notes": "Find gate, fence and climbable-object issues early. Get the certificate itself in July 2027; it lasts two years.",
+   "id": "k003",
+   "extra": {}
+  },
+  {
+   "num": 77,
+   "title": "Pool safety certificate",
+   "area": "pool",
+   "type": "Admin",
+   "tier": "must",
+   "who": "Trade",
+   "status": "todo",
+   "due": "2027-07",
+   "cost_low": 150.0,
+   "cost_high": 250.0,
+   "actual": 0.0,
+   "tags": [
+    "Pool"
+   ],
+   "after_ids": [
+    "k003"
+   ],
+   "notes": "Avoids giving buyers a Form 36 notice.",
+   "id": "k004",
+   "extra": {}
+  },
+  {
+   "num": 25,
+   "title": "Pre-sale building and pest inspection",
+   "area": "general",
+   "type": "Admin",
+   "tier": "worth",
+   "who": "Trade",
+   "status": "todo",
+   "due": "2027-02",
+   "cost_low": 500.0,
+   "cost_high": 800.0,
+   "actual": 0.0,
+   "tags": [
+    "Inspection"
+   ],
+   "notes": "Finds issues before a buyer's inspector does, so you fix them on your terms.",
+   "id": "k005",
+   "extra": {}
+  },
+  {
+   "num": 18,
+   "title": "Garage declutter: shelving, pallets, bikes, freezer",
+   "area": "garage",
+   "type": "Declutter",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2026-12",
+   "cost_low": 0.0,
+   "cost_high": 400.0,
+   "actual": 0.0,
+   "tags": [
+    "Rubbish run"
+   ],
+   "notes": "Aim for both car spaces visibly clear. Allow for a skip bin.",
+   "id": "k006",
+   "extra": {}
+  },
+  {
+   "num": 24,
+   "title": "Walk-in robe declutter",
+   "area": "walk-in-robe",
+   "type": "Declutter",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-01",
+   "cost_low": 0.0,
+   "cost_high": 150.0,
+   "actual": 0.0,
+   "tags": [],
+   "notes": "Half full, matching baskets, nothing on the floor.",
+   "id": "k007",
+   "extra": {}
+  },
+  {
+   "num": 21,
+   "title": "Linen cupboard declutter",
+   "area": "general",
+   "type": "Declutter",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-01",
+   "cost_low": 0.0,
+   "cost_high": 150.0,
+   "actual": 0.0,
+   "tags": [],
+   "notes": "Half full, matching baskets, nothing on the floor.",
+   "id": "k008",
+   "extra": {}
+  },
+  {
+   "num": 27,
+   "title": "Give this room one clear purpose",
+   "area": "multipurpose",
+   "type": "Declutter",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-02",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "tags": [],
+   "notes": "Move craft, music and gym gear out of the rooms buyers will see as living or bedrooms.",
+   "id": "k009",
+   "extra": {}
+  },
+  {
+   "num": 28,
+   "title": "Give this room one clear purpose",
+   "area": "retreat",
+   "type": "Declutter",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-02",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "tags": [],
+   "notes": "Move craft, music and gym gear out of the rooms buyers will see as living or bedrooms.",
+   "id": "k010",
+   "extra": {}
+  },
+  {
+   "num": 29,
+   "title": "Give this room one clear purpose",
+   "area": "rumpus",
+   "type": "Declutter",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-02",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "tags": [],
+   "notes": "Move craft, music and gym gear out of the rooms buyers will see as living or bedrooms.",
+   "id": "k011",
+   "extra": {}
+  },
+  {
+   "num": 30,
+   "title": "Give this room one clear purpose",
+   "area": "main-bedroom",
+   "type": "Declutter",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-02",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "tags": [],
+   "notes": "Move craft, music and gym gear out of the rooms buyers will see as living or bedrooms.",
+   "id": "k012",
+   "extra": {}
+  },
+  {
+   "num": 40,
+   "title": "Clear desks, racks and music gear",
+   "area": "bedroom-2",
+   "type": "Declutter",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-03",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "tags": [],
+   "notes": "",
+   "id": "k013",
+   "extra": {}
+  },
+  {
+   "num": 41,
+   "title": "Clear desks, racks and music gear",
+   "area": "bedroom-3",
+   "type": "Declutter",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-03",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "tags": [],
+   "notes": "",
+   "id": "k014",
+   "extra": {}
+  },
+  {
+   "num": 42,
+   "title": "Clear desks, racks and music gear",
+   "area": "bedroom-4",
+   "type": "Declutter",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-03",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "tags": [],
+   "notes": "",
+   "id": "k015",
+   "extra": {}
+  },
+  {
+   "num": 51,
+   "title": "Sell or donate furniture too big for a townhouse",
+   "area": "general",
+   "type": "Declutter",
+   "tier": "worth",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-05",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "tags": [
+    "Rubbish run"
+   ],
+   "notes": "Bookcases, extra desks, second lounge suite. Record any sale income in notes.",
+   "id": "k016",
+   "extra": {}
+  },
+  {
+   "num": 69,
+   "title": "Off-site storage for the listing period",
+   "area": "general",
+   "type": "Declutter",
+   "tier": "worth",
+   "who": "Either",
+   "status": "todo",
+   "due": "2027-07",
+   "cost_low": 500.0,
+   "cost_high": 1000.0,
+   "actual": 0.0,
+   "tags": [],
+   "notes": "Only if the undecided pile won't fit out of sight.",
+   "id": "k017",
+   "extra": {}
+  },
+  {
+   "num": 65,
+   "title": "Take down posters, patch holes, touch up paint",
+   "area": "bedroom-2",
+   "type": "Repair",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-06",
+   "cost_low": 30.0,
+   "cost_high": 100.0,
+   "actual": 0.0,
+   "tags": [
+    "Paint touch-ups"
+   ],
+   "notes": "",
+   "id": "k018",
+   "extra": {}
+  },
+  {
+   "num": 66,
+   "title": "Take down posters, patch holes, touch up paint",
+   "area": "bedroom-3",
+   "type": "Repair",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-06",
+   "cost_low": 30.0,
+   "cost_high": 100.0,
+   "actual": 0.0,
+   "tags": [
+    "Paint touch-ups"
+   ],
+   "notes": "",
+   "id": "k019",
+   "extra": {}
+  },
+  {
+   "num": 67,
+   "title": "Take down posters, patch holes, touch up paint",
+   "area": "bedroom-4",
+   "type": "Repair",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-06",
+   "cost_low": 30.0,
+   "cost_high": 100.0,
+   "actual": 0.0,
+   "tags": [
+    "Paint touch-ups"
+   ],
+   "notes": "",
+   "id": "k020",
+   "extra": {}
+  },
+  {
+   "num": 52,
+   "title": "Repaint pink and beige feature walls in warm white",
+   "area": "general",
+   "type": "Paint",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-05",
+   "cost_low": 300.0,
+   "cost_high": 800.0,
+   "actual": 0.0,
+   "tags": [
+    "Painting"
+   ],
+   "after_ids": [
+    "k058"
+   ],
+   "notes": "",
+   "id": "k021",
+   "extra": {}
+  },
+  {
+   "num": 59,
+   "title": "Touch up skirting, doors and scuffs throughout",
+   "area": "general",
+   "type": "Paint",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-06",
+   "cost_low": 100.0,
+   "cost_high": 200.0,
+   "actual": 0.0,
+   "tags": [
+    "Paint touch-ups"
+   ],
+   "after_ids": [
+    "k021",
+    "k018",
+    "k019",
+    "k020"
+   ],
+   "notes": "",
+   "id": "k022",
+   "extra": {}
+  },
+  {
+   "num": 54,
+   "title": "Replace dark timber venetians with light blinds or sheers",
+   "area": "living",
+   "type": "Upgrade",
+   "tier": "worth",
+   "who": "Trade",
+   "status": "todo",
+   "due": "2027-05",
+   "cost_low": 1000.0,
+   "cost_high": 2670.0,
+   "actual": 0.0,
+   "tags": [
+    "Blinds"
+   ],
+   "after_ids": [
+    "k058"
+   ],
+   "notes": "Get quotes. Do the rooms in the listing photos first: living, family, main bedroom.",
+   "id": "k023",
+   "extra": {}
+  },
+  {
+   "num": 55,
+   "title": "Replace dark timber venetians with light blinds or sheers",
+   "area": "family",
+   "type": "Upgrade",
+   "tier": "worth",
+   "who": "Trade",
+   "status": "todo",
+   "due": "2027-05",
+   "cost_low": 1000.0,
+   "cost_high": 2670.0,
+   "actual": 0.0,
+   "tags": [
+    "Blinds"
+   ],
+   "after_ids": [
+    "k058"
+   ],
+   "notes": "Get quotes. Do the rooms in the listing photos first: living, family, main bedroom.",
+   "id": "k024",
+   "extra": {}
+  },
+  {
+   "num": 56,
+   "title": "Replace dark timber venetians with light blinds or sheers",
+   "area": "main-bedroom",
+   "type": "Upgrade",
+   "tier": "worth",
+   "who": "Trade",
+   "status": "todo",
+   "due": "2027-05",
+   "cost_low": 1000.0,
+   "cost_high": 2670.0,
+   "actual": 0.0,
+   "tags": [
+    "Blinds"
+   ],
+   "after_ids": [
+    "k058"
+   ],
+   "notes": "Get quotes. Do the rooms in the listing photos first: living, family, main bedroom.",
+   "id": "k025",
+   "extra": {}
+  },
+  {
+   "num": 79,
+   "title": "Professional carpet clean upstairs",
+   "area": "general",
+   "type": "Clean",
+   "tier": "must",
+   "who": "Trade",
+   "status": "todo",
+   "due": "2027-08",
+   "cost_low": 300.0,
+   "cost_high": 600.0,
+   "actual": 0.0,
+   "tags": [
+    "Cleaner"
+   ],
+   "after_ids": [
+    "k022"
+   ],
+   "notes": "Pets in the house, so book close to photos.",
+   "id": "k026",
+   "extra": {}
+  },
+  {
+   "num": 80,
+   "title": "Steam clean downstairs tiles and grout",
+   "area": "general",
+   "type": "Clean",
+   "tier": "must",
+   "who": "Trade",
+   "status": "todo",
+   "due": "2027-08",
+   "cost_low": 400.0,
+   "cost_high": 900.0,
+   "actual": 0.0,
+   "tags": [
+    "Cleaner"
+   ],
+   "notes": "",
+   "id": "k027",
+   "extra": {}
+  },
+  {
+   "num": 60,
+   "title": "Replace dated pendant and ceiling lights",
+   "area": "general",
+   "type": "Upgrade",
+   "tier": "worth",
+   "who": "Either",
+   "status": "todo",
+   "due": "2027-06",
+   "cost_low": 300.0,
+   "cost_high": 800.0,
+   "actual": 0.0,
+   "tags": [
+    "Electrician"
+   ],
+   "notes": "Licensed electrician for anything hard-wired.",
+   "id": "k028",
+   "extra": {}
+  },
+  {
+   "num": 74,
+   "title": "Kitchen deep clean, oven clean, clear benches",
+   "area": "kitchen",
+   "type": "Clean",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-07",
+   "cost_low": 100.0,
+   "cost_high": 300.0,
+   "actual": 0.0,
+   "tags": [],
+   "notes": "Kitchen is in reasonable shape, so no upgrade planned.",
+   "id": "k029",
+   "extra": {}
+  },
+  {
+   "num": 34,
+   "title": "Regrout and reseal",
+   "area": "downstairs-bathroom",
+   "type": "Repair",
+   "tier": "must",
+   "who": "Either",
+   "status": "todo",
+   "due": "2027-03",
+   "cost_low": 200.0,
+   "cost_high": 670.0,
+   "actual": 0.0,
+   "tags": [
+    "Grout and silicone"
+   ],
+   "notes": "Professional grout restoration if DIY isn't practical.",
+   "id": "k030",
+   "extra": {}
+  },
+  {
+   "num": 36,
+   "title": "Regrout and reseal",
+   "area": "ensuite",
+   "type": "Repair",
+   "tier": "must",
+   "who": "Either",
+   "status": "todo",
+   "due": "2027-03",
+   "cost_low": 200.0,
+   "cost_high": 670.0,
+   "actual": 0.0,
+   "tags": [
+    "Grout and silicone"
+   ],
+   "notes": "Professional grout restoration if DIY isn't practical.",
+   "id": "k031",
+   "extra": {}
+  },
+  {
+   "num": 38,
+   "title": "Regrout and reseal",
+   "area": "main-bathroom",
+   "type": "Repair",
+   "tier": "must",
+   "who": "Either",
+   "status": "todo",
+   "due": "2027-03",
+   "cost_low": 200.0,
+   "cost_high": 670.0,
+   "actual": 0.0,
+   "tags": [
+    "Grout and silicone"
+   ],
+   "notes": "Professional grout restoration if DIY isn't practical.",
+   "id": "k032",
+   "extra": {}
+  },
+  {
+   "num": 35,
+   "title": "Replace silicone around bath, vanity and shower",
+   "area": "downstairs-bathroom",
+   "type": "Repair",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-03",
+   "cost_low": 20.0,
+   "cost_high": 50.0,
+   "actual": 0.0,
+   "tags": [
+    "Grout and silicone"
+   ],
+   "after_ids": [
+    "k030"
+   ],
+   "notes": "",
+   "id": "k033",
+   "extra": {}
+  },
+  {
+   "num": 37,
+   "title": "Replace silicone around bath, vanity and shower",
+   "area": "ensuite",
+   "type": "Repair",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-03",
+   "cost_low": 20.0,
+   "cost_high": 50.0,
+   "actual": 0.0,
+   "tags": [
+    "Grout and silicone"
+   ],
+   "after_ids": [
+    "k031"
+   ],
+   "notes": "",
+   "id": "k034",
+   "extra": {}
+  },
+  {
+   "num": 39,
+   "title": "Replace silicone around bath, vanity and shower",
+   "area": "main-bathroom",
+   "type": "Repair",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-03",
+   "cost_low": 20.0,
+   "cost_high": 50.0,
+   "actual": 0.0,
+   "tags": [
+    "Grout and silicone"
+   ],
+   "after_ids": [
+    "k032"
+   ],
+   "notes": "",
+   "id": "k035",
+   "extra": {}
+  },
+  {
+   "num": 43,
+   "title": "New tapware and shower head in matte black or brushed nickel",
+   "area": "downstairs-bathroom",
+   "type": "Upgrade",
+   "tier": "worth",
+   "who": "Trade",
+   "status": "todo",
+   "due": "2027-04",
+   "cost_low": 500.0,
+   "cost_high": 1170.0,
+   "actual": 0.0,
+   "tags": [
+    "Plumber"
+   ],
+   "after_ids": [
+    "k042"
+   ],
+   "notes": "Licensed plumber. Covers three bathrooms.",
+   "id": "k036",
+   "extra": {}
+  },
+  {
+   "num": 45,
+   "title": "New tapware and shower head in matte black or brushed nickel",
+   "area": "ensuite",
+   "type": "Upgrade",
+   "tier": "worth",
+   "who": "Trade",
+   "status": "todo",
+   "due": "2027-04",
+   "cost_low": 500.0,
+   "cost_high": 1170.0,
+   "actual": 0.0,
+   "tags": [
+    "Plumber"
+   ],
+   "after_ids": [
+    "k042"
+   ],
+   "notes": "Licensed plumber. Covers three bathrooms.",
+   "id": "k037",
+   "extra": {}
+  },
+  {
+   "num": 47,
+   "title": "New tapware and shower head in matte black or brushed nickel",
+   "area": "main-bathroom",
+   "type": "Upgrade",
+   "tier": "worth",
+   "who": "Trade",
+   "status": "todo",
+   "due": "2027-04",
+   "cost_low": 500.0,
+   "cost_high": 1170.0,
+   "actual": 0.0,
+   "tags": [
+    "Plumber"
+   ],
+   "after_ids": [
+    "k042"
+   ],
+   "notes": "Licensed plumber. Covers three bathrooms.",
+   "id": "k038",
+   "extra": {}
+  },
+  {
+   "num": 44,
+   "title": "New mirror and vanity lighting",
+   "area": "downstairs-bathroom",
+   "type": "Upgrade",
+   "tier": "worth",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-04",
+   "cost_low": 130.0,
+   "cost_high": 400.0,
+   "actual": 0.0,
+   "tags": [
+    "Electrician"
+   ],
+   "notes": "",
+   "id": "k039",
+   "extra": {}
+  },
+  {
+   "num": 46,
+   "title": "New mirror and vanity lighting",
+   "area": "ensuite",
+   "type": "Upgrade",
+   "tier": "worth",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-04",
+   "cost_low": 130.0,
+   "cost_high": 400.0,
+   "actual": 0.0,
+   "tags": [
+    "Electrician"
+   ],
+   "notes": "",
+   "id": "k040",
+   "extra": {}
+  },
+  {
+   "num": 48,
+   "title": "New mirror and vanity lighting",
+   "area": "main-bathroom",
+   "type": "Upgrade",
+   "tier": "worth",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-04",
+   "cost_low": 130.0,
+   "cost_high": 400.0,
+   "actual": 0.0,
+   "tags": [
+    "Electrician"
+   ],
+   "notes": "",
+   "id": "k041",
+   "extra": {}
+  },
+  {
+   "num": 26,
+   "title": "Get quotes for bathroom refresh options",
+   "area": "general",
+   "type": "Admin",
+   "tier": "must",
+   "who": "Trade",
+   "status": "todo",
+   "due": "2027-02",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "tags": [
+    "Bathrooms"
+   ],
+   "after_ids": [
+    "k001"
+   ],
+   "notes": "Compare: frameless screens, new vanity tops, tile coating versus retiling the spa hobs. No tile lifting without a licensed waterproofer.",
+   "id": "k042",
+   "extra": {}
+  },
+  {
+   "num": 57,
+   "title": "Ensuite: replace framed shower screen with semi-frameless",
+   "area": "ensuite",
+   "type": "Upgrade",
+   "tier": "agent",
+   "who": "Trade",
+   "status": "todo",
+   "due": "2027-05",
+   "cost_low": 800.0,
+   "cost_high": 1500.0,
+   "actual": 0.0,
+   "tags": [
+    "Glazier"
+   ],
+   "after_ids": [
+    "k042"
+   ],
+   "notes": "",
+   "id": "k043",
+   "extra": {}
+  },
+  {
+   "num": 53,
+   "title": "Bathroom upgrade beyond a refresh (spa hob, vanity, retile)",
+   "area": "general",
+   "type": "Upgrade",
+   "tier": "agent",
+   "who": "Trade",
+   "status": "todo",
+   "due": "2027-05",
+   "cost_low": 8000.0,
+   "cost_high": 20000.0,
+   "actual": 0.0,
+   "tags": [
+    "Bathrooms"
+   ],
+   "after_ids": [
+    "k001",
+    "k042"
+   ],
+   "notes": "Only if agents say buyers will pay for it.",
+   "id": "k044",
+   "extra": {}
+  },
+  {
+   "num": 87,
+   "title": "New towels and bath mat for photos",
+   "area": "downstairs-bathroom",
+   "type": "Style",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-08",
+   "cost_low": 70.0,
+   "cost_high": 130.0,
+   "actual": 0.0,
+   "tags": [],
+   "notes": "",
+   "id": "k045",
+   "extra": {}
+  },
+  {
+   "num": 88,
+   "title": "New towels and bath mat for photos",
+   "area": "ensuite",
+   "type": "Style",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-08",
+   "cost_low": 70.0,
+   "cost_high": 130.0,
+   "actual": 0.0,
+   "tags": [],
+   "notes": "",
+   "id": "k046",
+   "extra": {}
+  },
+  {
+   "num": 89,
+   "title": "New towels and bath mat for photos",
+   "area": "main-bathroom",
+   "type": "Style",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-08",
+   "cost_low": 70.0,
+   "cost_high": 130.0,
+   "actual": 0.0,
+   "tags": [],
+   "notes": "",
+   "id": "k047",
+   "extra": {}
+  },
+  {
+   "num": 13,
+   "title": "Photograph and map all the outside tile areas",
+   "area": "back-yard",
+   "type": "Admin",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2026-11",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "tags": [],
+   "notes": "Send to Claude so we can choose the right fix.",
+   "id": "k048",
+   "extra": {}
+  },
+  {
+   "num": 31,
+   "title": "Get quotes for outdoor tile options",
+   "area": "back-yard",
+   "type": "Admin",
+   "tier": "must",
+   "who": "Trade",
+   "status": "todo",
+   "due": "2027-02",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "tags": [
+    "Tiler"
+   ],
+   "after_ids": [
+    "k048"
+   ],
+   "notes": "Clean and seal, coating, overlay with decking or pavers, retile.",
+   "id": "k049",
+   "extra": {}
+  },
+  {
+   "num": 58,
+   "title": "Outdoor tile fix (chosen option)",
+   "area": "back-yard",
+   "type": "Repair",
+   "tier": "agent",
+   "who": "Trade",
+   "status": "todo",
+   "due": "2027-05",
+   "cost_low": 3000.0,
+   "cost_high": 15000.0,
+   "actual": 0.0,
+   "tags": [
+    "Tiler"
+   ],
+   "after_ids": [
+    "k049",
+    "k001"
+   ],
+   "notes": "Range covers clean and seal through to retiling the most visible areas.",
+   "id": "k050",
+   "extra": {}
+  },
+  {
+   "num": 68,
+   "title": "Driveway crack repair and sealing, or resurface",
+   "area": "front-yard",
+   "type": "Repair",
+   "tier": "worth",
+   "who": "Trade",
+   "status": "todo",
+   "due": "2027-06",
+   "cost_low": 800.0,
+   "cost_high": 3000.0,
+   "actual": 0.0,
+   "tags": [
+    "Driveway"
+   ],
+   "notes": "Book for April to June, outside the wet season.",
+   "id": "k051",
+   "extra": {}
+  },
+  {
+   "num": 75,
+   "title": "Pressure wash render, front fence, letterbox and paths",
+   "area": "front-yard",
+   "type": "Clean",
+   "tier": "must",
+   "who": "Either",
+   "status": "todo",
+   "due": "2027-07",
+   "cost_low": 300.0,
+   "cost_high": 700.0,
+   "actual": 0.0,
+   "tags": [
+    "Pressure washing"
+   ],
+   "notes": "",
+   "id": "k052",
+   "extra": {}
+  },
+  {
+   "num": 49,
+   "title": "Prune, weed, mulch, lawn refresh and planting",
+   "area": "front-yard",
+   "type": "Garden",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-04",
+   "cost_low": 250.0,
+   "cost_high": 750.0,
+   "actual": 0.0,
+   "tags": [
+    "Garden"
+   ],
+   "notes": "Plant by April so it establishes before spring photos.",
+   "id": "k053",
+   "extra": {}
+  },
+  {
+   "num": 50,
+   "title": "Prune, weed, mulch, lawn refresh and planting",
+   "area": "back-yard",
+   "type": "Garden",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-04",
+   "cost_low": 250.0,
+   "cost_high": 750.0,
+   "actual": 0.0,
+   "tags": [
+    "Garden"
+   ],
+   "notes": "Plant by April so it establishes before spring photos.",
+   "id": "k054",
+   "extra": {}
+  },
+  {
+   "num": 76,
+   "title": "Front entry: pots, mat, clean house number",
+   "area": "front-yard",
+   "type": "Style",
+   "tier": "worth",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-07",
+   "cost_low": 200.0,
+   "cost_high": 500.0,
+   "actual": 0.0,
+   "tags": [],
+   "notes": "",
+   "id": "k055",
+   "extra": {}
+  },
+  {
+   "num": 78,
+   "title": "Pool clean, waterline tiles and equipment service",
+   "area": "pool",
+   "type": "Clean",
+   "tier": "must",
+   "who": "Either",
+   "status": "todo",
+   "due": "2027-07",
+   "cost_low": 200.0,
+   "cost_high": 600.0,
+   "actual": 0.0,
+   "tags": [
+    "Pool"
+   ],
+   "notes": "",
+   "id": "k056",
+   "extra": {}
+  },
+  {
+   "num": 90,
+   "title": "Style alfresco areas with existing outdoor furniture",
+   "area": "back-yard",
+   "type": "Style",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-08",
+   "cost_low": 0.0,
+   "cost_high": 300.0,
+   "actual": 0.0,
+   "tags": [],
+   "after_ids": [
+    "k058"
+   ],
+   "notes": "",
+   "id": "k057",
+   "extra": {}
+  },
+  {
+   "num": 6,
+   "title": "Lock in style direction and paint colours",
+   "area": "general",
+   "type": "Style",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2026-11",
+   "cost_low": 0.0,
+   "cost_high": 50.0,
+   "actual": 0.0,
+   "tags": [],
+   "notes": "Sample pots in your own light.",
+   "id": "k058",
+   "extra": {}
+  },
+  {
+   "num": 70,
+   "title": "Cushions, throws and rugs to tie the palette together",
+   "area": "general",
+   "type": "Style",
+   "tier": "worth",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-07",
+   "cost_low": 800.0,
+   "cost_high": 2000.0,
+   "actual": 0.0,
+   "tags": [],
+   "after_ids": [
+    "k058"
+   ],
+   "notes": "Soften the black leather lounges; replace bright rugs.",
+   "id": "k059",
+   "extra": {}
+  },
+  {
+   "num": 81,
+   "title": "Professional window clean inside and out",
+   "area": "general",
+   "type": "Clean",
+   "tier": "must",
+   "who": "Trade",
+   "status": "todo",
+   "due": "2027-08",
+   "cost_low": 300.0,
+   "cost_high": 600.0,
+   "actual": 0.0,
+   "tags": [
+    "Windows",
+    "Cleaner"
+   ],
+   "notes": "Book in the week before photos.",
+   "id": "k060",
+   "extra": {}
+  },
+  {
+   "num": 82,
+   "title": "Clean light fittings, fans, vents and skirting",
+   "area": "general",
+   "type": "Clean",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-08",
+   "cost_low": 0.0,
+   "cost_high": 50.0,
+   "actual": 0.0,
+   "tags": [
+    "Cleaning"
+   ],
+   "notes": "",
+   "id": "k061",
+   "extra": {}
+  },
+  {
+   "num": 7,
+   "title": "Test every smoke alarm and vacuum the vents",
+   "area": "general",
+   "type": "Maintenance",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2026-11",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "est_hours": 0.5,
+   "act_hours": 0.0,
+   "tags": [
+    "Smoke alarms"
+   ],
+   "quotes": [],
+   "after_ids": [],
+   "contact_id": null,
+   "repeat_months": 6,
+   "materials": "",
+   "notes": "",
+   "id": "m01",
+   "extra": {}
+  },
+  {
+   "num": 1,
+   "title": "Clean aircon filters on every indoor unit",
+   "area": "general",
+   "type": "Maintenance",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2026-10",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "est_hours": 1.0,
+   "act_hours": 0.0,
+   "tags": [
+    "Aircon"
+   ],
+   "quotes": [],
+   "after_ids": [],
+   "contact_id": null,
+   "repeat_months": 3,
+   "materials": "",
+   "notes": "",
+   "id": "m02",
+   "extra": {}
+  },
+  {
+   "num": 8,
+   "title": "Clear gutters and downpipes before storm season",
+   "area": "general",
+   "type": "Maintenance",
+   "tier": "must",
+   "who": "Trade",
+   "status": "todo",
+   "due": "2026-11",
+   "cost_low": 250.0,
+   "cost_high": 450.0,
+   "actual": 0.0,
+   "est_hours": 0.0,
+   "act_hours": 0.0,
+   "tags": [
+    "Gutters"
+   ],
+   "quotes": [],
+   "after_ids": [],
+   "contact_id": null,
+   "repeat_months": 12,
+   "materials": "",
+   "notes": "Two storey, so a trade with roof access.",
+   "id": "m03",
+   "extra": {}
+  },
+  {
+   "num": 9,
+   "title": "Annual termite inspection",
+   "area": "general",
+   "type": "Maintenance",
+   "tier": "must",
+   "who": "Trade",
+   "status": "todo",
+   "due": "2026-11",
+   "cost_low": 250.0,
+   "cost_high": 400.0,
+   "actual": 0.0,
+   "est_hours": 0.0,
+   "act_hours": 0.0,
+   "tags": [
+    "Pest"
+   ],
+   "quotes": [],
+   "after_ids": [],
+   "contact_id": null,
+   "repeat_months": 12,
+   "materials": "",
+   "notes": "Keep the report for the documents page.",
+   "id": "m04",
+   "extra": {}
+  },
+  {
+   "num": 16,
+   "title": "Dust ceiling fans and light fittings",
+   "area": "general",
+   "type": "Maintenance",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2026-12",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "est_hours": 1.0,
+   "act_hours": 0.0,
+   "tags": [
+    "Cleaning"
+   ],
+   "quotes": [],
+   "after_ids": [],
+   "contact_id": null,
+   "repeat_months": 3,
+   "materials": "Extendable duster, microfibre cloths",
+   "notes": "",
+   "id": "m05",
+   "extra": {}
+  },
+  {
+   "num": 22,
+   "title": "Vacuum door and window tracks, wash flyscreens",
+   "area": "general",
+   "type": "Maintenance",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-01",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "est_hours": 2.0,
+   "act_hours": 0.0,
+   "tags": [
+    "Windows"
+   ],
+   "quotes": [],
+   "after_ids": [],
+   "contact_id": null,
+   "repeat_months": 6,
+   "materials": "Track brush, sugar soap",
+   "notes": "",
+   "id": "m06",
+   "extra": {}
+  },
+  {
+   "num": 10,
+   "title": "Hot water system: ease the relief valve",
+   "area": "general",
+   "type": "Maintenance",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2026-11",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "est_hours": 0.25,
+   "act_hours": 0.0,
+   "tags": [
+    "Hot water"
+   ],
+   "quotes": [],
+   "after_ids": [],
+   "contact_id": null,
+   "repeat_months": 6,
+   "materials": "",
+   "notes": "Follow the manufacturer's instructions on the unit label.",
+   "id": "m07",
+   "extra": {}
+  },
+  {
+   "num": 17,
+   "title": "Water tank: clean gutter screens and first-flush diverter",
+   "area": "general",
+   "type": "Maintenance",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2026-12",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "est_hours": 1.0,
+   "act_hours": 0.0,
+   "tags": [
+    "Water tank"
+   ],
+   "quotes": [],
+   "after_ids": [],
+   "contact_id": null,
+   "repeat_months": 6,
+   "materials": "",
+   "notes": "",
+   "id": "m08",
+   "extra": {}
+  },
+  {
+   "num": 61,
+   "title": "Solar panels: check for dirt and shading, wash if needed",
+   "area": "general",
+   "type": "Maintenance",
+   "tier": "must",
+   "who": "Trade",
+   "status": "todo",
+   "due": "2027-06",
+   "cost_low": 150.0,
+   "cost_high": 250.0,
+   "actual": 0.0,
+   "est_hours": 0.0,
+   "act_hours": 0.0,
+   "tags": [
+    "Solar"
+   ],
+   "quotes": [],
+   "after_ids": [],
+   "contact_id": null,
+   "repeat_months": 12,
+   "materials": "",
+   "notes": "",
+   "id": "m09",
+   "extra": {}
+  },
+  {
+   "num": 2,
+   "title": "Clean rangehood filters and dishwasher filter",
+   "area": "kitchen",
+   "type": "Maintenance",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2026-10",
+   "cost_low": 0.0,
+   "cost_high": 20.0,
+   "actual": 0.0,
+   "est_hours": 0.5,
+   "act_hours": 0.0,
+   "tags": [],
+   "quotes": [],
+   "after_ids": [],
+   "contact_id": null,
+   "repeat_months": 3,
+   "materials": "Degreaser, dishwasher cleaner",
+   "notes": "",
+   "id": "m10",
+   "extra": {}
+  },
+  {
+   "num": 23,
+   "title": "Clean fridge coils and door seals",
+   "area": "kitchen",
+   "type": "Maintenance",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-01",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "est_hours": 0.5,
+   "act_hours": 0.0,
+   "tags": [],
+   "quotes": [],
+   "after_ids": [],
+   "contact_id": null,
+   "repeat_months": 12,
+   "materials": "",
+   "notes": "",
+   "id": "m11",
+   "extra": {}
+  },
+  {
+   "num": 11,
+   "title": "Washing machine clean cycle and dryer lint duct",
+   "area": "laundry",
+   "type": "Maintenance",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2026-11",
+   "cost_low": 0.0,
+   "cost_high": 15.0,
+   "actual": 0.0,
+   "est_hours": 0.5,
+   "act_hours": 0.0,
+   "tags": [],
+   "quotes": [],
+   "after_ids": [],
+   "contact_id": null,
+   "repeat_months": 3,
+   "materials": "Washing machine cleaner",
+   "notes": "",
+   "id": "m12",
+   "extra": {}
+  },
+  {
+   "num": 19,
+   "title": "Garage door: lubricate rollers and test auto-reverse",
+   "area": "garage",
+   "type": "Maintenance",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2026-12",
+   "cost_low": 0.0,
+   "cost_high": 15.0,
+   "actual": 0.0,
+   "est_hours": 0.5,
+   "act_hours": 0.0,
+   "tags": [],
+   "quotes": [],
+   "after_ids": [],
+   "contact_id": null,
+   "repeat_months": 6,
+   "materials": "Silicone spray",
+   "notes": "",
+   "id": "m13",
+   "extra": {}
+  },
+  {
+   "num": 4,
+   "title": "Pool filter clean or backwash",
+   "area": "pool",
+   "type": "Maintenance",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2026-10",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "est_hours": 1.0,
+   "act_hours": 0.0,
+   "tags": [
+    "Pool"
+   ],
+   "quotes": [],
+   "after_ids": [],
+   "contact_id": null,
+   "repeat_months": 3,
+   "materials": "",
+   "notes": "Monthly through summer.",
+   "id": "m14",
+   "extra": {}
+  },
+  {
+   "num": 5,
+   "title": "Check pool fence, gate self-closing and latch",
+   "area": "pool",
+   "type": "Maintenance",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2026-10",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "est_hours": 0.5,
+   "act_hours": 0.0,
+   "tags": [
+    "Pool"
+   ],
+   "quotes": [],
+   "after_ids": [],
+   "contact_id": null,
+   "repeat_months": 3,
+   "materials": "",
+   "notes": "Anything climbable within 900 mm of the fence goes.",
+   "id": "m15",
+   "extra": {}
+  },
+  {
+   "num": 3,
+   "title": "Feed and weed the lawns",
+   "area": "front-yard",
+   "type": "Maintenance",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2026-10",
+   "cost_low": 30.0,
+   "cost_high": 80.0,
+   "actual": 0.0,
+   "est_hours": 1.5,
+   "act_hours": 0.0,
+   "tags": [
+    "Garden"
+   ],
+   "quotes": [],
+   "after_ids": [],
+   "contact_id": null,
+   "repeat_months": 6,
+   "materials": "Lawn food, weed and feed",
+   "notes": "Spring and autumn.",
+   "id": "m16",
+   "extra": {}
+  },
+  {
+   "num": 14,
+   "title": "Trim hedges and garden beds back from the house",
+   "area": "back-yard",
+   "type": "Maintenance",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2026-11",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "est_hours": 2.0,
+   "act_hours": 0.0,
+   "tags": [
+    "Garden"
+   ],
+   "quotes": [],
+   "after_ids": [],
+   "contact_id": null,
+   "repeat_months": 3,
+   "materials": "",
+   "notes": "",
+   "id": "m17",
+   "extra": {}
+  },
+  {
+   "num": 20,
+   "title": "Clear the side path, check drains and weep holes",
+   "area": "side-yard",
+   "type": "Maintenance",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2026-12",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "est_hours": 1.0,
+   "act_hours": 0.0,
+   "tags": [
+    "Garden"
+   ],
+   "quotes": [],
+   "after_ids": [],
+   "contact_id": null,
+   "repeat_months": 6,
+   "materials": "",
+   "notes": "",
+   "id": "m18",
+   "extra": {}
+  },
+  {
+   "num": 12,
+   "title": "Clear the balcony drain and clean the tiles",
+   "area": "balcony",
+   "type": "Maintenance",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2026-11",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "est_hours": 0.5,
+   "act_hours": 0.0,
+   "tags": [],
+   "quotes": [],
+   "after_ids": [],
+   "contact_id": null,
+   "repeat_months": 6,
+   "materials": "",
+   "notes": "",
+   "id": "m19",
+   "extra": {}
+  },
+  {
+   "num": 62,
+   "title": "Choose the agent, sign the appointment and agree the marketing budget",
+   "area": "general",
+   "type": "Pre-sale",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-06",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "est_hours": 0.0,
+   "act_hours": 0.0,
+   "tags": [],
+   "quotes": [],
+   "after_ids": [
+    "k001"
+   ],
+   "contact_id": null,
+   "repeat_months": null,
+   "materials": "",
+   "notes": "Marketing costs sit outside the prep budget.",
+   "id": "p01",
+   "extra": {}
+  },
+  {
+   "num": 63,
+   "title": "Engage a conveyancer for the Form 2 disclosure and contract",
+   "area": "general",
+   "type": "Pre-sale",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-06",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "est_hours": 0.0,
+   "act_hours": 0.0,
+   "tags": [],
+   "quotes": [],
+   "after_ids": [],
+   "contact_id": null,
+   "repeat_months": null,
+   "materials": "",
+   "notes": "",
+   "id": "p02",
+   "extra": {}
+  },
+  {
+   "num": 64,
+   "title": "Agree sale method and price guide with the agent",
+   "area": "general",
+   "type": "Pre-sale",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-06",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "est_hours": 0.0,
+   "act_hours": 0.0,
+   "tags": [],
+   "quotes": [],
+   "after_ids": [
+    "p01"
+   ],
+   "contact_id": null,
+   "repeat_months": null,
+   "materials": "",
+   "notes": "",
+   "id": "p03",
+   "extra": {}
+  },
+  {
+   "num": 71,
+   "title": "Gather everything for the Form 2 disclosure (see Documents)",
+   "area": "general",
+   "type": "Pre-sale",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-07",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "est_hours": 0.0,
+   "act_hours": 0.0,
+   "tags": [],
+   "quotes": [],
+   "after_ids": [
+    "p02"
+   ],
+   "contact_id": null,
+   "repeat_months": null,
+   "materials": "",
+   "notes": "",
+   "id": "p04",
+   "extra": {}
+  },
+  {
+   "num": 72,
+   "title": "Book photos, drone, floorplan and video",
+   "area": "general",
+   "type": "Pre-sale",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-07",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "est_hours": 0.0,
+   "act_hours": 0.0,
+   "tags": [],
+   "quotes": [],
+   "after_ids": [
+    "p01"
+   ],
+   "contact_id": null,
+   "repeat_months": null,
+   "materials": "",
+   "notes": "Aim for a fine morning in the last fortnight of August.",
+   "id": "p05",
+   "extra": {}
+  },
+  {
+   "num": 73,
+   "title": "Stylist consult or hire pieces, only if the agent recommends it",
+   "area": "general",
+   "type": "Pre-sale",
+   "tier": "agent",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-07",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "est_hours": 0.0,
+   "act_hours": 0.0,
+   "tags": [],
+   "quotes": [],
+   "after_ids": [
+    "p01"
+   ],
+   "contact_id": null,
+   "repeat_months": null,
+   "materials": "",
+   "notes": "",
+   "id": "p06",
+   "extra": {}
+  },
+  {
+   "num": 83,
+   "title": "Agent walk-through and fix their list",
+   "area": "general",
+   "type": "Pre-sale",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-08",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "est_hours": 0.0,
+   "act_hours": 0.0,
+   "tags": [],
+   "quotes": [],
+   "after_ids": [
+    "p01"
+   ],
+   "contact_id": null,
+   "repeat_months": null,
+   "materials": "",
+   "notes": "",
+   "id": "p07",
+   "extra": {}
+  },
+  {
+   "num": 84,
+   "title": "Photo day: run the reset checklist",
+   "area": "general",
+   "type": "Pre-sale",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-08",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "est_hours": 0.0,
+   "act_hours": 0.0,
+   "tags": [],
+   "quotes": [],
+   "after_ids": [
+    "p05",
+    "k026",
+    "k027",
+    "k060"
+   ],
+   "contact_id": null,
+   "repeat_months": null,
+   "materials": "",
+   "notes": "Garden, pool and lawn at their best that week.",
+   "id": "p08",
+   "extra": {}
+  },
+  {
+   "num": 85,
+   "title": "Plan where the pets and family go during open homes",
+   "area": "general",
+   "type": "Pre-sale",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-08",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "est_hours": 0.0,
+   "act_hours": 0.0,
+   "tags": [],
+   "quotes": [],
+   "after_ids": [],
+   "contact_id": null,
+   "repeat_months": null,
+   "materials": "",
+   "notes": "",
+   "id": "p09",
+   "extra": {}
+  },
+  {
+   "num": 86,
+   "title": "Approve the listing copy, photos and floorplan",
+   "area": "general",
+   "type": "Pre-sale",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-08",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "est_hours": 0.0,
+   "act_hours": 0.0,
+   "tags": [],
+   "quotes": [],
+   "after_ids": [
+    "p08"
+   ],
+   "contact_id": null,
+   "repeat_months": null,
+   "materials": "",
+   "notes": "",
+   "id": "p10",
+   "extra": {}
+  },
+  {
+   "num": 91,
+   "title": "Listing live and first open home",
+   "area": "general",
+   "type": "Pre-sale",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-09",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "est_hours": 0.0,
+   "act_hours": 0.0,
+   "tags": [],
+   "quotes": [],
+   "after_ids": [
+    "p10",
+    "p04"
+   ],
+   "contact_id": null,
+   "repeat_months": null,
+   "materials": "",
+   "notes": "",
+   "id": "p11",
+   "extra": {}
+  },
+  {
+   "num": 92,
+   "title": "Weekly feedback and price check with the agent",
+   "area": "general",
+   "type": "Pre-sale",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-09",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "est_hours": 0.0,
+   "act_hours": 0.0,
+   "tags": [],
+   "quotes": [],
+   "after_ids": [
+    "p11"
+   ],
+   "contact_id": null,
+   "repeat_months": null,
+   "materials": "",
+   "notes": "",
+   "id": "p12",
+   "extra": {}
+  },
+  {
+   "num": 93,
+   "title": "Contract review with the conveyancer before signing",
+   "area": "general",
+   "type": "Pre-sale",
+   "tier": "must",
+   "who": "DIY",
+   "status": "todo",
+   "due": "2027-09",
+   "cost_low": 0.0,
+   "cost_high": 0.0,
+   "actual": 0.0,
+   "est_hours": 0.0,
+   "act_hours": 0.0,
+   "tags": [],
+   "quotes": [],
+   "after_ids": [
+    "p02"
+   ],
+   "contact_id": null,
+   "repeat_months": null,
+   "materials": "",
+   "notes": "",
+   "id": "p13",
+   "extra": {}
+  }
+ ],
+ "documents": [
+  {
+   "title": "Air conditioning warranty and service records",
+   "category": "Warranty",
+   "have": "need",
+   "area": "general",
+   "issued": "",
+   "expires": "",
+   "notes": "Find your copy.",
+   "files": [],
+   "id": "aircon",
+   "extra": {}
+  },
+  {
+   "title": "Pre-sale building and pest report",
+   "category": "Report",
+   "have": "need",
+   "area": "general",
+   "issued": "",
+   "expires": "",
+   "notes": "Inspection planned for February 2027.",
+   "files": [],
+   "id": "bp",
+   "extra": {}
+  },
+  {
+   "title": "Council approvals and final inspection certificates",
+   "category": "Approval",
+   "have": "need",
+   "area": "general",
+   "issued": "",
+   "expires": "",
+   "notes": "Find your copies, including the pool and any later works.",
+   "files": [],
+   "id": "council",
+   "extra": {}
+  },
+  {
+   "title": "Flood information (FloodWise property report)",
+   "category": "Report",
+   "have": "need",
+   "area": "front-yard",
+   "issued": "",
+   "expires": "",
+   "notes": "Minor flooding shown only at the bottom front corner, outside the retaining wall. Have it ready for buyer questions.",
+   "files": [],
+   "id": "flood",
+   "extra": {}
+  },
+  {
+   "title": "Form 2 seller disclosure statement",
+   "category": "Sale",
+   "have": "need",
+   "area": "general",
+   "issued": "",
+   "expires": "",
+   "notes": "Prepared with the conveyancer before listing.",
+   "files": [],
+   "id": "form2",
+   "extra": {}
+  },
+  {
+   "title": "Hot water system warranty",
+   "category": "Warranty",
+   "have": "need",
+   "area": "laundry",
+   "issued": "",
+   "expires": "",
+   "notes": "Find your copy.",
+   "files": [],
+   "id": "hws",
+   "extra": {}
+  },
+  {
+   "title": "Appliance and pool equipment manuals",
+   "category": "Manual",
+   "have": "need",
+   "area": "general",
+   "issued": "",
+   "expires": "",
+   "notes": "Nice to leave for buyers.",
+   "files": [],
+   "id": "manuals",
+   "extra": {}
+  },
+  {
+   "title": "Pool safety certificate",
+   "category": "Compliance",
+   "have": "need",
+   "area": "pool",
+   "issued": "",
+   "expires": "",
+   "notes": "Valid two years. Due July 2027 on the task list.",
+   "files": [],
+   "id": "pool-cert",
+   "extra": {}
+  },
+  {
+   "title": "Rates and water notices for the last year",
+   "category": "Sale",
+   "have": "need",
+   "area": "general",
+   "issued": "",
+   "expires": "",
+   "notes": "",
+   "files": [],
+   "id": "rates",
+   "extra": {}
+  },
+  {
+   "title": "Roof repair invoice and warranty",
+   "category": "Warranty",
+   "have": "need",
+   "area": "general",
+   "issued": "",
+   "expires": "",
+   "notes": "Find your copy.",
+   "files": [],
+   "id": "roof",
+   "extra": {}
+  },
+  {
+   "title": "Smoke alarm compliance",
+   "category": "Compliance",
+   "have": "need",
+   "area": "general",
+   "issued": "",
+   "expires": "",
+   "notes": "Photoelectric, interconnected, every bedroom, hallway and level.",
+   "files": [],
+   "id": "smoke",
+   "extra": {}
+  },
+  {
+   "title": "Solar system warranty and installer certificate",
+   "category": "Warranty",
+   "have": "need",
+   "area": "general",
+   "issued": "",
+   "expires": "",
+   "notes": "Find your copy.",
+   "files": [],
+   "id": "solar",
+   "extra": {}
+  },
+  {
+   "title": "Termite inspection reports",
+   "category": "Report",
+   "have": "need",
+   "area": "general",
+   "issued": "",
+   "expires": "",
+   "notes": "",
+   "files": [],
+   "id": "termite",
+   "extra": {}
+  }
+ ],
+ "finishes": [],
+ "checklists": [
+  {
+   "items": [
+    {
+     "d": false,
+     "t": "Pets, dog bed, bowls and leads out of the house"
+    },
+    {
+     "d": false,
+     "t": "Beds made, cushions on, robe doors closed"
+    },
+    {
+     "d": false,
+     "t": "Kitchen benches clear except the styled pieces"
+    },
+    {
+     "d": false,
+     "t": "Bins emptied and out of sight"
+    },
+    {
+     "d": false,
+     "t": "Bathrooms: towels set, toilet lids down, products away"
+    },
+    {
+     "d": false,
+     "t": "Blinds open and every light on"
+    },
+    {
+     "d": false,
+     "t": "Aircon set to 23 degrees"
+    },
+    {
+     "d": false,
+     "t": "Pool vacuumed, cleaner and hoses out of sight"
+    },
+    {
+     "d": false,
+     "t": "Cars out of the driveway, garage tidy"
+    },
+    {
+     "d": false,
+     "t": "Laundry baskets, shoes and bags away"
+    },
+    {
+     "d": false,
+     "t": "Valuables, medication, mail and keys locked away"
+    },
+    {
+     "d": false,
+     "t": "Floors vacuumed, dog hair off the lounges"
+    },
+    {
+     "d": false,
+     "t": "Front entry swept, mat straight, pots watered"
+    },
+    {
+     "d": false,
+     "t": "Alfresco cushions out, table set simply"
+    }
+   ],
+   "id": "openhome",
+   "extra": {}
+  }
+ ],
+ "cleanup": [
+  [
+   "tasks",
+   "id",
+   [
+    "zz1"
+   ]
+  ],
+  [
+   "members",
+   "user_id",
+   [
+    "00000000-0000-0000-0000-0000000000e1",
+    "00000000-0000-0000-0000-0000000000f1"
+   ]
+  ],
+  [
+   "invites",
+   "email",
+   [
+    "test-editor@example.com",
+    "test-viewer@example.com"
+   ]
+  ]
+ ]
+}

@@ -1,0 +1,32 @@
+name: Back up data
+
+# Runs every 3 days. It copies every table into backups/ and commits it,
+# so GitHub keeps a dated history. The regular visit also stops the free
+# Supabase project from pausing after a week without use.
+on:
+  schedule:
+    - cron: "17 16 */3 * *"   # about 2am Brisbane time
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Export tables
+        env:
+          SUPABASE_URL: https://hnwdcmhkwgjptsbgygyo.supabase.co
+          SUPABASE_KEY: sb_publishable_5aCyEeVFQrHKaMgtYblpKQ_pzrx7EpT
+          FAMILY_EMAIL: family@home.sabav2v.com
+          FAMILY_PASSWORD: ${{ secrets.FAMILY_PASSWORD }}
+        run: bash scripts/backup.sh
+      - name: Commit if anything changed
+        run: |
+          git config user.name "backup-bot"
+          git config user.email "backup-bot@users.noreply.github.com"
+          git add backups
+          git diff --cached --quiet || git commit -m "Data backup $(date -u +%F)"
+          git push

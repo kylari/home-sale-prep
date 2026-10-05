@@ -1,0 +1,1543 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#2f5d50">
+<meta name="robots" content="noindex, nofollow">
+<link rel="manifest" href="manifest.webmanifest" crossorigin="use-credentials">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Highland Drive Sale Prep</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: sticky header with page tabs; one page visible at a time; dashboard is a summary strip over a filterable task list */
+:root{
+  --bg:#f5f5f1; --surface:#ffffff; --sunk:#ecede8; --ink:#1e2427; --muted:#5b6569; --line:#d9dcd5;
+  --accent:#2f5d50; --accent-soft:#dbe8e2; --timber:#a8794b;
+  --ok:#2e7a4d; --ok-soft:#dcefe3; --warn:#9a6a12; --warn-soft:#f6ead0; --crit:#a73d33; --crit-soft:#f5dcd8;
+  --display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --body:"Public Sans",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#14181a; --surface:#1c2225; --sunk:#232a2e; --ink:#e7eae6; --muted:#9ca6a9; --line:#323b3f;
+  --accent:#86bfa9; --accent-soft:#22362f; --timber:#d3a676;
+  --ok:#7cc99a; --ok-soft:#1f3527; --warn:#e2b45e; --warn-soft:#3a2f18; --crit:#ec8e84; --crit-soft:#3d2321; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#14181a; --surface:#1c2225; --sunk:#232a2e; --ink:#e7eae6; --muted:#9ca6a9; --line:#323b3f;
+  --accent:#86bfa9; --accent-soft:#22362f; --timber:#d3a676;
+  --ok:#7cc99a; --ok-soft:#1f3527; --warn:#e2b45e; --warn-soft:#3a2f18; --crit:#ec8e84; --crit-soft:#3d2321; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--body);margin:0}
+a{color:var(--accent)}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.15;margin:0}
+h2{font-size:1.65rem;font-weight:700}
+h3{font-size:1.1rem;font-weight:700}
+p{margin:0}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:16px}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;padding-block:14px 6px}
+.brand h1{font-size:1.25rem}
+.brand span{color:var(--muted);font-size:.85rem}
+nav.tabs{overflow-x:auto;scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs ul{display:flex;gap:4px;list-style:none;margin:0;padding:0 0 8px;white-space:nowrap}
+nav.tabs a{display:block;padding:6px 12px;border-radius:999px;text-decoration:none;color:var(--muted);font-weight:500;font-size:.92rem}
+nav.tabs a:hover{color:var(--ink);background:var(--sunk)}
+nav.tabs a[aria-current="page"]{background:var(--ink);color:var(--bg)}
+main{padding-block:24px 64px}
+section.page{display:grid;gap:22px}
+.lede{color:var(--muted);max-width:68ch}
+.prose{display:grid;gap:12px;max-width:68ch}
+.prose ul{margin:0;padding-left:1.2em;display:grid;gap:6px}
+.eyebrow{font:500 .72rem/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))}
+.num{font-variant-numeric:tabular-nums}
+/* dashboard summary */
+.summary{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))}
+.stat{display:grid;gap:6px;align-content:start}
+.stat .big{font:700 2rem/1 var(--display)}
+.stat .sub{color:var(--muted);font-size:.85rem}
+.bar{height:8px;background:var(--sunk);border-radius:99px;overflow:hidden;display:flex}
+.bar i{display:block;height:100%}
+.tierrow{display:grid;grid-template-columns:7.5rem 1fr 3.5rem;gap:10px;align-items:center;font-size:.88rem}
+.budget{position:relative;height:28px;background:var(--sunk);border-radius:6px;margin-top:4px}
+.budget .fill{position:absolute;inset:0 auto 0 0;background:var(--accent);border-radius:6px;opacity:.85}
+.budget .spent{position:absolute;inset:0 auto 0 0;background:var(--timber);border-radius:6px}
+.budget .mark{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink)}
+.budget .mlab{position:absolute;top:32px;transform:translateX(-50%);font:500 .72rem var(--mono);color:var(--muted);white-space:nowrap}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.8rem;color:var(--muted);margin-top:26px}
+.legend b{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+/* tasks */
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.toolbar select,.toolbar input{font:inherit;font-size:.88rem;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);min-width:0}
+.btn{font:600 .9rem var(--body);padding:8px 14px;border-radius:8px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.danger{background:var(--crit);border-color:var(--crit);color:var(--surface)}
+.btn:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,.pill:focus-visible,.tname:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.tasks{display:grid;gap:0;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);overflow:hidden}
+.trow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 12px;padding:12px 14px;border-top:1px solid var(--line);align-items:start}
+.trow:first-child{border-top:0}
+.trow.done .tname{text-decoration:line-through;color:var(--muted)}
+.trow.dropped{opacity:.55}
+.tname{background:none;border:0;padding:0;font:600 .95rem var(--body);color:var(--ink);text-align:left;cursor:pointer}
+.tmeta{display:flex;flex-wrap:wrap;gap:6px 10px;font-size:.8rem;color:var(--muted);margin-top:3px}
+.tcost{font:500 .82rem var(--mono);text-align:right;white-space:nowrap;color:var(--muted)}
+.pill{font:600 .72rem/1 var(--body);letter-spacing:.02em;padding:6px 9px;border-radius:999px;border:1px solid transparent;cursor:pointer;white-space:nowrap;min-width:5.6rem}
+.s-todo{background:var(--sunk);color:var(--muted);border-color:var(--line)}
+.s-doing{background:var(--warn-soft);color:var(--warn)}
+.s-done{background:var(--ok-soft);color:var(--ok)}
+.s-dropped{background:transparent;color:var(--muted);border-color:var(--line);text-decoration:line-through}
+.tag{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 7px;border-radius:5px}
+.t-must{background:var(--crit-soft);color:var(--crit)}
+.t-worth{background:var(--accent-soft);color:var(--accent)}
+.t-agent{background:var(--warn-soft);color:var(--warn)}
+.overdue{color:var(--crit);font-weight:600}
+.empty{padding:28px 18px;text-align:center;color:var(--muted)}
+/* editor */
+dialog{border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);padding:0;width:min(560px,calc(100vw - 32px))}
+dialog::backdrop{background:rgba(10,14,16,.45)}
+dialog form{display:grid;gap:12px;padding:20px}
+.fgrid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr))}
+label{display:grid;gap:4px;font-size:.8rem;font-weight:600;color:var(--muted)}
+label input,label select,label textarea{font:400 .95rem var(--body);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-width:0}
+textarea{resize:vertical;min-height:70px}
+.factions{display:flex;gap:8px;flex-wrap:wrap;justify-content:space-between;align-items:center}
+.factions div{display:flex;gap:8px;flex-wrap:wrap}
+.note{font-size:.82rem;color:var(--muted)}
+.banner{padding:10px 14px;border-radius:8px;background:var(--warn-soft);color:var(--warn);font-size:.88rem}
+/* tables */
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font:500 .72rem var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--sunk)}
+tr:last-child td{border-bottom:0}
+td.r,th.r{text-align:right}
+/* rooms */
+.room{display:grid;gap:8px;align-content:start}
+.room .floor{font:500 .7rem var(--mono);color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.room dl{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;margin:0;font-size:.88rem}
+.room dt{color:var(--muted)}
+.room dd{margin:0}
+.photo{font-size:.75rem;font-weight:600;color:var(--warn)}
+/* timeline */
+.phases{display:grid;gap:0;border-left:2px solid var(--line);margin-left:6px}
+.phase{position:relative;padding:0 0 22px 22px;display:grid;gap:6px}
+.phase::before{content:"";position:absolute;left:-7px;top:4px;width:12px;height:12px;border-radius:50%;background:var(--surface);border:2px solid var(--accent)}
+.phase.now::before{background:var(--accent)}
+.phase .when{font:500 .78rem var(--mono);color:var(--accent)}
+.phase ul{margin:0;padding-left:1.1em;display:grid;gap:3px;font-size:.92rem}
+/* style */
+.swatches{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(min(100%,130px),1fr))}
+.sw{border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--surface)}
+.sw i{display:block;height:64px}
+.sw div{padding:8px 10px;font-size:.82rem}
+.sw small{display:block;color:var(--muted);font-family:var(--mono);font-size:.72rem}
+.two{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+.keep li::marker{color:var(--ok)} .lose li::marker{color:var(--crit)}
+@media (min-width:760px){.summary .wide{grid-column:span 2}}
+/* areas */
+.ibtn{display:inline-grid;place-items:center;width:34px;height:34px;border:0;border-radius:8px;background:none;color:var(--muted);cursor:pointer}
+.ibtn:hover{background:var(--sunk);color:var(--ink)}
+.ibtn.danger:hover{color:var(--crit)}
+.ibtn.grip{cursor:grab;touch-action:none}
+.dragging{opacity:.6;outline:2px dashed var(--accent);outline-offset:2px}
+.mleft{display:flex;align-items:center;gap:4px;min-width:0}
+.micons{display:flex;gap:0;flex:0 0 auto}
+.mhead{gap:4px}
+.mrow{display:flex;flex-wrap:nowrap;gap:6px;align-items:center;justify-content:space-between;padding:4px 6px;border-top:1px solid var(--line)}
+.mrow:first-child{border-top:0}
+.mrow .mname{font-weight:600}
+.mlink{cursor:pointer}.mlink:hover{text-decoration:underline}
+.mbox{border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+.ms{position:relative}
+.msbtn{font:inherit;font-size:.88rem;padding:7px 28px 7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);cursor:pointer;max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;position:relative}
+.msbtn::after{content:"";position:absolute;right:10px;top:50%;width:6px;height:6px;border-right:1.5px solid var(--muted);border-bottom:1.5px solid var(--muted);transform:translateY(-70%) rotate(45deg)}
+.msbtn.on{border-color:var(--accent);color:var(--accent);font-weight:600}
+.mspanel{position:absolute;z-index:4;top:calc(100% + 4px);left:0;min-width:220px;max-width:min(320px,calc(100vw - 32px));max-height:60vh;overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.14);padding:6px}
+.mspanel label{display:flex;gap:8px;align-items:center;padding:6px 8px;border-radius:6px;font:400 .9rem var(--body);color:var(--ink);cursor:pointer}
+.mspanel label:hover{background:var(--sunk)}
+.mspanel .msall{font-weight:600;border-bottom:1px solid var(--line);border-radius:0;margin-bottom:4px}
+.mspanel .msg{font-weight:600;margin-top:4px}
+.mspanel .msin{padding-left:26px}
+.msfoot{display:flex;justify-content:space-between;border-top:1px solid var(--line);margin-top:4px;padding:6px 4px 2px}
+.readyck{display:flex;flex-direction:row;align-items:center;gap:6px;font:500 .88rem var(--body);color:var(--ink)}
+.agrid{grid-template-columns:repeat(auto-fill,minmax(min(100%,160px),1fr))}
+.areagroup{display:grid;gap:10px}
+.acard{display:grid;grid-template-rows:auto 1fr;text-decoration:none;color:inherit;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.acard:hover{border-color:var(--accent)}
+.acard .thumb{aspect-ratio:16/9;max-width:100%;background:var(--sunk) center/cover no-repeat;display:grid;place-items:center;color:var(--muted);font-size:.78rem}
+.acard .abody{padding:12px 14px;display:grid;gap:6px;align-content:start}
+.acard h3{font-size:1rem}
+.acard .ameta{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:.8rem;color:var(--muted)}
+.crumb{font-size:.85rem}
+.gallery{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(min(100%,180px),1fr))}
+.tile{position:relative;border-radius:8px;overflow:hidden;background:var(--sunk);border:1px solid var(--line)}
+.tile img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;cursor:zoom-in}
+.tile .tbar{display:flex;justify-content:space-between;align-items:center;gap:6px;padding:6px 8px;font-size:.75rem;color:var(--muted)}
+.tile button{font:600 .72rem var(--body);background:none;border:0;color:var(--crit);cursor:pointer;padding:2px 4px}
+.ghostdrop{display:grid;place-items:center;text-align:center;padding:22px 12px;border:1.5px dashed var(--line);border-radius:8px;color:var(--muted);font-size:.85rem;min-height:120px}
+.galhead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.filebtn{position:relative;overflow:hidden}
+.filebtn input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.checks{display:grid;gap:10px;max-height:260px;overflow:auto;border:1px solid var(--line);border-radius:8px;padding:10px;background:var(--bg)}
+.checks fieldset{border:0;margin:0;padding:0;display:grid;gap:4px;grid-template-columns:repeat(auto-fill,minmax(min(100%,150px),1fr))}
+.checks legend{font:500 .7rem var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:0 0 4px}
+.checks label{display:flex;gap:6px;align-items:center;font-weight:500;color:var(--ink);font-size:.88rem}
+.alink{color:var(--muted);text-decoration:none;border-bottom:1px dotted var(--muted)}
+.alink:hover{color:var(--accent)}
+.ttype{font-size:.72rem;font-weight:600;padding:2px 7px;border-radius:5px;background:var(--sunk);color:var(--ink)}
+#viewer{width:min(1100px,calc(100vw - 32px))}
+#viewer img{display:block;width:100%;height:auto;max-height:80vh;object-fit:contain;background:var(--sunk)}
+#viewer .vbar{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 14px}
+@media (prefers-reduced-motion:no-preference){.bar i,.budget .fill,.budget .spent{transition:width .4s ease}}
+.chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:.8rem;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:3px 4px 3px 10px;color:var(--ink);max-width:100%}
+.chip a,.chip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chip button{background:none;border:0;cursor:pointer;color:var(--muted);font:600 .95rem var(--body);padding:0 6px}
+.inrow{display:flex;gap:8px;flex-wrap:wrap;align-items:end}
+.inrow>*{flex:1 1 140px;min-width:0}
+.inrow>.btn{flex:0 0 auto}
+.sub-h{font-size:.8rem;font-weight:600;color:var(--muted)}
+.qlist{display:grid;gap:6px}
+.q{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);font-size:.86rem;overflow-wrap:anywhere}
+.q.acc{border-color:var(--ok);background:var(--ok-soft)}
+.q .qa{display:flex;gap:2px;flex-wrap:wrap;justify-content:flex-end;align-content:start}
+.linkbtn,.q .qa button{background:none;border:0;padding:2px 4px;font:600 .8rem var(--body);color:var(--accent);cursor:pointer;text-align:left}
+.reclist{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr))}
+.rec{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:grid;gap:6px;align-content:start;font-size:.88rem;min-width:0;overflow-wrap:anywhere}
+.rec h4{margin:0;font:700 .98rem var(--display)}
+.rec .meta{color:var(--muted);font-size:.8rem;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center}
+.rec .files{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:.82rem}
+.t-need{background:var(--warn-soft);color:var(--warn)}
+.t-have{background:var(--ok-soft);color:var(--ok)}
+.t-wait{background:var(--sunk);color:var(--muted);border:1px solid var(--line)}
+.secthead{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+.secthead input{font:inherit;font-size:.88rem;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);min-width:0;flex:1 1 200px;max-width:340px}
+.cl{display:grid;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);overflow:hidden}
+.cl label{display:flex;gap:10px;align-items:flex-start;padding:10px 14px;border-top:1px solid var(--line);font:400 .92rem var(--body);color:var(--ink)}
+.cl label:first-child{border-top:0}
+.cl label.on span{color:var(--muted);text-decoration:line-through}
+.cl input{margin-top:4px;flex:0 0 auto}
+.cl .x{margin-left:auto;flex:0 0 auto}
+dialog .full{grid-column:1/-1}
+.tnum{font:500 .78rem var(--mono);color:var(--muted);margin-right:6px}
+.ttags{color:var(--accent)}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.steps li{display:flex;align-items:center;gap:6px;font-size:.82rem;padding:6px 10px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--muted)}
+.steps li.ok{border-color:var(--ok);color:var(--ok);background:var(--ok-soft)}
+.steps li b{font-family:var(--mono);font-weight:500}
+.steps button{background:none;border:0;padding:0;font:600 .75rem var(--body);color:var(--accent);cursor:pointer}
+.opts{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))}
+.opt{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:grid;gap:8px;align-content:start;min-width:0;overflow-wrap:anywhere}
+.opt.sel{border-color:var(--ok);box-shadow:0 0 0 1px var(--ok)}
+.opt h4{margin:0;font:700 1.05rem var(--display)}
+.opt .acts{display:flex;flex-wrap:wrap;gap:6px}
+.opt .acts .btn{padding:6px 10px;font-size:.82rem}
+.gallery.sm{grid-template-columns:repeat(auto-fill,minmax(min(100%,110px),1fr))}
+.irows{display:grid;gap:6px}
+.irow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:6px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+.irow input{font:400 .9rem var(--body);color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:6px 8px;min-width:0}
+.irow .i-name{flex:1 1 150px}.irow .i-qty{flex:0 1 70px}.irow .i-cost{flex:0 1 80px}.irow .i-url{flex:2 1 200px}
+.irow .i-have{display:flex;flex-direction:row;align-items:center;gap:4px;font-weight:500;color:var(--ink)}
+#detail .dbody{display:grid;gap:12px;padding:20px}
+.dsec{display:grid;gap:6px;padding-top:12px;border-top:1px solid var(--line)}
+.dsec h4{margin:0;font:700 .92rem var(--display)}
+.dsec table{font-size:.85rem}
+.dsec td,.dsec th{padding:6px 8px}
+.pre{white-space:pre-wrap}
+.tcost .est{display:block}
+.tcost .act{display:block;color:var(--ok)}
+.tcost .act.over{color:var(--crit);font-weight:700}
+.grp{display:grid;gap:8px}
+#tsum td,#tsum th{white-space:nowrap}
+#tsum tfoot td{font-weight:700;background:var(--sunk)}
+.whoami{margin-left:auto;font-size:.82rem;color:var(--muted)}
+.whoami button{font:inherit;color:var(--accent);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline}
+.hist{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.hist li{padding:10px 0;border-top:1px solid var(--line)}
+.hist li:first-child{border-top:0}
+.hist .when{color:var(--muted);font-size:.82rem}
+.hist .chg{color:var(--muted);font-size:.85rem}
+</style>
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.min.js"></script>
+<script src="js/store.js"></script>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><h1>Highland Drive Sale Prep</h1><span>25 Highland Drive, Seventeen Mile Rocks</span><span class="whoami" id="whoami" hidden></span></div>
+    <nav class="tabs" aria-label="Plan pages"><ul id="navlist">
+      <li><a href="#dashboard">Dashboard</a></li>
+      <li><a href="#tasks">Tasks</a></li>
+      <li><a href="#areas">Area</a></li>
+      <li><a href="#presale">Pre-sale</a></li>
+      <li><a href="#documents">Documents</a></li>
+      <li><a href="#contacts">Contacts</a></li>
+      <li><a href="#finishes">Finishes</a></li>
+      <li><a href="#plan">Plan</a></li>
+      <li><a href="#market">Market</a></li>
+            <li><a href="#outside">Outside</a></li>
+      <li><a href="#declutter">Declutter</a></li>
+      <li><a href="#style">Style</a></li>
+      <li><a href="#timeline">Timeline</a></li>
+      <li><a href="#risks">Risks</a></li>
+      <li><a href="#history">History</a></li>
+    </ul></nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- DASHBOARD -->
+<section class="page" id="p-dashboard">
+  <div class="summary">
+    <div class="panel stat">
+      <span class="eyebrow">Target listing</span>
+      <span class="big num" id="countdown">…</span>
+      <span class="sub">to 1 September 2027. Fallback is March to April 2028, then spring 2028.</span>
+    </div>
+    <div class="panel stat">
+      <span class="eyebrow">Tasks done</span>
+      <span class="big num" id="donecount">…</span>
+      <div id="tierbars" style="display:grid;gap:8px;margin-top:6px"></div>
+    </div>
+    <div class="panel stat wide" style="min-width:0">
+      <span class="eyebrow">Spend against the ceiling</span>
+      <span class="big num" id="spendbig">…</span>
+      <span class="sub" id="spendsub">Planned spend uses the midpoint of each estimate for tasks that aren't dropped.</span>
+      <div class="budget" id="budget" aria-hidden="true"></div>
+      <div class="legend"><span><b style="background:var(--timber)"></b>Spent</span><span><b style="background:var(--accent)"></b>Planned</span><span>Markers at $50k and $100k</span></div>
+    </div>
+  </div>
+
+  <div class="panel" style="display:grid;gap:10px">
+    <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline">
+      <h3>Due now and next month</h3><span class="note" id="nextnote"></span>
+    </div>
+    <div id="nextup" class="tasks"></div>
+  </div>
+
+  <p><a href="#tasks">See all tasks, filters and totals</a></p>
+</section>
+
+<!-- PLAN -->
+<section class="page" id="p-plan" hidden>
+  <div class="prose">
+    <span class="eyebrow">The plan on one page</span>
+    <h2>Sell well, spend only where it pays back</h2>
+    <p class="lede">The goal is to sell 25 Highland Drive and downsize to a two or three bedroom townhouse or apartment, freeing up equity for an earlier retirement. Every dollar spent on preparation has to come back in the sale price, or it reduces the money you walk away with.</p>
+  </div>
+  <div class="grid">
+    <div class="panel prose"><span class="eyebrow">Timing</span><h3>Spring 2027</h3><p>List between late August and November 2027. If that slips, the fallback is March to April 2028, then spring 2028. The timeline works back from 1 September 2027.</p></div>
+    <div class="panel prose"><span class="eyebrow">Budget</span><h3>$50k to $100k ceiling</h3><p>No fixed budget. Spend is approved item by item. The bigger the item, the stronger the evidence it needs that buyers will pay more for it.</p></div>
+    <div class="panel prose"><span class="eyebrow">Who does it</span><h3>DIY first, trades for the hard parts</h3><p>You do the easy, learnable jobs at your own pace. Trades handle anything complex, licensed (plumbing, electrical, waterproofing) or heavy.</p></div>
+  </div>
+  <div class="panel prose">
+    <h3>The return test every task has to pass</h3>
+    <ul>
+      <li><strong>Must do</strong> items are cheap, fix something a buyer or building inspector would mark down, or are legally required. Do them regardless.</li>
+      <li><strong>Worth doing</strong> items are moderate spends that make the photos and inspections noticeably better, compared with similar listings nearby.</li>
+      <li><strong>If agents back it</strong> items are larger spends. They only go ahead if two or more agents independently say buyers in this price range will pay more for them.</li>
+      <li>When in doubt, refresh rather than replace. Cleaning, regrouting, new fittings and paint come before ripping anything out.</li>
+    </ul>
+  </div>
+  <div class="panel prose">
+    <h3>How we'll work through it</h3>
+    <ul>
+      <li>Room by room: you send current photos, Claude gives a costed task list and styling notes for that room, and the tasks land on the dashboard.</li>
+      <li>Agent appraisals happen once the plan is drafted and before any big spend, so the "if agents back it" tier gets real local evidence.</li>
+      <li>Restyled images of your actual rooms aren't possible yet. Your Adobe connector needs reconnecting on claude.ai first. Until then, each room gets a written styling brief and product picks.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- MARKET -->
+<section class="page" id="p-market" hidden>
+  <div class="prose">
+    <span class="eyebrow">Market and buyer</span>
+    <h2>Who buys this house, and what it's worth now</h2>
+    <p class="lede">These figures come from automated property sites, checked on 5 October 2026. They're a rough guide, not a valuation. Agent appraisals will replace them.</p>
+  </div>
+  <div class="grid">
+    <div class="panel stat"><span class="eyebrow">Domain estimate, your house</span><span class="big num">$1.88M</span><span class="sub">Range $1.62M to $2.14M</span></div>
+    <div class="panel stat"><span class="eyebrow">Suburb house median</span><span class="big num">$1.3M</span><span class="sub">Domain says $1.29M. Down about 3.4% over 12 months.</span></div>
+    <div class="panel stat"><span class="eyebrow">Houses sold a year</span><span class="big num">42</span><span class="sub">About 15 days on market</span></div>
+  </div>
+  <div class="grid">
+    <div class="panel stat"><span class="eyebrow">Across the road</span><span class="big num">$1.57M and $1.67M</span><span class="sub">28 Highland (Nov 2023) and 30 Highland (Jun 2024), both 4 bed with a pool on 761 m²</span></div>
+    <div class="panel stat"><span class="eyebrow">Newer 4 and 5 bed nearby</span><span class="big num">$1.5M to $1.9M</span><span class="sub">Most sales since late 2023 of 2002 to 2011 homes within about 1 km</span></div>
+    <div class="panel stat"><span class="eyebrow">Watch this one</span><span class="big num">17 Oct 2026</span><span class="sub">49 Flindersia Cres goes to auction. It's the closest sale to you and last sold for $1.67M in March 2024.</span></div>
+  </div>
+  <div style="display:grid;gap:12px">
+    <div class="secthead"><h3>House sales within about 1 km</h3><span class="note num" id="cs-count"></span></div>
+    <div class="toolbar">
+      <select id="cs-beds" aria-label="Bedrooms"><option value="4">4 or more beds</option><option value="5">5 or more beds</option><option value="0">Any beds</option></select>
+      <select id="cs-pool" aria-label="Pool"><option value="">Pool or not</option><option value="y">With a pool</option></select>
+      <select id="cs-dist" aria-label="Distance"><option value="1.2">Within about 1 km</option><option value="0.5">Within about 500 m</option><option value="0.25">Within about 250 m</option></select>
+      <select id="cs-since" aria-label="Sold since"><option value="2023-10">Since Oct 2023</option><option value="2025-01">Since Jan 2025</option><option value="2026-01">Since Jan 2026</option><option value="">All years</option></select>
+      <select id="cs-sort" aria-label="Sort"><option value="dist">Closest first</option><option value="date">Newest first</option><option value="price">Highest price first</option></select>
+    </div>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Address</th><th>Sold</th><th class="r">Price</th><th>Bed, bath, car</th><th class="r">Land</th><th>Pool</th><th class="r">Distance</th><th>Links</th></tr></thead>
+      <tbody id="cs-body"></tbody>
+    </table></div>
+    <p class="note">Prices and details come from Domain pages fetched on 5 October 2026. Distances are rough estimates (no mapping service was reachable), so treat them as within a few hundred metres. Off-market sales may be missing, which is how 30 Highland nearly slipped through. The realestate.com.au links follow that site's address pattern and couldn't be checked from here, so a few may not open. Tap a row's address to see its notes.</p>
+  </div>
+  <div style="display:grid;gap:12px">
+    <h3>On the market now</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Address</th><th>Bed, bath, car</th><th class="r">Land</th><th>Price or method</th><th>Links</th></tr></thead>
+      <tbody id="cl-body"></tbody>
+    </table></div>
+  </div>
+  <p class="note">Other sources: <a href="https://www.domain.com.au/property-profile/25-highland-drive-seventeen-mile-rocks-qld-4073" target="_blank" rel="noopener">Domain profile for your house</a>, <a href="https://www.domain.com.au/suburb-profile/seventeen-mile-rocks-qld-4073" target="_blank" rel="noopener">Domain suburb profile</a>, <a href="https://www.propertyvalue.com.au/suburb/seventeen%20mile%20rocks-4073-qld" target="_blank" rel="noopener">PropertyValue suburb data</a>. Domain medians by bedrooms: 3 bed $1.04M, 4 bed $1.46M, 5 bed $1.71M. None of the nearby sales is as big inside as yours (471 m² on Domain, which likely includes the garage), so floor area is something to put to the agents.</p>
+<script type="application/json" id="comps-data">{"sales": [{"address": "30 Highland Drive", "street": "Highland Drive", "date": "2024-06", "price": 1670500, "beds": 4, "baths": 2, "cars": 4, "land": 761, "pool": true, "distanceKm": 0.05, "domainUrl": "https://www.domain.com.au/property-profile/30-highland-drive-seventeen-mile-rocks-qld-4073", "note": "Directly across the road (even side). Sold 23 Jun 2024, private treaty, Hood Estate Agents, 10 days. Built 2010, 273 m2 internal. Not on Domain's suburb sold list, so probably sold off-market or with little advertising."}, {"address": "28 Highland Drive", "street": "Highland Drive", "date": "2023-11", "price": 1565000, "beds": 4, "baths": 3, "cars": 4, "land": 761, "pool": true, "distanceKm": 0.05, "domainUrl": "https://www.domain.com.au/28-highland-drive-seventeen-mile-rocks-qld-4073-2018863541", "note": "Directly across the road (even side). Auction 13 Nov 2023, Ray White Toowong|Chapel Hill, 17 days. Built 2004, 288 m2 internal. Profile: https://www.domain.com.au/property-profile/28-highland-drive-seventeen-mile-rocks-qld-4073"}, {"address": "10 Highland Drive", "street": "Highland Drive", "date": "2022-07", "price": 1520000, "beds": 4, "baths": 3, "cars": 2, "land": 761, "pool": null, "distanceKm": 0.15, "domainUrl": "https://www.domain.com.au/property-profile/10-highland-drive-seventeen-mile-rocks-qld-4073", "note": "Older reference sale (re-verified). 15 Jul 2022, private treaty, Belle Property Sherwood. Built 2006, 319 m2 internal. Pool not shown."}, {"address": "21 Highland Drive", "street": "Highland Drive", "date": "2021-08", "price": 1036000, "beds": 4, "baths": 2, "cars": 2, "land": 630, "pool": true, "distanceKm": 0.05, "domainUrl": "https://www.domain.com.au/property-profile/21-highland-drive-seventeen-mile-rocks-qld-4073", "note": "Older reference sale (re-verified). 2 Aug 2021, private treaty. Built 2005, 217 m2 internal."}, {"address": "2 Goodenia Crescent", "street": "Goodenia Crescent", "date": "2024-06", "price": 1532000, "beds": 4, "baths": 3, "cars": 2, "land": 545, "pool": true, "distanceKm": 0.2, "domainUrl": "https://www.domain.com.au/2-goodenia-crescent-seventeen-mile-rocks-qld-4073-2019270211", "note": "Auction. Built 2007, 228 m2 internal. School distances on Domain nearly match no. 25, so it is very close (~0.2 km)."}, {"address": "52 Goodenia Crescent", "street": "Goodenia Crescent", "date": "2026-07", "price": 2500000, "beds": 5, "baths": 3, "cars": 3, "land": 796, "pool": null, "distanceKm": 0.5, "domainUrl": "https://www.domain.com.au/52-goodenia-crescent-seventeen-mile-rocks-qld-4073-2020957072", "note": "Private treaty, McGrath Paddington. Built 2008, 326 m2 internal. Suburb record-level price."}, {"address": "49 Flindersia Crescent", "street": "Flindersia Crescent", "date": "2024-03", "price": 1670000, "beds": 5, "baths": 3, "cars": 2, "land": 1087, "pool": true, "distanceKm": 0.15, "domainUrl": "https://www.domain.com.au/49-flindersia-crescent-seventeen-mile-rocks-qld-4073-2019093571", "note": "Private treaty, 8 days. Built 2003, 240 m2 internal, Edenbrooke Estate. School distances on Domain match no. 25 within 0.1 km, so it is probably a near neighbour (~0.15 km). Back on market now: auction on 17 Oct 2026."}, {"address": "10 Flindersia Crescent", "street": "Flindersia Crescent", "date": "2025-12", "price": 1600000, "beds": 5, "baths": 2, "cars": 2, "land": 810, "pool": null, "distanceKm": 0.4, "domainUrl": "https://www.domain.com.au/10-flindersia-crescent-seventeen-mile-rocks-qld-4073-2020444149", "note": "Private treaty, 18 days. Built 2003, 221 m2 internal."}, {"address": "3 Melaleuca Crescent", "street": "Melaleuca Crescent", "date": "2025-08", "price": 1600000, "beds": 4, "baths": 2, "cars": 2, "land": 545, "pool": null, "distanceKm": 0.3, "domainUrl": "https://www.domain.com.au/3-melaleuca-crescent-seventeen-mile-rocks-qld-4073-2020122418", "note": "Private treaty, NGU Real Estate. Two storey, 285 m2 floor. Distance is uncertain: based on only 2 school distances."}, {"address": "125 Edenbrooke Drive", "street": "Edenbrooke Drive", "date": "2026-05", "price": 1690000, "beds": 5, "baths": 3, "cars": 2, "land": 586, "pool": null, "distanceKm": 0.3, "domainUrl": "https://www.domain.com.au/125-edenbrooke-drive-seventeen-mile-rocks-qld-4073-2020822184", "note": "Private treaty. Built 2006, 268 m2 internal. Previous sale Jun 2022: $1.38M."}, {"address": "20 Casuarina Street", "street": "Casuarina Street", "date": "2026-08", "price": 1690000, "beds": 5, "baths": 3, "cars": 2, "land": 725, "pool": null, "distanceKm": 0.4, "domainUrl": "https://www.domain.com.au/20-casuarina-street-seventeen-mile-rocks-qld-4073-2020980075", "note": "Auction 1 Aug 2026. Built 2009, 340 m2 internal."}, {"address": "17 Casuarina Street", "street": "Casuarina Street", "date": "2025-10", "price": 1700000, "beds": 5, "baths": 3, "cars": 2, "land": 631, "pool": true, "distanceKm": 0.4, "domainUrl": "https://www.domain.com.au/17-casuarina-street-seventeen-mile-rocks-qld-4073-2020322273", "note": "Auction. Built 2007, 287 m2 internal."}, {"address": "28 Casuarina Street", "street": "Casuarina Street", "date": "2024-12", "price": 1250000, "beds": 5, "baths": 2, "cars": 2, "land": 820, "pool": null, "distanceKm": 0.4, "domainUrl": "https://www.domain.com.au/28-casuarina-street-seventeen-mile-rocks-qld-4073-2019579399", "note": "Private treaty, 36 days. Built 2010, 230 m2 internal. Domain profile says Nov 2024; sold list says 11 Dec 2024."}, {"address": "8 Lomandra Court", "street": "Lomandra Court", "date": "2024-11", "price": 1550000, "beds": 5, "baths": 2, "cars": 2, "land": 800, "pool": null, "distanceKm": 0.4, "domainUrl": "https://www.domain.com.au/8-lomandra-court-seventeen-mile-rocks-qld-4073-2019610388", "note": "Private treaty. Built 2002, 200 m2 internal. Flood overlay."}, {"address": "10 Saffron Place", "street": "Saffron Place", "date": "2023-11", "price": 1165000, "beds": 4, "baths": 2, "cars": 3, "land": 672, "pool": true, "distanceKm": 0.4, "domainUrl": "https://www.domain.com.au/10-saffron-pl-seventeen-mile-rocks-qld-4073-2018884566", "note": "Private treaty, 5 days. Built 2003, 186 m2 internal."}, {"address": "7 Brookeside Crescent", "street": "Brookeside Crescent", "date": "2026-07", "price": 1650000, "beds": 4, "baths": 2, "cars": 5, "land": 608, "pool": null, "distanceKm": 0.4, "domainUrl": "https://www.domain.com.au/7-brookeside-crescent-seventeen-mile-rocks-qld-4073-2020795092", "note": "Private treaty. Built 2003, 200 m2 internal. Sold list says 23 Jul 2026; profile says May 2026."}, {"address": "66 Brookeside Crescent", "street": "Brookeside Crescent", "date": "2026-08", "price": 1240000, "beds": 5, "baths": 2, "cars": 2, "land": 659, "pool": null, "distanceKm": 0.6, "domainUrl": "https://www.domain.com.au/66-brookeside-crescent-seventeen-mile-rocks-qld-4073-2020818599", "note": "Private treaty. Built 2002, 202 m2 internal."}, {"address": "61 Brookeside Crescent", "street": "Brookeside Crescent", "date": "2026-02", "price": 1600000, "beds": 4, "baths": 2, "cars": 2, "land": 627, "pool": true, "distanceKm": 0.6, "domainUrl": "https://www.domain.com.au/61-brookeside-crescent-seventeen-mile-rocks-qld-4073-2020559356", "note": "Auction, Place Indooroopilly. Built 2002, 305 m2 internal."}, {"address": "57 Brookeside Crescent", "street": "Brookeside Crescent", "date": "2026-01", "price": 1500000, "beds": 4, "baths": 2, "cars": 2, "land": 716, "pool": true, "distanceKm": 0.6, "domainUrl": "https://www.domain.com.au/57-brookeside-crescent-seventeen-mile-rocks-qld-4073-2020513754", "note": "Private treaty. Built 2002, 206 m2 internal."}, {"address": "42 Brookeside Crescent", "street": "Brookeside Crescent", "date": "2024-11", "price": 1330000, "beds": 4, "baths": 2, "cars": 2, "land": 551, "pool": false, "distanceKm": 0.6, "domainUrl": "https://www.domain.com.au/42-brookeside-crescent-seventeen-mile-rocks-qld-4073-2019602676", "note": "Private treaty. Built 2002, 202 m2 internal."}, {"address": "67 Brookeside Crescent", "street": "Brookeside Crescent", "date": "2024-09", "price": 1245000, "beds": 4, "baths": 2, "cars": 2, "land": 514, "pool": null, "distanceKm": 0.6, "domainUrl": "https://www.domain.com.au/67-brookeside-crescent-seventeen-mile-rocks-qld-4073-2019450181", "note": "Private treaty."}, {"address": "106 Brookeside Crescent", "street": "Brookeside Crescent", "date": "2024-04", "price": 1125000, "beds": 4, "baths": 2, "cars": 2, "land": 556, "pool": null, "distanceKm": 0.6, "domainUrl": "https://www.domain.com.au/106-brookeside-crescent-seventeen-mile-rocks-qld-4073-2019102599", "note": "Private treaty. Exact position on the street is unknown."}, {"address": "98 Brookeside Crescent", "street": "Brookeside Crescent", "date": "2023-12", "price": 1200000, "beds": 3, "baths": 2, "cars": 2, "land": 570, "pool": null, "distanceKm": 0.6, "domainUrl": "https://www.domain.com.au/98-brookeside-crescent-seventeen-mile-rocks-qld-4073-2018946324", "note": "Private treaty. Exact position on the street is unknown."}, {"address": "27 Brookeside Crescent", "street": "Brookeside Crescent", "date": "2023-10", "price": 1100000, "beds": 4, "baths": 2, "cars": 2, "land": 539, "pool": null, "distanceKm": 0.6, "domainUrl": "https://www.domain.com.au/27-brookeside-crescent-seventeen-mile-rocks-qld-4073-2018892938", "note": "Private treaty. Exact position on the street is unknown."}, {"address": "24 Argyle Street", "street": "Argyle Street", "date": "2026-06", "price": 1140000, "beds": 3, "baths": 2, "cars": 2, "land": 405, "pool": null, "distanceKm": 0.5, "domainUrl": "https://www.domain.com.au/24-argyle-street-seventeen-mile-rocks-qld-4073-2020769261", "note": "Private treaty. Small 405 m2 lot."}, {"address": "35 Argyle Street", "street": "Argyle Street", "date": "2026-05", "price": 1130000, "beds": 2, "baths": 2, "cars": 2, "land": 405, "pool": null, "distanceKm": 0.5, "domainUrl": "https://www.domain.com.au/35-argyle-street-seventeen-mile-rocks-qld-4073-2020811149", "note": "Private treaty. Built 1980."}, {"address": "23 Argyle Street", "street": "Argyle Street", "date": "2026-04", "price": 1120000, "beds": 3, "baths": 1, "cars": 2, "land": 405, "pool": null, "distanceKm": 0.5, "domainUrl": "https://www.domain.com.au/23-argyle-street-seventeen-mile-rocks-qld-4073-2020755486", "note": "Private treaty."}, {"address": "36 Argyle Street", "street": "Argyle Street", "date": "2026-04", "price": 1082000, "beds": 2, "baths": 2, "cars": 2, "land": 405, "pool": null, "distanceKm": 0.5, "domainUrl": "https://www.domain.com.au/36-argyle-street-seventeen-mile-rocks-qld-4073-2020708463", "note": "Auction."}, {"address": "37 Argyle Street", "street": "Argyle Street", "date": "2025-10", "price": 1200000, "beds": 5, "baths": 3, "cars": 2, "land": 405, "pool": false, "distanceKm": 0.5, "domainUrl": "https://www.domain.com.au/37-argyle-street-seventeen-mile-rocks-qld-4073-2020272776", "note": "Private treaty. Built 1960, 263 m2 internal. Resold after the Jul 2024 sale."}, {"address": "37 Argyle Street", "street": "Argyle Street", "date": "2024-07", "price": 1025000, "beds": 5, "baths": 2, "cars": 2, "land": 405, "pool": false, "distanceKm": 0.5, "domainUrl": "https://www.domain.com.au/37-argyle-street-seventeen-mile-rocks-qld-4073-2019325893", "note": "Private treaty. Earlier sale of the same house."}, {"address": "19 Argyle Street", "street": "Argyle Street", "date": "2024-05", "price": 816000, "beds": 3, "baths": 1, "cars": 1, "land": 405, "pool": null, "distanceKm": 0.5, "domainUrl": "https://www.domain.com.au/19-argyle-street-seventeen-mile-rocks-qld-4073-2019201952", "note": "Auction."}, {"address": "18 Somersby Street", "street": "Somersby Street", "date": "2026-03", "price": 1150000, "beds": 3, "baths": 2, "cars": 2, "land": 452, "pool": null, "distanceKm": 0.5, "domainUrl": "https://www.domain.com.au/18-somersby-street-seventeen-mile-rocks-qld-4073-2020606679", "note": "Auction, Harcourts Marketplace."}, {"address": "8 Somersby Street", "street": "Somersby Street", "date": "2025-05", "price": 1060000, "beds": 4, "baths": 2, "cars": 2, "land": 459, "pool": null, "distanceKm": 0.5, "domainUrl": "https://www.domain.com.au/8-somersby-street-seventeen-mile-rocks-qld-4073-2019909521", "note": "Private treaty."}, {"address": "19 Carlyle Street", "street": "Carlyle Street", "date": "2026-01", "price": 1150000, "beds": 3, "baths": 1, "cars": 2, "land": 405, "pool": null, "distanceKm": 0.4, "domainUrl": "https://www.domain.com.au/19-carlyle-street-seventeen-mile-rocks-qld-4073-2020504875", "note": "Auction. Built 1970."}, {"address": "27 Carlyle Street", "street": "Carlyle Street", "date": "2025-09", "price": 1000000, "beds": 3, "baths": 1, "cars": 2, "land": 405, "pool": null, "distanceKm": 0.4, "domainUrl": "https://www.domain.com.au/27-carlyle-street-seventeen-mile-rocks-qld-4073-2020164978", "note": "Private treaty."}, {"address": "7 Pandorea Close", "street": "Pandorea Close", "date": "2025-02", "price": 2280000, "beds": 5, "baths": 3, "cars": 2, "land": 1428, "pool": true, "distanceKm": 0.5, "domainUrl": "https://www.domain.com.au/7-pandorea-close-seventeen-mile-rocks-qld-4073-2019714812", "note": "Private treaty. Built 2009, 306 m2 internal. Large 1,428 m2 block."}, {"address": "10 Bengar Place", "street": "Bengar Place", "date": "2026-06", "price": 1308000, "beds": 3, "baths": 2, "cars": 2, "land": 515, "pool": null, "distanceKm": 0.5, "domainUrl": "https://www.domain.com.au/10-bengar-place-seventeen-mile-rocks-qld-4073-2020863097", "note": "Private treaty."}, {"address": "13 Bengar Place", "street": "Bengar Place", "date": "2025-12", "price": 1215000, "beds": 4, "baths": 2, "cars": 2, "land": 587, "pool": null, "distanceKm": 0.5, "domainUrl": "https://www.domain.com.au/13-bengar-place-seventeen-mile-rocks-qld-4073-2020477091", "note": "Auction. Built 1998, 240 m2 internal."}, {"address": "25 Harris Place", "street": "Harris Place", "date": "2023-10", "price": 890000, "beds": 3, "baths": 1, "cars": 1, "land": 495, "pool": null, "distanceKm": 0.5, "domainUrl": "https://www.domain.com.au/25-harris-place-seventeen-mile-rocks-qld-4073-2018830500", "note": "Private treaty. Built 1998."}, {"address": "18 Harris Place", "street": "Harris Place", "date": "2023-10", "price": 880000, "beds": 3, "baths": 2, "cars": 2, "land": 521, "pool": null, "distanceKm": 0.5, "domainUrl": "https://www.domain.com.au/18-harris-place-seventeen-mile-rocks-qld-4073-2018797453", "note": "Private treaty, 6 Oct 2023."}, {"address": "6 Beauchamp Street", "street": "Beauchamp Street", "date": "2026-01", "price": 1280000, "beds": 4, "baths": 2, "cars": 2, "land": 450, "pool": null, "distanceKm": 0.6, "domainUrl": "https://www.domain.com.au/6-beauchamp-street-seventeen-mile-rocks-qld-4073-2020525398", "note": "Private treaty. Built 1997, 153 m2 internal."}, {"address": "10 Beauchamp Street", "street": "Beauchamp Street", "date": "2024-02", "price": 850000, "beds": 3, "baths": 2, "cars": 2, "land": 450, "pool": null, "distanceKm": 0.6, "domainUrl": "https://www.domain.com.au/10-beauchamp-street-seventeen-mile-rocks-qld-4073-2018980683", "note": "Auction."}, {"address": "2 Beauchamp Street", "street": "Beauchamp Street", "date": "2024-01", "price": 880000, "beds": 3, "baths": 2, "cars": 2, "land": 451, "pool": null, "distanceKm": 0.6, "domainUrl": "https://www.domain.com.au/2-beauchamp-street-seventeen-mile-rocks-qld-4073-2018979491", "note": "Private treaty."}, {"address": "9 Hogan Place", "street": "Hogan Place", "date": "2025-11", "price": 1315500, "beds": 4, "baths": 3, "cars": 2, "land": 526, "pool": false, "distanceKm": 0.6, "domainUrl": "https://www.domain.com.au/9-hogan-place-seventeen-mile-rocks-qld-4073-2020372237", "note": "Private treaty."}, {"address": "10 McNally Close", "street": "McNally Close", "date": "2025-10", "price": 1305000, "beds": 4, "baths": 3, "cars": 2, "land": 582, "pool": null, "distanceKm": 0.6, "domainUrl": "https://www.domain.com.au/10-mcnally-close-seventeen-mile-rocks-qld-4073-2020294959", "note": "Auction. Built 2000, 250 m2 internal."}, {"address": "11 McNally Close", "street": "McNally Close", "date": "2024-10", "price": 1157500, "beds": 4, "baths": 3, "cars": 2, "land": 623, "pool": null, "distanceKm": 0.6, "domainUrl": "https://www.domain.com.au/11-mcnally-close-seventeen-mile-rocks-qld-4073-2019492065", "note": "Private treaty."}, {"address": "3 McNally Close", "street": "McNally Close", "date": "2024-03", "price": 975000, "beds": 4, "baths": 3, "cars": 2, "land": 450, "pool": null, "distanceKm": 0.6, "domainUrl": "https://www.domain.com.au/3-mcnally-close-seventeen-mile-rocks-qld-4073-2018982296", "note": "Private treaty."}, {"address": "15 McNally Close", "street": "McNally Close", "date": "2024-02", "price": 1015000, "beds": 4, "baths": 3, "cars": 2, "land": 477, "pool": null, "distanceKm": 0.6, "domainUrl": "https://www.domain.com.au/15-mcnally-close-seventeen-mile-rocks-qld-4073-2019137125", "note": "Auction."}, {"address": "19 Norfolk Place", "street": "Norfolk Place", "date": "2025-08", "price": 1500000, "beds": 4, "baths": 2, "cars": 2, "land": 910, "pool": null, "distanceKm": 0.6, "domainUrl": "https://www.domain.com.au/19-norfolk-place-seventeen-mile-rocks-qld-4073-2020156462", "note": "Private treaty. Built 1994, 249 m2 internal."}, {"address": "6 Pampling Street", "street": "Pampling Street", "date": "2023-10", "price": 896500, "beds": 4, "baths": 2, "cars": 2, "land": 458, "pool": null, "distanceKm": 0.6, "domainUrl": "https://www.domain.com.au/6-pampling-street-seventeen-mile-rocks-qld-4073-2018777666", "note": "Auction. Built 1997."}, {"address": "5 Roberts Street", "street": "Roberts Street", "date": "2024-04", "price": 903000, "beds": 3, "baths": 2, "cars": 3, "land": 457, "pool": null, "distanceKm": 0.7, "domainUrl": "https://www.domain.com.au/5-roberts-street-seventeen-mile-rocks-qld-4073-2019158600", "note": "Auction. Built 1997."}, {"address": "15 Hounslow Way", "street": "Hounslow Way", "date": "2025-10", "price": 1100000, "beds": 3, "baths": 2, "cars": 2, "land": 469, "pool": null, "distanceKm": 0.7, "domainUrl": "https://www.domain.com.au/15-hounslow-way-seventeen-mile-rocks-qld-4073-2020181075", "note": "Private treaty, 2 Oct 2025."}, {"address": "27 Hounslow Way", "street": "Hounslow Way", "date": "2024-06", "price": 1020000, "beds": 3, "baths": 2, "cars": 2, "land": 460, "pool": null, "distanceKm": 0.7, "domainUrl": "https://www.domain.com.au/27-hounslow-way-seventeen-mile-rocks-qld-4073-2019247269", "note": "Auction."}, {"address": "14 Hounslow Way", "street": "Hounslow Way", "date": "2024-04", "price": 950000, "beds": 4, "baths": 2, "cars": 2, "land": 450, "pool": false, "distanceKm": 0.7, "domainUrl": "https://www.domain.com.au/14-hounslow-way-seventeen-mile-rocks-qld-4073-2019155778", "note": "Auction. Built 1999."}, {"address": "4 Crieff Close", "street": "Crieff Close", "date": "2025-04", "price": 990000, "beds": 4, "baths": 2, "cars": 2, "land": 648, "pool": null, "distanceKm": 0.7, "domainUrl": "https://www.domain.com.au/4-crieff-close-seventeen-mile-rocks-qld-4073-2019781934", "note": "Private treaty."}, {"address": "5 Crieff Close", "street": "Crieff Close", "date": "2023-12", "price": 1150000, "beds": 4, "baths": 2, "cars": 2, "land": 628, "pool": null, "distanceKm": 0.7, "domainUrl": "https://www.domain.com.au/5-crieff-close-seventeen-mile-rocks-qld-4073-2018929457", "note": "Private treaty. Built 1990."}, {"address": "12 Delapine Place", "street": "Delapine Place", "date": "2024-07", "price": 965000, "beds": 3, "baths": 1, "cars": 2, "land": 700, "pool": null, "distanceKm": 0.8, "domainUrl": "https://www.domain.com.au/12-delapine-place-seventeen-mile-rocks-qld-4073-2019356990", "note": "Private treaty. Built 1992."}, {"address": "10 Skirmish Street", "street": "Skirmish Street", "date": "2025-03", "price": 922000, "beds": 3, "baths": 1, "cars": 2, "land": 647, "pool": null, "distanceKm": 0.8, "domainUrl": "https://www.domain.com.au/10-skirmish-street-seventeen-mile-rocks-qld-4073-2019784454", "note": "Private treaty. Built 1984. Distance is uncertain: based on few school distances."}, {"address": "35 Molesworth Street", "street": "Molesworth Street", "date": "2025-10", "price": 1150000, "beds": 4, "baths": 2, "cars": 2, "land": 607, "pool": null, "distanceKm": 0.8, "domainUrl": "https://www.domain.com.au/35-molesworth-street-seventeen-mile-rocks-qld-4073-2020320473", "note": "Private treaty."}, {"address": "21 Molesworth Street", "street": "Molesworth Street", "date": "2025-08", "price": 1325000, "beds": 4, "baths": 2, "cars": 2, "land": 644, "pool": true, "distanceKm": 0.8, "domainUrl": "https://www.domain.com.au/21-molesworth-street-seventeen-mile-rocks-qld-4073-2020158625", "note": "Private treaty. Built 1975. Probably renovated: bought Feb 2025 for $750k."}, {"address": "21 Molesworth Street", "street": "Molesworth Street", "date": "2025-02", "price": 750000, "beds": 4, "baths": 2, "cars": 2, "land": 644, "pool": true, "distanceKm": 0.8, "domainUrl": "https://www.domain.com.au/21-molesworth-street-seventeen-mile-rocks-qld-4073-2019935984", "note": "Earlier sale of the same house. Likely bought to renovate."}, {"address": "11 Meehan Street", "street": "Meehan Street", "date": "2024-11", "price": 1150000, "beds": 3, "baths": 1, "cars": 2, "land": 646, "pool": null, "distanceKm": 0.9, "domainUrl": "https://www.domain.com.au/11-meehan-street-seventeen-mile-rocks-qld-4073-2019574245", "note": "Private treaty. Built 1985. Distance is uncertain."}, {"address": "12 Bunya Place", "street": "Bunya Place", "date": "2026-08", "price": 1500888, "beds": 4, "baths": 2, "cars": 2, "land": 880, "pool": null, "distanceKm": 0.9, "domainUrl": "https://www.domain.com.au/12-bunya-place-seventeen-mile-rocks-qld-4073-2021036897", "note": "Private treaty. Built 1995, 144 m2 internal."}, {"address": "151 Gordon Circuit", "street": "Gordon Circuit", "date": "2026-07", "price": 1910000, "beds": 5, "baths": 3, "cars": 2, "land": 754, "pool": null, "distanceKm": 0.9, "domainUrl": "https://www.domain.com.au/151-gordon-circuit-seventeen-mile-rocks-qld-4073-2020941171", "note": "Auction, Ray White Centenary. Built 2007, 304 m2 internal. About 0.8-1.0 km away, on the eastern (Fig Tree Pocket) side."}, {"address": "54 Gordon Circuit", "street": "Gordon Circuit", "date": "2026-02", "price": 1850000, "beds": 5, "baths": 2, "cars": 2, "land": 791, "pool": null, "distanceKm": 1.0, "domainUrl": "https://www.domain.com.au/54-gordon-circuit-seventeen-mile-rocks-qld-4073-2020523023", "note": "Private treaty. Built 2008, 258 m2 internal. Borderline 1 km."}, {"address": "81 Gordon Circuit", "street": "Gordon Circuit", "date": "2025-10", "price": 2032000, "beds": 4, "baths": 2, "cars": 2, "land": 926, "pool": false, "distanceKm": 1.0, "domainUrl": "https://www.domain.com.au/81-gordon-circuit-seventeen-mile-rocks-qld-4073-2020298924", "note": "Private treaty. 260 m2 internal. Borderline 1 km."}, {"address": "147 Gordon Circuit", "street": "Gordon Circuit", "date": "2025-10", "price": 1818000, "beds": 5, "baths": 3, "cars": 2, "land": 756, "pool": true, "distanceKm": 0.9, "domainUrl": "https://www.domain.com.au/147-gordon-circuit-seventeen-mile-rocks-qld-4073-2020305776", "note": "Private treaty. Built 2006, 307 m2 internal. Resold within 2 years."}, {"address": "147 Gordon Circuit", "street": "Gordon Circuit", "date": "2023-10", "price": 1720000, "beds": 5, "baths": 3, "cars": 2, "land": 756, "pool": true, "distanceKm": 0.9, "domainUrl": "https://www.domain.com.au/147-gordon-circuit-seventeen-mile-rocks-qld-4073-2018832607", "note": "Earlier sale of the same house."}, {"address": "139 Gordon Circuit", "street": "Gordon Circuit", "date": "2025-05", "price": 1645000, "beds": 4, "baths": 3, "cars": 2, "land": 760, "pool": null, "distanceKm": 0.9, "domainUrl": "https://www.domain.com.au/139-gordon-circuit-seventeen-mile-rocks-qld-4073-2019892039", "note": "Auction. Borderline 1 km."}, {"address": "28 Gordon Circuit", "street": "Gordon Circuit", "date": "2025-05", "price": 1780000, "beds": 4, "baths": 2, "cars": 2, "land": 1094, "pool": true, "distanceKm": 1.0, "domainUrl": "https://www.domain.com.au/28-gordon-circuit-seventeen-mile-rocks-qld-4073-2019926089", "note": "Sold prior to auction. Built 2006, 297 m2 internal. Borderline 1 km."}, {"address": "70 Gordon Circuit", "street": "Gordon Circuit", "date": "2024-09", "price": 1860000, "beds": 5, "baths": 2, "cars": 2, "land": 700, "pool": true, "distanceKm": 1.0, "domainUrl": "https://www.domain.com.au/70-gordon-circuit-seventeen-mile-rocks-qld-4073-2019434531", "note": "Private treaty. Built 2011, 279 m2 internal. Borderline 1 km."}, {"address": "8 Gordon Circuit", "street": "Gordon Circuit", "date": "2024-08", "price": 1750000, "beds": 5, "baths": 4, "cars": 5, "land": 927, "pool": false, "distanceKm": 1.1, "domainUrl": "https://www.domain.com.au/8-gordon-circuit-seventeen-mile-rocks-qld-4073-2019356860", "note": "Private treaty. Built 2006. Borderline 1 km."}, {"address": "25 Venerable Street", "street": "Venerable Street", "date": "2024-10", "price": 1220000, "beds": 5, "baths": 2, "cars": 2, "land": 725, "pool": true, "distanceKm": 1.0, "domainUrl": "https://www.domain.com.au/25-venerable-street-seventeen-mile-rocks-qld-4073-2019475023", "note": "Private treaty. Built 1970. About 1 km away."}], "listings": [{"address": "49 Flindersia Crescent", "street": "Flindersia Crescent", "date": "2026-10", "price": null, "beds": 5, "baths": 3, "cars": 2, "land": 1087, "pool": true, "distanceKm": 0.15, "domainUrl": "https://www.domain.com.au/49-flindersia-crescent-seventeen-mile-rocks-qld-4073-2021183460", "note": "Auction Sat 17 Oct 2026, 3pm, on site, Ray White Centenary. Two storey, 240 m2 internal, pool, indoor spa, solar. Sold Mar 2024 for $1.67M. Very close to no. 25 and worth watching.", "asking": "Auction (no price guide)"}, {"address": "69 Gordon Circuit", "street": "Gordon Circuit", "date": "2026-10", "price": null, "beds": 4, "baths": 2, "cars": 2, "land": 955, "pool": null, "distanceKm": 1.0, "domainUrl": "https://www.domain.com.au/69-gordon-circuit-seventeen-mile-rocks-qld-4073-2021041401", "note": "Architect-designed, backs onto bushland. Plum Property Sales.", "asking": "Sale by negotiation (no price)"}, {"address": "2 Paterson Street", "street": "Paterson Street", "date": "2026-10", "price": null, "beds": 5, "baths": 2, "cars": 2, "land": 642, "pool": true, "distanceKm": null, "domainUrl": "https://www.domain.com.au/2-paterson-street-seventeen-mile-rocks-qld-4073-2021074308", "note": "Ray White Centenary. Elevated, north-facing, pool. Distance not estimated (Corinda catchment, so probably >1 km).", "asking": "Price guide on request"}, {"address": "49 Venerable Street", "street": "Venerable Street", "date": "2026-10", "price": null, "beds": 4, "baths": 2, "cars": 3, "land": 817, "pool": true, "distanceKm": 1.0, "domainUrl": "https://www.domain.com.au/49-venerable-street-seventeen-mile-rocks-qld-4073-2021085468", "note": "Under contract before auction. Renovated, with pool. The sale price will show once it settles.", "asking": "Under contract (no price)"}]}</script>
+  <div class="two">
+    <div class="panel prose">
+      <h3>Likely buyer</h3>
+      <p>A family upgrading into a bigger home. Four bedrooms, a study, several living areas, a pool and two alfresco areas suit a household with school-age or teenage children. They'll want space that looks easy to live in, bedrooms that read as bedrooms, and a backyard that feels ready for summer.</p>
+    </div>
+    <div class="panel prose">
+      <h3>Flood overlay</h3>
+      <p>Council FloodWise mapping shows potential minor flooding only at the bottom front corner of the block, outside the 1.2 m retaining wall. Queensland's seller disclosure statement doesn't require flood history, but buyers and their insurers will check the mapping themselves. Keep the FloodWise report and a photo of the wall so the agent can answer questions with facts.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRIORITIES -->
+<section class="page" id="p-tasks" hidden>
+  <div class="prose">
+    <span class="eyebrow">Tasks</span>
+    <h2>Every task, by priority</h2>
+    <p class="lede">Totals compare the estimate with what's actually been spent and, for DIY jobs, the hours. Routine maintenance is left out of the money totals.</p>
+  </div>
+  <div class="tablewrap"><table id="tsum"></table></div>
+  <div style="display:grid;gap:12px">
+    <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center">
+      <h3>Task list</h3>
+      <button class="btn" id="addbtn" type="button">Add task</button>
+    </div>
+    <div class="toolbar">
+      <div id="ms-area"></div>
+      <div id="ms-type"></div>
+      <div id="ms-tier"></div>
+      <div id="ms-status"></div>
+      <div id="ms-who"></div>
+      <div id="ms-tag"></div>
+      <select id="f-group" aria-label="Group by"><option value="tier">Group by priority</option><option value="area">Group by room or area</option><option value="type">Group by type</option><option value="due">Group by due month</option><option value="">No grouping</option></select>
+      <label class="readyck"><input type="checkbox" id="f-ready"> Ready to start only</label>
+      <input id="f-q" type="search" placeholder="Search tasks" aria-label="Search tasks">
+    </div>
+    <div id="dbstate" class="banner" hidden></div>
+    <div id="tasklist" style="display:grid;gap:18px"><div class="empty">Loading your task list…</div></div>
+    <p class="note">Tap a status to move it along (to do, in progress, done). Tap a task name to edit costs, time, materials, quotes and notes. A red actual means it went over the high estimate. Cost ranges are rough guides for Brisbane in 2026 and need confirming with quotes.</p>
+  </div>
+</section>
+
+<!-- AREAS -->
+<section class="page" id="p-areas" hidden>
+  <div class="prose">
+    <h2>Area</h2>
+    <p class="lede">Open an area to see its vision, current photos and task list.</p>
+  </div>
+  <div class="secthead"><span class="note" id="mg-note"></span><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost" id="mg-addgroup" type="button" hidden>Add group</button><button class="btn ghost" id="mg-toggle" type="button" hidden>Manage groups and areas</button></div></div>
+  <div id="areagroups" style="display:grid;gap:26px"></div>
+</section>
+
+<!-- ONE AREA -->
+<section class="page" id="p-area" hidden>
+  <a class="crumb" href="#areas">All areas</a>
+  <div class="prose">
+    <span class="eyebrow" id="a-group"></span>
+    <h2 id="a-name"></h2>
+  </div>
+  <ol class="steps" id="a-steps" aria-label="Progress for this room"></ol>
+  <div class="two">
+    <div class="panel prose"><div class="secthead"><span class="eyebrow">Now</span><button type="button" class="linkbtn" data-aedit="now">Edit</button></div><p id="a-now" class="pre"></p></div>
+    <div class="panel prose"><div class="secthead"><span class="eyebrow">Goals for sale</span><button type="button" class="linkbtn" data-aedit="sale">Edit</button></div><p id="a-sale" class="pre"></p></div>
+  </div>
+  <div class="panel" style="display:grid;gap:12px">
+    <div class="galhead"><h3>Current state</h3><label class="btn ghost filebtn" id="up-current-wrap">Add current photos<input type="file" id="up-current" accept="image/*" multiple></label></div>
+    <p class="note">Wide shots from each doorway or corner, plus close-ups of anything worn, broken or dated.</p>
+    <div class="gallery" id="g-current"></div>
+  </div>
+  <div class="panel" style="display:grid;gap:12px">
+    <h3>The vision</h3>
+    <div id="a-chosen"></div>
+  </div>
+  <div style="display:grid;gap:10px">
+    <h3>Vision options</h3>
+    <p class="note">Low is the must-dos and basics. Medium is what buyers expect, with a clear return. High is a premium feel that still pays back. Lux is the dream if money were no object and you were staying.</p>
+    <div class="opts" id="a-opts"></div>
+  </div>
+  <div class="panel" style="display:grid;gap:12px">
+    <div class="galhead"><h3>Inspiration</h3><label class="btn ghost filebtn" id="up-vision-wrap">Add inspiration<input type="file" id="up-vision" accept="image/*" multiple></label></div>
+    <p class="note">Pinterest saves and other rooms you like, to steer the options.</p>
+    <div class="gallery sm" id="g-vision"></div>
+  </div>
+  <p class="note" id="a-upmsg" role="status"></p>
+  <div style="display:grid;gap:12px">
+    <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center">
+      <h3 id="a-taskhead">Tasks</h3>
+      <button class="btn" id="a-add" type="button">Add task here</button>
+    </div>
+    <div id="a-tasks" class="tasks"></div>
+  </div>
+  <div class="panel" style="display:grid;gap:12px">
+    <div class="galhead"><h3>Finishes</h3><button class="btn ghost" id="a-addfin" type="button">Add finish</button></div>
+    <p class="note">Paint colours, tiles and fittings in this room, so touch-ups match.</p>
+    <div id="a-fin"></div>
+  </div>
+</section>
+
+<!-- PRE-SALE -->
+<section class="page" id="p-presale" hidden>
+  <div class="prose">
+    <span class="eyebrow">Pre-sale</span>
+    <h2>Countdown to listing</h2>
+    <p class="lede">The run-in from choosing an agent to the first open home, by month. These are ordinary tasks, so they also show on the dashboard and on their rooms. If the listing date moves, shift their due months.</p>
+  </div>
+  <div class="secthead"><h3>Pre-sale tasks</h3><button class="btn" id="ps-add" type="button">Add pre-sale task</button></div>
+  <div id="ps-list" style="display:grid;gap:18px"></div>
+  <div class="panel" style="display:grid;gap:12px">
+    <div class="secthead"><h3>Photo day and open home reset</h3><button class="btn ghost" id="oh-reset" type="button">Untick all for next time</button></div>
+    <p class="note">The last walk-through before the photographer or each open home. Tick as you go, then untick all ready for the next one. <span id="oh-count" class="num"></span></p>
+    <div class="cl" id="oh-list"></div>
+    <div class="inrow"><label>Add an item<input id="oh-new" maxlength="160"></label><button class="btn ghost" id="oh-add" type="button">Add</button></div>
+  </div>
+</section>
+
+<!-- DOCUMENTS -->
+<section class="page" id="p-documents" hidden>
+  <div class="prose">
+    <span class="eyebrow">Documents</span>
+    <h2>Certificates, approvals, warranties and reports</h2>
+    <p class="lede">What the agent, conveyancer and buyers will ask for, with the files attached. Anything that expires before the listing window closes at the end of November 2027 is flagged.</p>
+  </div>
+  <div class="secthead"><span class="note num" id="d-sum"></span><button class="btn" id="d-add" type="button">Add document</button></div>
+  <div id="d-list" style="display:grid;gap:18px"></div>
+</section>
+
+<!-- CONTACTS -->
+<section class="page" id="p-contacts" hidden>
+  <div class="prose">
+    <span class="eyebrow">Contacts</span>
+    <h2>Trades, suppliers and agents</h2>
+    <p class="lede">Everyone you get quotes from or work with, linked to their tasks. Add someone here, or type a new name when you log a quote and they're added for you.</p>
+  </div>
+  <div class="secthead"><input id="c-q" type="search" placeholder="Search contacts" aria-label="Search contacts"><button class="btn" id="c-add" type="button">Add contact</button></div>
+  <div id="c-list" style="display:grid;gap:18px"></div>
+</section>
+
+<!-- FINISHES -->
+<section class="page" id="p-finishes" hidden>
+  <div class="prose">
+    <span class="eyebrow">Finishes</span>
+    <h2>Paint, tiles and fittings by room</h2>
+    <p class="lede">Record what's on the walls, floors and fittings so touch-ups match and buyers' questions are quick to answer. Paint names and codes are usually on the tin lid or the receipt.</p>
+  </div>
+  <div class="secthead"><span></span><button class="btn" id="fin-add" type="button">Add finish</button></div>
+  <div id="fin-list" style="display:grid;gap:18px"></div>
+</section>
+
+<!-- OUTSIDE -->
+<section class="page" id="p-outside" hidden>
+  <div class="prose">
+    <span class="eyebrow">Outside</span>
+    <h2>Street appeal, then the backyard</h2>
+    <p class="lede">The front already photographs well: rendered two-storey facade, slatted fence, cypress pines and a lawn. The work is mostly cleaning and fixing wear. The backyard and the mismatched tiles need photos before we can choose a fix.</p>
+  </div>
+  <div class="grid">
+    <div class="panel prose"><h3>Front and driveway</h3><ul><li>Asphalt driveway is cracked and stained. Get quotes for crack repair and sealing versus resurfacing.</li><li>Pressure wash the rendered fence, letterbox and paths.</li><li>Freshen the front entry with pots, a new mat and a clean house number.</li></ul></div>
+    <div class="panel prose"><h3>Side path</h3><ul><li>Gravel side path with slatted gate looks tidy. Top up gravel and edge it.</li><li>Clear anything stored along the side of the house before photos.</li></ul></div>
+    <div class="panel prose"><h3>Alfresco and pool</h3><ul><li>Two alfresco areas and a fenced pool are big selling points for family buyers. Style them as outdoor rooms with your existing outdoor furniture.</li><li>Pool clean, waterline tiles, equipment service, and an early safety inspection.</li></ul></div>
+  </div>
+  <div class="panel prose">
+    <h3>The mismatched tiles</h3>
+    <p>Tiles that differ around the house can be handled four ways, from cheapest to dearest. Quotes and photos decide which.</p>
+    <ul>
+      <li><strong>Clean and seal</strong> so they read as deliberate zones, if the mismatch is mainly colour from wear.</li>
+      <li><strong>Coat or paint</strong> with an outdoor tile coating, which unifies colour but needs reapplying and may not suit pool surrounds.</li>
+      <li><strong>Overlay</strong> with timber or composite decking, or porcelain pavers on pedestals, over the worst areas.</li>
+      <li><strong>Retile</strong> the most visible areas only. This is in the "if agents back it" tier.</li>
+    </ul>
+  </div>
+  <div class="panel prose">
+    <h3>Garden timing</h3>
+    <p>Do the planting and lawn work by April 2027 so it has autumn and winter to establish before spring photos. Brisbane's wet season makes outdoor trade work harder between December and March, so book driveway and tile work for April to June.</p>
+  </div>
+</section>
+
+<!-- DECLUTTER -->
+<section class="page" id="p-declutter" hidden>
+  <div class="prose">
+    <span class="eyebrow">Declutter and storage</span>
+    <h2>The biggest win costs almost nothing</h2>
+    <p class="lede">In the photos, most rooms are doing two or three jobs at once (storage, office, music, craft, gym), and the garage and robes are full. Buyers judge size by what they can see of the floor and walls. Clearing now also means less to pack when you move.</p>
+  </div>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Zone</th><th>What the photos show</th><th>Aim for sale</th><th>When</th></tr></thead>
+      <tbody>
+        <tr><td>Garage</td><td>Floor-to-ceiling shelving, pallets, bikes, freezer, bins, car</td><td>Both car spaces visibly clear, one tidy shelving wall</td><td>Dec 2026</td></tr>
+        <tr><td>Robes and linen</td><td>Walk-in robes and linen cupboard full to the top shelf</td><td>Half full, matching baskets, nothing on the floor</td><td>Jan 2027</td></tr>
+        <tr><td>Multipurpose room and retreat</td><td>Craft table, sewing, desk, storage drawers, bookcases</td><td>One purpose each: home office and a quiet sitting room or guest room</td><td>Feb 2027</td></tr>
+        <tr><td>Rumpus and sun room</td><td>Drum kit, piano, sofas, washing baskets, toys</td><td>Rumpus as a family living room, sun room as a reading nook</td><td>Feb 2027</td></tr>
+        <tr><td>Bedrooms 2 to 4</td><td>Desks, music gear, clothes racks, posters</td><td>Bed, side tables, one desk at most, clear walls</td><td>Mar 2027</td></tr>
+        <tr><td>Walls</td><td>Posters, flags, photos, Blu-tack and hooks</td><td>A few framed pieces only; holes patched</td><td>Jun 2027</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="panel prose">
+    <h3>Sort with the next home in mind</h3>
+    <p>You don't know the next place yet, so sort into four piles: definitely coming, definitely going, too big for a townhouse (sell now while it still has value), and undecided (box it and store it out of sight). Large bookcases, extra desks and the second lounge suite are the obvious candidates for "too big".</p>
+  </div>
+</section>
+
+<!-- STYLE -->
+<section class="page" id="p-style" hidden>
+  <div class="prose">
+    <span class="eyebrow">Style guide</span>
+    <h2>Warm modern, sale edition</h2>
+    <p class="lede">Your Pinterest board is consistent: warm walnut timber, charcoal and deep grey, black metal, slatted timber panels, floating shelves, lots of greenery, textured rugs and poufs, and stone-look bathrooms with timber vanities. It's a strong look. For a sale it needs to be dialled back, because dark walls make rooms photograph smaller and narrow the buyer pool. The rule here is light envelope, your look in the layers.</p>
+  </div>
+  <div class="two">
+    <div class="panel prose"><h3>The envelope stays light</h3><p>Walls, ceilings and big surfaces in warm white or a soft greige. Light floors stay as they are. This is what most buyers in this price range expect, and it lets them picture their own furniture.</p></div>
+    <div class="panel prose"><h3>Your look goes in the layers</h3><p>Walnut-toned timber, black fittings, linen and wool throws, a textured rug, poufs, plants and a few framed black and white prints. All of it moves with you, so it isn't money spent on the house.</p></div>
+  </div>
+  <div class="swatches">
+    <div class="sw"><i style="background:#F1EEE7"></i><div>Warm white<small>walls, ceilings</small></div></div>
+    <div class="sw"><i style="background:#D8D1C5"></i><div>Soft greige<small>an alternative wall tone</small></div></div>
+    <div class="sw"><i style="background:#7A5A3E"></i><div>Walnut timber<small>shelves, stools, trays</small></div></div>
+    <div class="sw"><i style="background:#6F7B62"></i><div>Olive green<small>plants, cushions, throws</small></div></div>
+    <div class="sw"><i style="background:#3B4245"></i><div>Charcoal<small>one feature at most</small></div></div>
+    <div class="sw"><i style="background:#1C1C1C"></i><div>Matte black<small>tapware, lights, frames</small></div></div>
+  </div>
+  <p class="note">Swatches show the direction only. Pick actual paint colours from physical samples in your own light.</p>
+  <div class="panel prose">
+    <h3>Where your Pinterest ideas fit, and where they don't</h3>
+    <ul>
+      <li><strong>Yes:</strong> matte black tapware and round black mirrors in the bathrooms, warm timber floating shelves with plants, pendant lights in woven or timber shades, linen bedding with a chunky throw, poufs and textured rugs in the living areas.</li>
+      <li><strong>One feature only, if any:</strong> a timber slat panel or charcoal wall behind the main bed. It photographs well in one room. Across the house it starts to feel like someone else's taste.</li>
+      <li><strong>Leave for the next home:</strong> dark painted walls in living areas, built-in timber feature walls, moody bedrooms and dark stone bathrooms. They cost real money and add risk with buyers.</li>
+    </ul>
+  </div>
+  <div class="two">
+    <div class="panel prose keep"><h3>Keep and work with</h3><ul><li>Grey modular sofa and white coffee table in the living room</li><li>Black leather lounges, softened with linen throws and cushions</li><li>Round black mirrors, lanterns, plants and baskets</li><li>White storage cubes and drawers, edited down</li><li>Outdoor furniture, styled as outdoor rooms</li></ul></div>
+    <div class="panel prose lose"><h3>Move out or replace</h3><ul><li>Dark timber venetians in the main rooms</li><li>Pink and beige feature walls</li><li>Honey timber bookcases, which clash with walnut and black</li><li>Bright red, purple and teal rugs</li><li>Wall posters and flags</li></ul></div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section class="page" id="p-timeline" hidden>
+  <div class="prose">
+    <span class="eyebrow">Timeline</span>
+    <h2>Working back from 1 September 2027</h2>
+    <p class="lede">About eleven months. Heavy trade work sits in autumn so the garden and finishes are settled before spring photos.</p>
+  </div>
+  <div class="phases" id="phases">
+    <div class="phase" data-start="2026-10" data-end="2026-12"><span class="when">Oct to Dec 2026</span><h3>Plan and clear</h3><ul><li>Room-by-room photos and task lists</li><li>Agent appraisals once the plan is drafted</li><li>Garage declutter, first round</li><li>Photograph the outside tile areas</li></ul></div>
+    <div class="phase" data-start="2027-01" data-end="2027-03"><span class="when">Jan to Mar 2027</span><h3>Quote and fix</h3><ul><li>Robes, linen and bedrooms decluttered</li><li>Quotes for tiles, driveway, blinds and bathroom options</li><li>Early pool safety inspection and smoke alarm check</li><li>Regrout and reseal bathrooms</li></ul></div>
+    <div class="phase" data-start="2027-04" data-end="2027-06"><span class="when">Apr to Jun 2027</span><h3>Trade work and garden</h3><ul><li>Outdoor tile fix and driveway</li><li>Tapware, blinds and any bathroom upgrades</li><li>Repaint feature walls, patch and touch up</li><li>Planting and lawn by April</li></ul></div>
+    <div class="phase" data-start="2027-07" data-end="2027-07"><span class="when">Jul 2027</span><h3>Finish and style</h3><ul><li>Pressure wash outside, pool service</li><li>Kitchen and garage final clear</li><li>Cushions, throws, rugs and lighting</li><li>Pool safety certificate</li></ul></div>
+    <div class="phase" data-start="2027-08" data-end="2027-08"><span class="when">Aug 2027</span><h3>Photo ready</h3><ul><li>Carpet and tile clean</li><li>Final styling, towels, alfresco set-up</li><li>Photos, then list</li></ul></div>
+  </div>
+</section>
+
+<!-- RISKS -->
+<section class="page" id="p-history" hidden>
+  <div class="prose">
+    <span class="eyebrow">History</span>
+    <h2>Who changed what</h2>
+    <p>The latest 200 changes, newest first. Names come from the "Who's using this?" question on each device.</p>
+  </div>
+  <div class="panel"><ul class="hist" id="histlist"><li class="note">Loading…</li></ul></div>
+</section>
+
+<section class="page" id="p-risks" hidden>
+  <div class="prose">
+    <span class="eyebrow">Risks and compliance</span>
+    <h2>Things to sort early</h2>
+  </div>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Item</th><th>Why it matters</th><th>What to do</th></tr></thead>
+      <tbody>
+        <tr><td>Pool safety certificate</td><td>Needed by settlement, or the buyer gets a Form 36 notice before signing, which buyers read as a warning. A certificate for a house pool lasts two years.</td><td>Book an inspection early in 2027 to find any fixes, then get the certificate before listing.</td></tr>
+        <tr><td>Smoke alarms</td><td>At sale, alarms must be photoelectric, interconnected, and in every bedroom, hallways linking bedrooms, and on every level.</td><td>You added alarms already. Get an electrician to confirm compliance and give a certificate.</td></tr>
+        <tr><td>Bathroom waterproofing</td><td>Disturbing old tiles or shower bases can expose leaks, and waterproofing must be done by a licensed trade.</td><td>Prefer regrouting and new fittings. Only lift tiles with a licensed waterproofer engaged.</td></tr>
+        <tr><td>Flood overlay</td><td>Recorded against the property even though the house sits above the affected corner.</td><td>Keep the FloodWise report and a photo of the retaining wall on file.</td></tr>
+        <tr><td>Budget creep</td><td>Small jobs add up and bigger jobs often grow once started.</td><td>Track actual spend on the dashboard. No "if agents back it" item without agent evidence.</td></tr>
+        <tr><td>Trade availability</td><td>Good trades book out in the months before spring.</td><td>Get quotes in January to March and book April to June work early.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">Sources: <a href="https://www.qbcc.qld.gov.au/sites/default/files/documents/guide-pool-safety-homeowners.pdf" target="_blank" rel="noopener">QBCC pool safety guide</a>, <a href="https://spotonconveyancing.com.au/selling-in-2026-your-ready-to-list-legal-checklist-form-2-pools-smoke-alarms/" target="_blank" rel="noopener">Spot On Conveyancing selling checklist</a>, <a href="https://www.fire.qld.gov.au/about-us/corporate-knowledge-centre/qfdlegislation/smoke-alarm-reforms" target="_blank" rel="noopener">QFD smoke alarm reforms</a>, <a href="https://hamiltonlocke.com.au/new-seller-disclosure-scheme-for-property-sales-in-queensland-to-take-effect-from-1-august-2025/" target="_blank" rel="noopener">Hamilton Locke on seller disclosure</a>. Confirm details with your conveyancer.</p>
+</section>
+</main>
+
+<dialog id="editor" aria-labelledby="ed-title">
+  <form id="edform" method="dialog">
+    <h3 id="ed-title">Edit task</h3>
+    <label>Task<input id="e-title" required maxlength="160"></label>
+    <div id="e-areas-multi" style="display:grid;gap:6px">
+      <span style="font-size:.8rem;font-weight:600;color:var(--muted)">Rooms and areas <span style="font-weight:400">(a separate task is made for each one ticked; the estimate applies to each)</span></span>
+      <div class="checks" id="e-checks"></div>
+    </div>
+    <label id="e-area-single">Room or area<select id="e-area"></select></label>
+    <div class="fgrid">
+      <label>Type<select id="e-type"></select></label>
+      <label>Priority<select id="e-tier"><option value="must">Must do</option><option value="worth">Worth doing</option><option value="agent">If agents back it</option></select></label>
+      <label>Who<select id="e-who"><option>DIY</option><option>Trade</option><option>Either</option></select></label>
+      <label>Status<select id="e-status"><option value="todo">To do</option><option value="doing">In progress</option><option value="done">Done</option><option value="dropped">Dropped</option></select></label>
+      <label>Due month<input id="e-due" type="month"></label>
+    </div>
+    <div class="fgrid">
+      <label>Estimate low ($)<input id="e-lo" type="number" min="0" step="1" inputmode="numeric"></label>
+      <label>Estimate high ($)<input id="e-hi" type="number" min="0" step="1" inputmode="numeric"></label>
+      <label>Actual spent ($)<input id="e-act" type="number" min="0" step="1" inputmode="numeric"></label>
+    </div>
+    <label>Job tags<input id="e-tags" list="taglist" maxlength="300" placeholder="Comma separated, e.g. Electrician, Windows, Paint touch-ups"></label>
+    <div id="e-diy" style="display:grid;gap:10px">
+      <span class="sub-h">DIY details</span>
+      <div class="fgrid">
+        <label>Estimated hours<input id="e-esth" type="number" min="0" step="0.5" inputmode="decimal"></label>
+        <label>Actual hours<input id="e-acth" type="number" min="0" step="0.5" inputmode="decimal"></label>
+      </div>
+      <div class="fgrid">
+        <label>Skills needed<input id="e-skills" maxlength="300" placeholder="e.g. cutting in, using a grout saw"></label>
+        <label>Your confidence<select id="e-conf"><option value="">Not checked yet</option><option value="yes">Done it before</option><option value="learn">Can learn it</option><option value="no">Get help instead</option></select></label>
+      </div>
+      <div style="display:grid;gap:6px"><span class="sub-h">Tools</span><div class="irows" id="e-tools"></div><button type="button" class="linkbtn" data-iadd="tools">Add a tool</button></div>
+      <div style="display:grid;gap:6px"><span class="sub-h">Materials</span><div class="irows" id="e-mats"></div><button type="button" class="linkbtn" data-iadd="mats">Add a material</button></div>
+      <div style="display:grid;gap:6px"><span class="sub-h">How-to videos and guides</span><div class="irows" id="e-links"></div><button type="button" class="linkbtn" data-iadd="links">Add a link</button></div>
+      <label>Steps<textarea id="e-steps" maxlength="4000" placeholder="One step per line"></textarea></label>
+      <p class="note" id="e-buy"></p>
+    </div>
+    <div class="fgrid">
+      <label>Trade or supplier<select id="e-contact"></select></label>
+      <label>Repeats<select id="e-repeat"></select></label>
+    </div>
+    <div style="display:grid;gap:6px">
+      <span class="sub-h">Do this after</span>
+      <div class="chips" id="e-depchips"></div>
+      <div class="inrow"><label style="flex:1 1 220px">Add a task this one waits on<select id="e-depsel"></select></label><button type="button" class="btn ghost" id="e-depadd">Add</button></div>
+    </div>
+    <label>Notes<textarea id="e-notes" maxlength="2000"></textarea></label>
+    <div id="e-quotes" style="display:grid;gap:8px">
+      <span class="sub-h">Quotes</span>
+      <div id="e-qbody" style="display:grid;gap:8px">
+        <div class="qlist" id="e-qlist"></div>
+        <div class="inrow">
+          <label>From<input id="q-from" list="contactnames" maxlength="120" placeholder="Name or business"></label>
+          <label>Amount ($)<input id="q-amt" type="number" min="0" step="1" inputmode="numeric"></label>
+          <label>Date<input id="q-date" type="date"></label>
+        </div>
+        <div class="inrow">
+          <label>Note<input id="q-note" maxlength="300" placeholder="Inclusions, how long it's valid"></label>
+          <label id="q-filewrap">Quote file<input id="q-file" type="file" accept="application/pdf,image/*"></label>
+          <button type="button" class="btn ghost" id="q-add">Add quote</button>
+        </div>
+      </div>
+      <p class="note" id="e-qnote" role="status"></p>
+    </div>
+    <p class="note" id="e-msg" role="status"></p>
+    <div class="factions">
+      <div><button type="button" class="btn ghost" id="e-del">Delete</button><button type="button" class="btn danger" id="e-delyes" hidden>Yes, delete it</button></div>
+      <div><button type="button" class="btn ghost" id="e-cancel">Cancel</button><button type="submit" class="btn" id="e-save">Save</button></div>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="rec" aria-labelledby="r-title">
+  <form id="recform" method="dialog">
+    <h3 id="r-title">Edit</h3>
+    <div class="fgrid" id="r-fields"></div>
+    <div id="r-filesec" style="display:grid;gap:8px" hidden>
+      <span class="sub-h">Files</span>
+      <div class="chips" id="r-files"></div>
+      <label class="btn ghost filebtn" id="r-upwrap" style="justify-self:start;color:var(--ink)">Attach files<input type="file" id="r-up" accept="application/pdf,image/*" multiple></label>
+    </div>
+    <p class="note" id="r-msg" role="status"></p>
+    <div class="factions">
+      <div><button type="button" class="btn ghost" id="r-del">Delete</button><button type="button" class="btn danger" id="r-delyes" hidden>Yes, delete it</button></div>
+      <div><button type="button" class="btn ghost" id="r-cancel">Cancel</button><button type="submit" class="btn" id="r-save">Save</button></div>
+    </div>
+  </form>
+</dialog>
+<datalist id="contactnames"></datalist>
+<datalist id="taglist"></datalist>
+<dialog id="detail" aria-labelledby="dt-title">
+  <div class="dbody">
+    <div class="secthead"><span class="eyebrow" id="dt-num"></span><button type="button" class="btn ghost" id="dt-close">Close</button></div>
+    <h3 id="dt-title"></h3>
+    <div id="dt-body" style="display:grid;gap:12px"></div>
+    <div class="factions"><div></div><div><button type="button" class="btn" id="dt-edit">Edit task</button></div></div>
+  </div>
+</dialog>
+<dialog id="tdlg" aria-labelledby="tt-title">
+  <form id="tform" method="dialog">
+    <h3 id="tt-title"></h3>
+    <div id="tt-fields" style="display:grid;gap:12px"></div>
+    <p class="note" id="tt-msg" role="status"></p>
+    <div class="factions"><div></div><div><button type="button" class="btn ghost" id="tt-cancel">Cancel</button><button type="submit" class="btn" id="tt-save">Save</button></div></div>
+  </form>
+</dialog>
+<datalist id="finitems"><option value="Walls"><option value="Ceiling"><option value="Trim and doors"><option value="Feature wall"><option value="Floor tiles"><option value="Wall tiles"><option value="Grout"><option value="Carpet"><option value="Benchtop"><option value="Tapware"><option value="Door handles"><option value="Light fittings"><option value="Render"><option value="Fence"></datalist>
+
+<dialog id="who" aria-labelledby="who-title">
+  <form id="whoform" method="dialog" style="display:grid;gap:12px;padding:20px">
+    <h3 id="who-title">Who's using this?</h3>
+    <p class="note">Your name goes on the changes you make, so everyone can see who did what. This device will remember it.</p>
+    <label>Your name<input id="who-name" maxlength="40" required autocomplete="given-name"></label>
+    <div class="factions"><div></div><div><button type="submit" class="btn">Continue</button></div></div>
+  </form>
+</dialog>
+
+<dialog id="viewer" aria-label="Photo">
+  <img id="v-img" alt="">
+  <div class="vbar"><span class="note" id="v-cap"></span><button type="button" class="btn ghost" id="v-close">Close</button></div>
+</dialog>
+
+<script>
+(function(){
+const DEFAULT_AREAS=[
+ {slug:"general",name:"General",group:"General",now:"Whole-of-house and admin jobs: appraisals, compliance, quotes, house-wide cleans and styling buys.",sale:"Everything ready, certified and documented before photos."},
+ {slug:"entry",name:"Entry and staircase",group:"Inside, ground floor",now:"Tiled entry with curved timber stair. Bags, a console table and a coat stand crowd it.",sale:"Clear, bright first impression. Console with one lamp and a plant."},
+ {slug:"living",name:"Living",group:"Inside, ground floor",now:"Grey modular sofa, white coffee table, coastal artwork. Dark venetians.",sale:"Formal lounge. Keep the sofa, lighten the windows."},
+ {slug:"family",name:"Family",group:"Inside, ground floor",now:"Black leather lounges, timber TV unit, dog bed.",sale:"Relaxed family room facing the alfresco. Soften the leather."},
+ {slug:"kitchen",name:"Kitchen and meals",group:"Inside, ground floor",now:"White cabinets, stone-look benches, gas cooktop. In reasonable shape.",sale:"Clear benches, three styled items. Keep as is."},
+ {slug:"multipurpose",name:"Multipurpose room",group:"Inside, ground floor",now:"Sewing and craft table, storage drawers, bookcases, desk.",sale:"Home office or second living room. One job only."},
+ {slug:"retreat",name:"Retreat",group:"Inside, ground floor",now:"Off the entry and garage. Used as storage and study.",sale:"Study or guest room."},
+ {slug:"laundry",name:"Laundry",group:"Inside, ground floor",now:"Laundry beside the downstairs bathroom.",sale:"Clear benches, tidy baskets, nothing on the floor."},
+ {slug:"downstairs-bathroom",name:"Downstairs bathroom",group:"Inside, ground floor",now:"Shower with framed screen, beige tiles, separate toilet.",sale:"Regrout, new fittings, crisp towels."},
+ {slug:"garage",name:"Garage",group:"Inside, ground floor",now:"Full shelving, pallets, bikes, freezer, car.",sale:"Two clear car spaces and one tidy shelving wall."},
+ {slug:"rumpus",name:"Rumpus",group:"Inside, upper floor",now:"Grey sofa, drum kit, washing baskets, toys.",sale:"Kids' living room or media room."},
+ {slug:"main-bedroom",name:"Main bedroom and sun room",group:"Inside, upper floor",now:"Large room with sun room alcove and a TV on a dresser.",sale:"Retreat feel. Bed, side tables, reading chairs in the sun room."},
+ {slug:"ensuite",name:"Ensuite",group:"Inside, upper floor",now:"Double vanity, tiled corner spa with beige hob, framed shower.",sale:"Regrout, tapware, mirror, spa-like styling."},
+ {slug:"walk-in-robe",name:"Walk-in robe",group:"Inside, upper floor",now:"Full to the top shelf, clothes and bags on the floor.",sale:"Half full, matching baskets, nothing on the floor."},
+ {slug:"main-bathroom",name:"Main bathroom",group:"Inside, upper floor",now:"Bath, white vanity, beige feature tiles. Used for plants and laundry.",sale:"Clean, simple, spa-like."},
+ {slug:"bedroom-2",name:"Bedroom 2",group:"Inside, upper floor",now:"Desk, music gear and personal items.",sale:"Bed, side tables, at most one desk, clear walls."},
+ {slug:"bedroom-3",name:"Bedroom 3",group:"Inside, upper floor",now:"Desk, clothes rack, posters.",sale:"Bed, side tables, at most one desk, clear walls."},
+ {slug:"bedroom-4",name:"Bedroom 4",group:"Inside, upper floor",now:"Desk, shelving, feature wall, posters.",sale:"Bed, side tables, at most one desk, clear walls."},
+ {slug:"balcony",name:"Balcony",group:"Inside, upper floor",now:"Iron balustrade, tiled floor, large potted plant.",sale:"Two chairs and a small table for the view photo."},
+ {slug:"front-yard",name:"Front yard",group:"Outside",now:"Rendered two-storey facade, slatted fence, cypress pines, lawn. Asphalt driveway cracked and stained.",sale:"Street appeal: clean render and fence, fixed driveway, sharp lawn and entry."},
+ {slug:"back-yard",name:"Back yard",group:"Outside",now:"Two alfresco areas and garden. Mismatched tiles around the house. Few photos yet.",sale:"Outdoor rooms ready for summer, with tiles that read as one finish."},
+ {slug:"side-yard",name:"Side yard",group:"Outside",now:"Gravel side path with slatted gate.",sale:"Tidy, edged, nothing stored along the house."},
+ {slug:"pool",name:"Pool",group:"Outside",now:"Fenced in-ground pool with glass and tiled surrounds.",sale:"Sparkling water, clean waterline, certified fencing."}
+];
+const DEFAULT_GROUPS=["Inside, ground floor","Inside, upper floor","Outside","General"];
+const MS={};let AREAS=DEFAULT_AREAS.slice(),GROUPS=DEFAULT_GROUPS.slice(),AMAP={};let cfgcol=null,manage=false;
+function applyAreas(){AMAP=Object.fromEntries(AREAS.map(a=>[a.slug,a]));buildAreaSelects()}
+const TYPES=["Admin","Declutter","Clean","Repair","Paint","Upgrade","Style","Garden","Maintenance","Pre-sale"];
+const REPEAT={"":"Doesn't repeat","1":"Monthly","3":"Every 3 months","6":"Every 6 months","12":"Yearly"};
+const ROLES=["Trade","Supplier","Agent","Conveyancer","Other"];
+const DOCCATS=["Compliance","Approval","Warranty","Report","Sale","Manual","Receipt","Other"];
+const LIST_END="2027-11-30";
+const LEVELS=[["low","Low","Must-dos and basics, low cost"],["medium","Medium","What buyers expect, with a clear return"],["high","High","Premium feel for top dollar, still paying back"],["lux","Lux","The dream, if money were no object"]];
+const LVL=Object.fromEntries(LEVELS.map(l=>[l[0],l]));
+const CONF={yes:"Done it before",learn:"Can learn it",no:"Get help instead"};
+const TAGSUGGEST=["Electrician","Plumber","Painter","Tiler","Handyman","Cleaner","Windows","Paint touch-ups","Grout and silicone","Pressure washing","Rubbish run","Hardware run","Garden","Pool"];
+const TIERS={must:"Must do",worth:"Worth doing",agent:"If agents back it"};
+const TIERNOTE={must:"Cheap, legally required, or fixes something buyers and inspectors would mark down.",worth:"Moderate spends that clearly lift photos and inspections.",agent:"Bigger spends that only go ahead if two or more agents say buyers will pay for them."};
+const STATUS={todo:"To do",doing:"In progress",done:"Done",dropped:"Dropped"};
+const NEXT={todo:"doing",doing:"done",done:"todo",dropped:"todo"};
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money=n=>"$"+Math.round(n).toLocaleString("en-AU");
+const kmoney=n=>n>=1e6?"$"+(n/1e6).toFixed(2).replace(/0$/,"").replace(/\.0$/,"")+"M":n>=1000?"$"+(n/1000).toFixed(n>=10000?0:1).replace(/\.0$/,"")+"k":money(n);
+const monthLabel=m=>{if(!m)return"No date";const[y,mo]=m.split("-");return new Date(+y,+mo-1,1).toLocaleDateString("en-AU",{month:"short",year:"numeric"})};
+const nowMonth=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")};
+const addMonth=(m,k)=>{const[y,mo]=m.split("-").map(Number);const d=new Date(y,mo-1+k,1);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")};
+const aname=s=>AMAP[s]?AMAP[s].name:(s||"Unassigned");
+const blob=id=>window.homeStore.blobUrl(id);
+const fmtDate=s=>{if(!s)return"";const[y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d||1).toLocaleDateString("en-AU",{day:"numeric",month:"short",year:"numeric"})};
+const stars=r=>{r=+r||0;return r?"★".repeat(r)+"☆".repeat(5-r):""};
+
+let contacts=[],docsR=[],fins=[],checklist=null;let ccol=null,dcol=null,fcol=null,klcol=null;let edDeps=[],edQuotes=[];
+let tasks=[];let areaDocs={};let db=null;let col=null;let acol=null;let assets=null;let editingId=null;let loaded=false;let curArea=null;
+
+/* selects */
+function areaOptions(sel,withAll){
+  [...sel.querySelectorAll("optgroup")].forEach(o=>o.remove());
+  if(withAll){const og=document.createElement("optgroup");og.label="Whole groups";GROUPS.forEach(g=>og.appendChild(new Option("All of "+g,"g:"+g)));sel.appendChild(og)}
+  GROUPS.forEach(g=>{const og=document.createElement("optgroup");og.label=g;AREAS.filter(a=>a.group===g).forEach(a=>og.appendChild(new Option(a.name,a.slug)));sel.appendChild(og)});
+}
+function buildAreaSelects(){
+  if(MS.area)msSetOpts(MS.area,areaMsOpts());
+  areaOptions($("#e-area"));
+  $("#e-checks").innerHTML=GROUPS.map(g=>`<fieldset><legend>${esc(g)}</legend>${AREAS.filter(a=>a.group===g).map(a=>`<label><input type="checkbox" value="${esc(a.slug)}" id="chk-${esc(a.slug)}">${esc(a.name)}</label>`).join("")}</fieldset>`).join("");
+}
+applyAreas();
+TYPES.forEach(t=>$("#e-type").add(new Option(t,t)));
+Object.entries(REPEAT).forEach(([k,v])=>$("#e-repeat").add(new Option(v,k)));
+/* multi-select filters */
+function msCreate(key,label,allLabel,opts,def){
+  const host=$("#ms-"+key);const wrap=document.createElement("div");wrap.className="ms";
+  wrap.innerHTML=`<button type="button" class="msbtn" aria-haspopup="true" aria-expanded="false" aria-label="Filter by ${esc(label.toLowerCase())}"></button><div class="mspanel" hidden></div>`;
+  host.replaceWith(wrap);const m={key,label,allLabel,sel:new Set(def||[]),opts:[],wrap,btn:wrap.firstElementChild,panel:wrap.lastElementChild};MS[key]=m;
+  m.btn.addEventListener("click",()=>{const opening=m.panel.hidden;msCloseAll();if(opening){m.panel.hidden=false;m.btn.setAttribute("aria-expanded","true");msPanel(m)}});
+  wrap.addEventListener("change",e=>{const x=e.target;
+    if(x.matches("[data-msall]")){m.sel=x.checked?new Set(m.opts.map(o=>o.v)):new Set()}
+    else if(x.matches("[data-msgrp]")){m.opts.filter(o=>o.g===x.dataset.msgrp).forEach(o=>x.checked?m.sel.add(o.v):m.sel.delete(o.v))}
+    else if(x.matches("[data-msv]")){x.checked?m.sel.add(x.dataset.msv):m.sel.delete(x.dataset.msv)}
+    msPanel(m);msLabel(m);render()});
+  wrap.addEventListener("click",e=>{if(e.target.closest("[data-msclear]")){m.sel=new Set();msPanel(m);msLabel(m);render()}else if(e.target.closest("[data-msdone]"))msCloseAll()});
+  msSetOpts(m,opts);return m;
+}
+function msCloseAll(){Object.values(MS).forEach(m=>{m.panel.hidden=true;m.btn.setAttribute("aria-expanded","false")})}
+document.addEventListener("click",e=>{if(!e.target.closest(".ms"))msCloseAll()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")msCloseAll()});
+function msSetOpts(m,opts){m.opts=opts;if(m.pending){m.pending.forEach(v=>m.sel.add(v))}const vals=new Set(opts.map(o=>o.v));[...m.sel].forEach(v=>{if(!vals.has(v)){m.pending=m.pending||new Set();m.pending.add(v);m.sel.delete(v)}else if(m.pending)m.pending.delete(v)});msLabel(m);if(!m.panel.hidden)msPanel(m)}
+const msActive=m=>m.sel.size>0&&m.sel.size<m.opts.length;
+const msPass=(m,v)=>!msActive(m)||m.sel.has(v);
+function msLabel(m){const n=m.sel.size;m.btn.textContent=!n||n===m.opts.length?m.allLabel:n<=2?m.opts.filter(o=>m.sel.has(o.v)).map(o=>o.l).join(" and ")||m.label:`${m.label}: ${n}`;m.btn.classList.toggle("on",msActive(m))}
+function msPanel(m){
+  const all=m.opts.length>0&&m.opts.every(o=>m.sel.has(o.v));let g,h=`<label class="msall"><input type="checkbox" data-msall${all?" checked":""}>Select all</label>`;
+  m.opts.forEach(o=>{if(o.g!=null&&o.g!==g){g=o.g;const gall=m.opts.filter(x=>x.g===g).every(x=>m.sel.has(x.v));h+=`<label class="msg"><input type="checkbox" data-msgrp="${esc(g)}"${gall?" checked":""}>${esc(g)}</label>`}
+    h+=`<label class="${o.g!=null?"msin":""}"><input type="checkbox" data-msv="${esc(o.v)}"${m.sel.has(o.v)?" checked":""}>${esc(o.l)}</label>`});
+  if(!m.opts.length)h+='<p class="note" style="padding:6px 8px">Nothing to pick yet.</p>';
+  m.panel.innerHTML=h+'<div class="msfoot"><button type="button" class="linkbtn" data-msclear>Clear</button><button type="button" class="linkbtn" data-msdone>Done</button></div>';
+}
+let savedF={};try{savedF=JSON.parse(localStorage.getItem("hd-filters3")||"{}")||{}}catch(e){}
+const sv=(k,d)=>Array.isArray(savedF[k])?savedF[k]:d;
+const areaMsOpts=()=>GROUPS.flatMap(g=>AREAS.filter(a=>a.group===g).map(a=>({v:a.slug,l:a.name,g})));
+msCreate("area","Areas","All areas",areaMsOpts(),sv("area",[]));
+msCreate("type","Types","All types",TYPES.map(t=>({v:t,l:t})),sv("type",[]));
+msCreate("tier","Priorities","All priorities",Object.entries(TIERS).map(([v,l])=>({v,l})),sv("tier",[]));
+msCreate("status","Statuses","All statuses",Object.entries(STATUS).map(([v,l])=>({v,l})),sv("status",["todo","doing"]));
+msCreate("who","Who","DIY and trades",[["DIY","DIY"],["Trade","Trade"],["Either","Either"]].map(([v,l])=>({v,l})),sv("who",[]));
+msCreate("tag","Job tags","All job tags",[],sv("tag",[]));
+if(typeof savedF.group==="string"&&[...$("#f-group").options].some(o=>o.value===savedF.group))$("#f-group").value=savedF.group;
+$("#f-ready").checked=!!savedF.ready;
+
+
+/* router */
+const pages=[...document.querySelectorAll("section.page")];
+function route(){
+  let h=(location.hash||"#dashboard").slice(1);if(h==="priorities")h="tasks";let page=h;curArea=null;
+  if(h.startsWith("area-")&&AMAP[h.slice(5)]){page="area";curArea=h.slice(5)}
+  if(!document.getElementById("p-"+page)){page="dashboard";h="dashboard"}
+  pages.forEach(p=>p.hidden=p.id!=="p-"+page);
+  const navKey=page==="area"?"areas":page;
+  document.querySelectorAll("#navlist a").forEach(a=>{if(a.getAttribute("href")==="#"+navKey)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
+  const cur=document.querySelector('#navlist a[aria-current="page"]');if(cur)cur.scrollIntoView({block:"nearest",inline:"nearest"});
+  if(curArea)renderArea();
+  if(page==="history")renderHistory();
+}
+addEventListener("hashchange",()=>{route();scrollTo(0,0)});
+
+(function(){const days=Math.ceil((new Date(2027,8,1)-new Date())/864e5);$("#countdown").textContent=days>0?days+" days":"Listing window open";
+ const nm=nowMonth();document.querySelectorAll(".phase").forEach(p=>{if(nm>=p.dataset.start&&nm<=p.dataset.end)p.classList.add("now")})})();
+
+const tagsOf=t=>Array.isArray(t.tags)?t.tags:[];
+const items=(t,k)=>Array.isArray(t[k])?t[k]:[];
+const buyOf=t=>t.who==="Trade"?0:items(t,"tools").concat(items(t,"mats")).filter(i=>!i.have).reduce((s,i)=>s+(+i.cost||0),0);
+const estLo=t=>(+t.costLow||0)+buyOf(t),estHi=t=>(+t.costHigh||+t.costLow||0)+buyOf(t);
+function mid(t){return (estLo(t)+estHi(t))/2}
+const nextNum=()=>Math.max(0,...tasks.map(t=>+t.num||0))+1;
+const open=t=>t.status!=="done"&&t.status!=="dropped";
+const blockers=t=>(Array.isArray(t.after)?t.after:[]).map(id=>tasks.find(x=>x.id===id)).filter(x=>x&&open(x));
+function contactName(id){const c=id&&contacts.find(x=>x.id===id);return c?c.name+(c.company&&c.company!==c.name?", "+c.company:""):""}
+const budgeted=t=>t.type!=="Maintenance";
+function filtered(){
+  const q=$("#f-q").value.trim().toLowerCase(),qn=q.replace(/^#/,""),ready=$("#f-ready").checked;
+  return tasks.filter(t=>msPass(MS.area,t.area)&&msPass(MS.type,t.type)&&msPass(MS.tier,t.tier)&&msPass(MS.status,t.status)&&msPass(MS.who,t.who)
+    &&(!msActive(MS.tag)||tagsOf(t).some(x=>MS.tag.sel.has(x)))&&(!ready||(open(t)&&!blockers(t).length))
+    &&(!q||(/^\d+$/.test(qn)?String(t.num||"")===qn:(t.title+" "+(t.notes||"")+" "+aname(t.area)+" "+tagsOf(t).join(" ")).toLowerCase().includes(q))))
+   .sort((x,y)=>(x.due||"9999").localeCompare(y.due||"9999")||(+x.num||0)-(+y.num||0));
+}
+function row(t,hideArea){
+  const nm=nowMonth();const over=t.due&&t.due<nm&&open(t);
+  const lo=estLo(t),hi=estHi(t);
+  const cost=(hi||lo)?"Est "+(lo==hi?kmoney(lo):kmoney(lo)+" to "+kmoney(hi)):"No estimate";
+  const hiC=hi;
+  const act=+t.actual?`<span class="act${+t.actual>hiC?" over":""}">Actual ${kmoney(+t.actual)}</span>`:(t.status==="done"?`<span class="act">Actual $0</span>`:"");
+  const hrs=(+t.estHours||+t.actHours)?`<span>${+t.estHours?(+t.estHours)+"h est":""}${+t.estHours&&+t.actHours?", ":""}${+t.actHours?(+t.actHours)+"h actual":""}</span>`:"";
+  const area=hideArea?"":(AMAP[t.area]?`<a class="alink" href="#area-${t.area}">${esc(aname(t.area))}</a>`:`<span>${esc(aname(t.area))}</span>`);
+  return `<div class="trow ${t.status}"><button type="button" class="pill s-${t.status}" data-cycle="${esc(t.id)}" aria-label="Status ${STATUS[t.status]}, tap to change">${STATUS[t.status]}</button>
+  <div style="min-width:0"><button type="button" class="tname" data-edit="${esc(t.id)}">${t.num?`<span class="tnum">#${t.num}</span>`:""}${esc(t.title)}</button>
+  <div class="tmeta"><span class="tag t-${t.tier}">${TIERS[t.tier]||""}</span>${t.type?`<span class="ttype">${esc(t.type)}</span>`:""}${area}<span>${esc(t.who)}</span>${hrs}${tagsOf(t).length?`<span class="ttags">${esc(tagsOf(t).join(", "))}</span>`:""}${t.repeat&&REPEAT[t.repeat]?`<span>${esc(REPEAT[t.repeat])}</span>`:""}${t.contactId&&contactName(t.contactId)?`<span>${esc(contactName(t.contactId))}</span>`:""}${(t.quotes||[]).length?`<span>${t.quotes.length} quote${t.quotes.length>1?"s":""}</span>`:""}${open(t)&&blockers(t).length?`<span class="tag t-wait" title="Waits on: ${esc(blockers(t).map(b=>b.title).join("; "))}">Waits on ${blockers(t).length}</span>`:""}<span class="${over?"overdue":""}">${over?"Overdue, ":""}${monthLabel(t.due)}</span></div></div>
+  <div class="tcost"><span class="est">${cost}</span>${act}</div></div>`;
+}
+function photosOf(slug){const d=areaDocs[slug]||{};return {vision:Array.isArray(d.vision)?d.vision:[],current:Array.isArray(d.current)?d.current:[]}}
+const adoc=slug=>areaDocs[slug]||{};
+const optOf=(slug,k)=>(adoc(slug).options||{})[k]||{};
+function listOf(slug,kind){if(kind.startsWith("opt-")){const o=optOf(slug,kind.slice(4));return Array.isArray(o.images)?o.images:[]}const d=adoc(slug);return Array.isArray(d[kind])?d[kind]:[]}
+function withList(slug,kind,list){const d=JSON.parse(JSON.stringify(adoc(slug)));if(kind.startsWith("opt-")){d.options=d.options||{};const k=kind.slice(4);d.options[k]=Object.assign({},d.options[k]||{},{images:list})}else d[kind]=list;return d}
+async function saveArea(slug,d){d.updatedAt=new Date().toISOString();await acol.doc(slug).set(d)}
+function render(){
+  try{const o={group:$("#f-group").value,ready:$("#f-ready").checked};Object.values(MS).forEach(m=>o[m.key]=[...m.sel].concat(m.pending?[...m.pending]:[]));localStorage.setItem("hd-filters3",JSON.stringify(o))}catch(e){}
+  const list=filtered();
+  const box=x=>`<div class="tasks">${x}</div>`;
+  $("#tasklist").innerHTML=!loaded?box('<div class="empty">Loading your task list…</div>'):tasks.length===0?box('<div class="empty">No tasks yet. Use "Add task" to create the first one.</div>'):!list.length?box('<div class="empty">No tasks match these filters.</div>'):groupTasks(list);
+  const live=tasks.filter(t=>t.status!=="dropped");const done=live.filter(t=>t.status==="done");
+  $("#donecount").textContent=loaded?done.length+" of "+live.length:"…";
+  $("#tierbars").innerHTML=Object.keys(TIERS).map(k=>{const all=live.filter(t=>t.tier===k),d=all.filter(t=>t.status==="done").length,p=all.length?d/all.length*100:0;
+    return `<div class="tierrow"><span>${TIERS[k]}</span><div class="bar"><i style="width:${p}%;background:var(--ok)"></i></div><span class="num" style="text-align:right">${d}/${all.length}</span></div>`}).join("");
+  const planned=live.filter(budgeted).reduce((s,t)=>s+mid(t),0),spent=tasks.filter(budgeted).reduce((s,t)=>s+(+t.actual||0),0),max=Math.max(110000,planned*1.05,spent*1.05);
+  $("#spendbig").textContent=loaded?kmoney(planned)+" planned":"…";
+  $("#spendsub").textContent=loaded?`${money(spent)} spent so far. Planned spend uses the midpoint of each estimate for tasks that aren't dropped. Routine maintenance isn't counted.`:"";
+  $("#budget").innerHTML=`<span class="fill" style="width:${planned/max*100}%"></span><span class="spent" style="width:${spent/max*100}%"></span>`+[50000,100000].map(v=>`<span class="mark" style="left:${v/max*100}%"></span><span class="mlab" style="left:${v/max*100}%">${kmoney(v)}</span>`).join("");
+  const nm=nowMonth(),nx=addMonth(nm,1);
+  const nu=tasks.filter(t=>t.due&&t.due<=nx&&open(t)).sort((a,b)=>a.due.localeCompare(b.due));
+  $("#nextup").innerHTML=!loaded?'<div class="empty">Loading…</div>':nu.length?nu.map(t=>row(t)).join(""):'<div class="empty">Nothing due this month or next.</div>';
+  $("#nextnote").textContent=loaded?`${monthLabel(nm)} and ${monthLabel(nx)}, plus anything overdue`:"";
+  renderSummary();
+  renderAreas();if(curArea)renderArea();
+  renderContacts();renderDocs();renderFinishes();renderPresale();
+  const allTags=[...new Set(tasks.flatMap(tagsOf))].sort();if(loaded)msSetOpts(MS.tag,allTags.map(x=>({v:x,l:x})));
+  $("#taglist").innerHTML=[...new Set(allTags.concat(TAGSUGGEST))].map(x=>`<option value="${esc(x)}">`).join("");
+  $("#contactnames").innerHTML=contacts.map(c=>`<option value="${esc(c.name)}">`).join("");
+}
+function contactCard(c){
+  const linked=tasks.filter(t=>t.contactId===c.id||(t.quotes||[]).some(q=>q.contactId===c.id));
+  return `<div class="rec"><div class="secthead"><h4>${esc(c.name)}</h4><button type="button" class="linkbtn" data-rec="contacts:${esc(c.id)}">Edit</button></div>
+  <div class="meta">${c.company?`<span>${esc(c.company)}</span>`:""}${c.trade?`<span>${esc(c.trade)}</span>`:""}${c.rating?`<span title="Rated ${esc(c.rating)} of 5">${stars(c.rating)}</span>`:""}</div>
+  ${c.phone?`<div><a href="tel:${esc(String(c.phone).replace(/[^\d+]/g,""))}">${esc(c.phone)}</a></div>`:""}${c.email?`<div><a href="mailto:${esc(c.email)}">${esc(c.email)}</a></div>`:""}
+  ${c.notes?`<p class="note">${esc(c.notes)}</p>`:""}
+  ${linked.length?`<div class="meta">${linked.slice(0,4).map(t=>`<button type="button" class="linkbtn" data-edit="${esc(t.id)}">${esc(t.title)} (${esc(aname(t.area))})</button>`).join("")}${linked.length>4?`<span>and ${linked.length-4} more</span>`:""}</div>`:""}</div>`;
+}
+function renderContacts(){
+  const q=$("#c-q").value.trim().toLowerCase();
+  const list=contacts.filter(c=>!q||[c.name,c.company,c.trade,c.notes,c.phone,c.email].join(" ").toLowerCase().includes(q)).sort((a,b)=>(a.name||"").localeCompare(b.name||""));
+  $("#c-list").innerHTML=!loaded?'<div class="empty">Loading…</div>':!list.length?`<div class="empty">${contacts.length?"No contacts match.":"No contacts yet. Add one, or type a new name when you log a quote."}</div>`:
+    ROLES.map(r=>{const g=list.filter(c=>(ROLES.includes(c.role)?c.role:"Other")===r);return g.length?`<div style="display:grid;gap:10px"><h3>${esc(r)}</h3><div class="reclist">${g.map(contactCard).join("")}</div></div>`:""}).join("");
+}
+function docCard(d){
+  const exp=d.expires,today=new Date().toISOString().slice(0,10),past=exp&&exp<today,warn=exp&&exp<=LIST_END;
+  return `<div class="rec"><div class="secthead"><h4>${esc(d.title)}</h4><button type="button" class="linkbtn" data-rec="documents:${esc(d.id)}">Edit</button></div>
+  <div class="meta"><span class="tag ${d.have==="have"?"t-have":"t-need"}">${d.have==="have"?"Have it":"Need it"}</span>${d.area&&d.area!=="general"&&AMAP[d.area]?`<a class="alink" href="#area-${esc(d.area)}">${esc(aname(d.area))}</a>`:""}${d.issued?`<span>Issued ${fmtDate(d.issued)}</span>`:""}${exp?`<span class="${warn?"overdue":""}">${past?"Expired":"Expires"} ${fmtDate(exp)}${warn&&!past?", before the listing window closes":""}</span>`:""}</div>
+  ${d.notes?`<p class="note">${esc(d.notes)}</p>`:""}
+  ${(d.files||[]).length?`<div class="files">${d.files.map(f=>`<a href="${blob(f.id)}" target="_blank" rel="noopener">${esc(f.name||"File")}</a>`).join("")}</div>`:""}</div>`;
+}
+function renderDocs(){
+  const have=docsR.filter(d=>d.have==="have").length;$("#d-sum").textContent=loaded&&docsR.length?`${have} of ${docsR.length} in hand`:"";
+  $("#d-list").innerHTML=!loaded?'<div class="empty">Loading…</div>':!docsR.length?'<div class="empty">No documents yet.</div>':
+    DOCCATS.map(c=>{const g=docsR.filter(d=>(DOCCATS.includes(d.category)?d.category:"Other")===c).sort((a,b)=>((a.have==="have")-(b.have==="have"))||(a.title||"").localeCompare(b.title||""));
+      return g.length?`<div style="display:grid;gap:10px"><h3>${esc(c)}</h3><div class="reclist">${g.map(docCard).join("")}</div></div>`:""}).join("");
+}
+function finTable(list){
+  return `<div class="tablewrap"><table><thead><tr><th>Surface</th><th>Product or colour</th><th>Finish</th><th>Supplier</th><th></th></tr></thead><tbody>${list.map(f=>`<tr><td>${esc(f.item)}</td><td>${esc(f.product)}${f.code?`<br><span class="note">${esc(f.code)}</span>`:""}${f.notes?`<br><span class="note">${esc(f.notes)}</span>`:""}</td><td>${esc(f.sheen)}</td><td>${esc(f.supplier)}</td><td class="r"><button type="button" class="linkbtn" data-rec="finishes:${esc(f.id)}">Edit</button></td></tr>`).join("")}</tbody></table></div>`;
+}
+function renderFinishes(){
+  const by=a=>fins.filter(f=>f.area===a).sort((x,y)=>(x.item||"").localeCompare(y.item||""));
+  const groups=AREAS.filter(a=>by(a.slug).length);
+  $("#fin-list").innerHTML=!loaded?'<div class="empty">Loading…</div>':!groups.length?'<div class="empty">No finishes recorded yet. Add them here or from a room page.</div>':
+    groups.map(a=>`<div style="display:grid;gap:8px"><h3><a href="#area-${a.slug}" style="color:inherit">${esc(a.name)}</a></h3>${finTable(by(a.slug))}</div>`).join("");
+}
+function monthsOut(m){const[y,mo]=m.split("-").map(Number);const d=2027*12+8-(y*12+mo-1);return d>1?`(${d} months before listing)`:d===1?"(the month before listing)":d===0?"(listing month)":"(after launch)"}
+function renderPresale(){
+  const ps=tasks.filter(t=>t.type==="Pre-sale").sort((a,b)=>(a.due||"9999").localeCompare(b.due||"9999")||a.title.localeCompare(b.title));
+  const months=[...new Set(ps.map(t=>t.due||""))];
+  $("#ps-list").innerHTML=!loaded?'<div class="empty">Loading…</div>':!ps.length?'<div class="empty">No pre-sale tasks yet.</div>':
+    months.map(m=>{const g=ps.filter(t=>(t.due||"")===m),d=g.filter(t=>t.status==="done").length;
+      return `<div style="display:grid;gap:8px"><div class="secthead"><h3>${m?monthLabel(m)+" "+monthsOut(m):"No date"}</h3><span class="note num">${d} of ${g.length} done</span></div><div class="tasks">${g.map(t=>row(t)).join("")}</div></div>`}).join("");
+  renderChecklist();
+}
+const ohItems=()=>checklist&&Array.isArray(checklist.items)?checklist.items:[];
+function renderChecklist(){
+  const it=ohItems(),d=it.filter(i=>i.d).length;$("#oh-count").textContent=it.length?`${d} of ${it.length} done.`:"";
+  $("#oh-list").innerHTML=it.length?it.map((i,k)=>`<label class="${i.d?"on":""}"><input type="checkbox" data-oh="${k}"${i.d?" checked":""}><span>${esc(i.t)}</span><button type="button" class="linkbtn x" data-ohrm="${k}">Remove</button></label>`).join(""):`<div class="empty">${loaded?"No items yet.":"Loading…"}</div>`;
+  $("#oh-add").disabled=$("#oh-reset").disabled=!klcol;
+}
+async function saveOh(items){checklist={items};renderChecklist();if(!klcol)return;try{await klcol.doc("openhome").set({items,updatedAt:new Date().toISOString()})}catch(e){showState("That checklist change didn't save. Try again.")}}
+function sumOf(list){const l=list.filter(t=>t.status!=="dropped");const b=l.filter(budgeted);const diy=l.filter(t=>+t.estHours||+t.actHours);
+  return {n:l.length,done:l.filter(t=>t.status==="done").length,est:b.reduce((s,t)=>s+mid(t),0),estDone:b.filter(t=>t.status==="done"||+t.actual).reduce((s,t)=>s+mid(t),0),act:b.reduce((s,t)=>s+(+t.actual||0),0),eh:diy.reduce((s,t)=>s+(+t.estHours||0),0),ah:diy.reduce((s,t)=>s+(+t.actHours||0),0)}}
+function renderSummary(){
+  if(!loaded){$("#tsum").innerHTML='<tbody><tr><td>Loading…</td></tr></tbody>';return}
+  const line=(lab,x)=>{const v=x.act-x.estDone;return `<tr><td>${lab}</td><td class="r num">${x.done} of ${x.n}</td><td class="r num">${kmoney(x.est)}</td><td class="r num">${kmoney(x.act)}</td><td class="r num" style="color:${x.act&&v>0?"var(--crit)":"var(--ok)"}">${x.act?(v>0?"+":v<0?"−":"")+kmoney(Math.abs(v)):""}</td><td class="r num">${x.eh||x.ah?(x.eh?x.eh+"h":"0h")+" / "+(x.ah?x.ah+"h":"0h"):""}</td></tr>`};
+  $("#tsum").innerHTML=`<thead><tr><th>Priority</th><th class="r">Done</th><th class="r">Estimate</th><th class="r">Actual</th><th class="r">Over or under</th><th class="r">DIY hours est / actual</th></tr></thead><tbody>${Object.keys(TIERS).map(k=>line(`<span class="tag t-${k}">${TIERS[k]}</span>`,sumOf(tasks.filter(t=>t.tier===k)))).join("")}</tbody><tfoot>${line("All tasks",sumOf(tasks))}</tfoot>`;
+}
+function groupTasks(list){
+  const g=$("#f-group").value;if(!g)return `<div class="tasks">${list.map(t=>row(t)).join("")}</div>`;
+  const keyOf=t=>g==="tier"?t.tier:g==="area"?t.area:g==="type"?(t.type||"Other"):(t.due||"");
+  let keys=[...new Set(list.map(keyOf))];
+  const order=g==="tier"?Object.keys(TIERS):g==="area"?AREAS.map(a=>a.slug):g==="type"?TYPES:null;
+  if(order)keys.sort((a,b)=>(order.indexOf(a)+1||99)-(order.indexOf(b)+1||99));else keys.sort((a,b)=>(a||"9999").localeCompare(b||"9999"));
+  return keys.map(k=>{const items=list.filter(t=>keyOf(t)===k);const x=sumOf(items);
+    const lab=g==="tier"?`<span class="tag t-${k}">${TIERS[k]||k}</span>`:g==="area"?esc(aname(k)):g==="type"?esc(k):esc(monthLabel(k));
+    return `<div class="grp"><div class="secthead"><h3>${lab}</h3><span class="note num">${items.length} task${items.length>1?"s":""}, est ${kmoney(x.est)}${x.act?", actual "+kmoney(x.act):""}</span></div>${g==="tier"&&TIERNOTE[k]?`<p class="note">${TIERNOTE[k]}</p>`:""}<div class="tasks">${items.map(t=>row(t,g==="area")).join("")}</div></div>`}).join("");
+}
+function renderAreas(){
+  const w=!!cfgcol;$("#mg-toggle").hidden=!w;$("#mg-addgroup").hidden=!(w&&manage);$("#mg-toggle").textContent=manage?"Done":"Manage groups and areas";
+  $("#mg-note").textContent=manage?"Drag the handles to change the order or move an area to another group. On a keyboard, use the arrow keys on a handle.":"";
+  if(manage){$("#areagroups").innerHTML=GROUPS.map((g,gi)=>{const as=AREAS.filter(a=>a.group===g);
+    return `<div class="areagroup" data-group="${esc(g)}"><div class="secthead mhead"><span class="mleft">${ibtn("grip","Drag to reorder groups","",`data-drag="group"`)}<h3 class="mlink" role="button" tabindex="0" title="Rename this group" data-gren="${gi}">${esc(g)}</h3></span><span class="micons">${ibtn("plus","Add an area to this group",`data-gadd="${gi}"`)}${ibtn("edit","Rename this group",`data-gren="${gi}"`)}${ibtn("trash","Remove this group",`data-grm="${gi}"`,"","danger")}</span></div>
+    <div class="mbox">${as.map(a=>{const n=tasks.filter(t=>t.area===a.slug).length;return `<div class="mrow" data-slug="${esc(a.slug)}"><span class="mleft">${ibtn("grip","Drag to reorder or move to another group","",`data-drag="area"`)}<span><span class="mname mlink" role="button" tabindex="0" title="Edit this area" data-aed="${esc(a.slug)}">${esc(a.name)}</span> <span class="note">${n} task${n===1?"":"s"}</span></span></span><span class="micons">${ibtn("edit","Edit this area",`data-aed="${esc(a.slug)}"`)}${ibtn("trash","Remove this area",`data-arm="${esc(a.slug)}"`,"","danger")}</span></div>`}).join("")}<div class="mrow mempty note"${as.length?" hidden":""}>No areas in this group yet. Drag one here or add one.</div></div></div>`}).join("");return}
+  $("#areagroups").innerHTML=GROUPS.map(g=>`<div class="areagroup"><h3>${esc(g)}</h3><div class="grid agrid">${AREAS.filter(a=>a.group===g).map(a=>{
+    const ts=tasks.filter(t=>t.area===a.slug&&t.status!=="dropped"),od=ts.filter(open).length,dn=ts.filter(t=>t.status==="done").length,cost=ts.reduce((s,t)=>s+mid(t),0);
+    const p=photosOf(a.slug);const ch=adoc(a.slug).chosen;const pic=(ch&&listOf(a.slug,"opt-"+ch)[0])||p.current[0]||p.vision[0];
+    return `<a class="acard" href="#area-${esc(a.slug)}"><div class="thumb" ${pic?`style="background-image:url('${blob(pic.id)}')"`:""}>${pic?"":"No photos yet"}</div><div class="abody"><h3>${esc(a.name)}</h3><div class="ameta"><span>${loaded?od+" open":""}</span><span>${loaded?dn+" done":""}</span><span>${loaded&&cost?"about "+kmoney(cost):""}</span><span>${p.current.length} photos</span>${ch&&LVL[ch]?`<span>${LVL[ch][1]} vision</span>`:""}</div></div></a>`}).join("")}</div></div>`).join("");
+}
+function gallery(list,kind){
+  if(!list.length)return `<div class="ghostdrop">${kind==="vision"?"No inspiration yet.":kind==="current"?"No current photos yet. Use the button above to add some.":"No images yet."}</div>`;
+  return list.map((p,i)=>`<div class="tile"><img src="${blob(p.id)}" alt="${esc(p.caption||(kind==="current"?"Current photo":"Vision image"))}" loading="lazy" data-view="${kind}:${i}"><div class="tbar"><span>${esc(p.addedAt?new Date(p.addedAt).toLocaleDateString("en-AU",{day:"numeric",month:"short",year:"numeric"}):"")}</span>${assets?`<button type="button" data-rm="${kind}:${i}">Remove</button>`:""}</div></div>`).join("");
+}
+function renderArea(){
+  const a=AMAP[curArea];if(!a)return;
+  const d=adoc(a.slug),w=!!acol;
+  $("#a-group").textContent=a.group;$("#a-name").textContent=a.name;$("#a-now").textContent=d.now||a.now;$("#a-sale").textContent=d.sale||a.sale;
+  document.querySelectorAll("[data-aedit]").forEach(b=>b.hidden=!w);
+  const p=photosOf(a.slug);
+  $("#g-vision").innerHTML=gallery(p.vision,"vision");$("#g-current").innerHTML=gallery(p.current,"current");
+  $("#up-vision-wrap").hidden=$("#up-current-wrap").hidden=!assets;
+  const hasOpt=LEVELS.some(([k])=>optOf(a.slug,k).summary||listOf(a.slug,"opt-"+k).length);
+  const st=[["Current photos",p.current.length>0,""],["Interview and description",!!d.descAgreed,"descAgreed"],["Vision options",hasOpt,""],["Vision chosen",!!(d.chosen&&LVL[d.chosen]),""],["Tasks agreed",!!d.tasksAgreed,"tasksAgreed"]];
+  $("#a-steps").innerHTML=st.map(([l,ok,flag],i)=>`<li class="${ok?"ok":""}"><b>${ok?"✓":i+1}</b>${esc(l)}${flag&&w?` <button type="button" data-step="${flag}">${ok?"Undo":"Mark done"}</button>`:""}</li>`).join("");
+  const ch=d.chosen&&LVL[d.chosen]?d.chosen:"";
+  $("#a-chosen").innerHTML=ch?`<div class="secthead"><span class="tag t-have">${LVL[ch][1]} option chosen</span>${w?`<button type="button" class="linkbtn" data-oedit="choice">Edit changes</button>`:""}</div>
+    <p class="pre">${esc(optOf(a.slug,ch).summary||"")}</p>${d.choiceNotes?`<p class="pre"><b>Changes:</b> ${esc(d.choiceNotes)}</p>`:""}<div class="gallery">${gallery(listOf(a.slug,"opt-"+ch),"opt-"+ch)}</div>`
+    :'<p class="note">Not chosen yet. Once the options below are ready, pick one and it shows here.</p>';
+  $("#a-opts").innerHTML=LEVELS.map(([k,l,blurb])=>{const o=optOf(a.slug,k),sel=ch===k;
+    return `<div class="opt${sel?" sel":""}"><div class="secthead"><h4>${l}</h4>${sel?'<span class="tag t-have">Chosen</span>':""}</div><p class="note">${esc(blurb)}</p>
+    <p class="pre">${o.summary?esc(o.summary):'<span class="note">Not written yet.</span>'}</p>
+    ${o.cost||o.time?`<div class="note">${o.cost?"Cost "+esc(o.cost):""}${o.cost&&o.time?". ":""}${o.time?"Time "+esc(o.time):""}</div>`:""}
+    <div class="gallery sm">${gallery(listOf(a.slug,"opt-"+k),"opt-"+k)}</div>
+    ${w?`<div class="acts">${assets?`<label class="btn ghost filebtn">Add images<input type="file" data-up="opt-${k}" accept="image/*" multiple></label>`:""}<button type="button" class="btn ghost" data-oedit="${k}">Edit</button><button type="button" class="btn${sel?" ghost":""}" data-ochoose="${k}">${sel?"Unchoose":"Choose this"}</button></div>`:""}</div>`}).join("");
+  const ts=tasks.filter(t=>t.area===a.slug).sort((x,y)=>(x.due||"9999").localeCompare(y.due||"9999"));
+  const live=ts.filter(t=>t.status!=="dropped");
+  $("#a-taskhead").textContent=loaded?`Tasks (${live.filter(open).length} open, ${live.filter(t=>t.status==="done").length} done, about ${kmoney(live.reduce((s,t)=>s+mid(t),0))})`:"Tasks";
+  const af=fins.filter(f=>f.area===a.slug).sort((x,y)=>(x.item||"").localeCompare(y.item||""));
+  $("#a-fin").innerHTML=af.length?finTable(af):'<p class="note">Nothing recorded yet.</p>';
+  $("#a-tasks").innerHTML=!loaded?'<div class="empty">Loading…</div>':ts.length?ts.map(t=>row(t,true)).join(""):'<div class="empty">No tasks for this area yet.</div>';
+}
+["#f-group","#f-ready"].forEach(s=>$(s).addEventListener("change",render));
+$("#f-q").addEventListener("input",render);
+$("#c-q").addEventListener("input",renderContacts);
+
+/* photos */
+async function toJpeg(file){
+  if(/^image\/(png|jpeg|webp|gif)$/.test(file.type)&&file.size<6e6)return file;
+  const url=URL.createObjectURL(file);
+  try{
+    const img=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=url});
+    const s=Math.min(1,2400/Math.max(img.naturalWidth,img.naturalHeight));const c=document.createElement("canvas");
+    c.width=Math.round(img.naturalWidth*s);c.height=Math.round(img.naturalHeight*s);c.getContext("2d").drawImage(img,0,0,c.width,c.height);
+    return await new Promise((res,rej)=>c.toBlob(b=>b?res(b):rej(new Error("encode")),"image/jpeg",0.85));
+  }finally{URL.revokeObjectURL(url)}
+}
+async function upFile(file){
+  const isImg=/^image\//.test(file.type)||/\.(heic|heif)$/i.test(file.name);
+  const b=isImg?await toJpeg(file):file;
+  const type=isImg?(b.type||"image/jpeg"):(file.type||(/\.pdf$/i.test(file.name)?"application/pdf":""));
+  const r=await assets.upload(b,type?{type}:undefined);
+  return {id:r.id,name:file.name,type,addedAt:new Date().toISOString()};
+}
+async function addPhotos(kind,files){
+  if(!assets||!acol||!curArea||!files.length)return;
+  const slug=curArea;const msg=$("#a-upmsg");const added=[];let failed=0;
+  for(let i=0;i<files.length;i++){
+    msg.textContent=`Uploading ${i+1} of ${files.length}…`;
+    try{const b=await toJpeg(files[i]);const r=await assets.upload(b,b.type?undefined:{type:"image/jpeg"});added.push({id:r.id,caption:files[i].name.replace(/\.[^.]+$/,""),addedAt:new Date().toISOString()})}
+    catch(e){failed++;if(e&&e.code==="rate_limited")break}
+  }
+  if(added.length){
+    try{await saveArea(slug,withList(slug,kind,listOf(slug,kind).concat(added)))}catch(e){msg.textContent="The photos uploaded but the page couldn't record them. Try again.";return}
+  }
+  msg.textContent=failed?`${added.length} added. ${failed} couldn't be read or uploaded; save them as JPEG and try again.`:`${added.length} added.`;
+}
+document.addEventListener("change",e=>{const u=e.target.closest("input[data-up]");if(u){addPhotos(u.dataset.up,[...u.files]);u.value=""}});
+$("#up-vision").addEventListener("change",e=>{addPhotos("vision",[...e.target.files]);e.target.value=""});
+$("#up-current").addEventListener("change",e=>{addPhotos("current",[...e.target.files]);e.target.value=""});
+
+/* interactions */
+let armed=null;
+document.addEventListener("click",async e=>{
+  const c=e.target.closest("[data-cycle]");
+  if(c){const t=tasks.find(x=>x.id===c.dataset.cycle);if(!t||!col)return;const ns=NEXT[t.status]||"todo";t.status=ns;render();
+    try{await col.doc(t.id).update({status:ns,updatedAt:new Date().toISOString()});if(ns==="done")await maybeRepeat(t)}catch(err){showState("That change didn't save. Check your connection and try again.")}return}
+  const rc=e.target.closest("[data-rec]");if(rc){const[k,id]=rc.dataset.rec.split(":");openRec(k,id||null);return}
+  const ohr=e.target.closest("[data-ohrm]");if(ohr){e.preventDefault();const it=ohItems().slice();it.splice(+ohr.dataset.ohrm,1);saveOh(it);return}
+  const dx=e.target.closest("[data-depx]");if(dx){edDeps=edDeps.filter(x=>x!==dx.dataset.depx);renderDeps();return}
+  const qa=e.target.closest("[data-qacc],[data-qun],[data-qrm]");if(qa){quoteAction(qa);return}
+  const rf=e.target.closest("[data-rf]");if(rf){const i=+rf.dataset.rf;const f=rFiles[i];if(!f)return;rFiles.splice(i,1);
+    if(rNew.some(n=>n.id===f.id)){rNew=rNew.filter(n=>n.id!==f.id);try{await assets.delete(f.id)}catch(_){}}else rGone.push(f);renderRFiles();return}
+  const ed=e.target.closest("[data-edit]");if(ed){openDetail(ed.dataset.edit);return}
+  const dj=e.target.closest("[data-detail]");if(dj){openDetail(dj.dataset.detail);return}
+  const ia=e.target.closest("[data-iadd]");if(ia){const box=$("#e-"+ia.dataset.iadd);box.insertAdjacentHTML("beforeend",irow(ia.dataset.iadd,{}));box.lastElementChild.querySelector("input").focus();buyNote();return}
+  const ir=e.target.closest("[data-irm]");if(ir){ir.closest(".irow").remove();buyNote();return}
+  const ae=e.target.closest("[data-aedit]");if(ae&&curArea){const k=ae.dataset.aedit,a=AMAP[curArea],d=adoc(curArea);
+    openT(k==="now"?"Now":"Goals for sale",[{k:"txt",l:k==="now"?"How the room is now":"What it needs to be for sale",t:"textarea",v:d[k]||a[k]}],async v=>{const n=JSON.parse(JSON.stringify(d));n[k]=v.txt;await saveArea(curArea,n)});return}
+  const oe=e.target.closest("[data-oedit]");if(oe&&curArea){const k=oe.dataset.oedit,d=adoc(curArea);
+    if(k==="choice"){openT("Changes to the chosen option",[{k:"txt",l:"What you'd change",t:"textarea",v:d.choiceNotes||""}],async v=>{const n=JSON.parse(JSON.stringify(d));n.choiceNotes=v.txt;await saveArea(curArea,n)});return}
+    const o=optOf(curArea,k);openT(LVL[k][1]+" option",[{k:"summary",l:"What this option includes",t:"textarea",v:o.summary||""},{k:"cost",l:"Rough cost",v:o.cost||""},{k:"time",l:"Rough time",v:o.time||""}],
+      async v=>{const n=JSON.parse(JSON.stringify(d));n.options=n.options||{};n.options[k]=Object.assign({},n.options[k]||{},v);await saveArea(curArea,n)});return}
+  const oc=e.target.closest("[data-ochoose]");if(oc&&curArea){const k=oc.dataset.ochoose,n=JSON.parse(JSON.stringify(adoc(curArea)));n.chosen=n.chosen===k?"":k;try{await saveArea(curArea,n)}catch(err){$("#a-upmsg").textContent="Couldn't save that. Try again."}return}
+  const sp=e.target.closest("[data-step]");if(sp&&curArea){const f=sp.dataset.step,n=JSON.parse(JSON.stringify(adoc(curArea)));n[f]=!n[f];try{await saveArea(curArea,n)}catch(err){$("#a-upmsg").textContent="Couldn't save that. Try again."}return}
+  const v=e.target.closest("[data-view]");if(v){const[k,i]=v.dataset.view.split(":");const p=listOf(curArea,k)[+i];if(p){$("#v-img").src=blob(p.id);$("#v-img").alt=p.caption||"";$("#v-cap").textContent=p.caption||"";$("#viewer").showModal()}return}
+  const rm=e.target.closest("[data-rm]");
+  if(rm){
+    if(armed!==rm){if(armed)armed.textContent="Remove";armed=rm;rm.textContent="Tap again to remove";return}
+    armed=null;const[k,i]=rm.dataset.rm.split(":");const slug=curArea;const l=listOf(slug,k).slice();const gone=l[+i];if(!gone)return;l.splice(+i,1);
+    try{await saveArea(slug,withList(slug,k,l));try{await assets.delete(gone.id)}catch(_){}}catch(err){$("#a-upmsg").textContent="Couldn't remove that photo. Try again."}
+    return}
+});
+$("#v-close").addEventListener("click",()=>$("#viewer").close());
+const dlg=$("#editor");
+/* manage groups and areas */
+const ICONS={grip:'<circle cx="9" cy="6" r="1.4"/><circle cx="15" cy="6" r="1.4"/><circle cx="9" cy="12" r="1.4"/><circle cx="15" cy="12" r="1.4"/><circle cx="9" cy="18" r="1.4"/><circle cx="15" cy="18" r="1.4"/>',
+ plus:'<path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+ edit:'<path d="M4 20h4L19 9l-4-4L4 16v4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>',
+ trash:'<path d="M5 7h14M10 7V4h4v3M7 7l1 13h8l1-13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>'};
+function ibtn(icon,label,attrs,dragAttr,cls){return `<button type="button" class="ibtn${icon==="grip"?" grip":""}${cls?" "+cls:""}" title="${esc(label)}" aria-label="${esc(label)}" ${attrs||""} ${dragAttr||""}><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="currentColor">${ICONS[icon]}</svg></button>`}
+let drag=null;
+function cfgFromDom(){
+  const gEls=[...document.querySelectorAll("#areagroups .areagroup[data-group]")];
+  const groups=gEls.map(x=>x.dataset.group),areas=[];
+  gEls.forEach(gEl=>gEl.querySelectorAll(".mrow[data-slug]").forEach(r=>{const a=AMAP[r.dataset.slug];if(a)areas.push(Object.assign({},a,{group:gEl.dataset.group}))}));
+  AREAS.forEach(a=>{if(!areas.some(x=>x.slug===a.slug))areas.push(Object.assign({},a))});
+  return [groups,areas];
+}
+async function commitOrder(){const[g,a]=cfgFromDom();const same=JSON.stringify(g)===JSON.stringify(GROUPS)&&JSON.stringify(a.map(x=>x.slug+"|"+x.group))===JSON.stringify(AREAS.map(x=>x.slug+"|"+x.group));if(same)return;
+  try{await saveCfg(g,a)}catch(err){showState("Couldn't save the new order. Try again.");render()}}
+function syncEmpty(){document.querySelectorAll("#areagroups .mbox").forEach(b=>{const e=b.querySelector(".mempty");if(e){e.hidden=!!b.querySelector(".mrow[data-slug]");b.appendChild(e)}})}
+document.addEventListener("pointerdown",e=>{const h=e.target.closest("[data-drag]");if(!h||!manage)return;e.preventDefault();
+  const item=h.closest(h.dataset.drag==="area"?".mrow":".areagroup");drag={kind:h.dataset.drag,item};item.classList.add("dragging");try{h.setPointerCapture(e.pointerId)}catch(_){}});
+document.addEventListener("pointermove",e=>{if(!drag)return;e.preventDefault();
+  if(e.clientY<70)scrollBy(0,-14);else if(e.clientY>innerHeight-50)scrollBy(0,14);
+  const el=document.elementFromPoint(e.clientX,e.clientY);if(!el)return;
+  if(drag.kind==="area"){const row=el.closest(".mrow[data-slug]"),box=el.closest(".mbox");
+    if(row&&row!==drag.item){const r=row.getBoundingClientRect();row.parentNode.insertBefore(drag.item,e.clientY<r.top+r.height/2?row:row.nextSibling)}
+    else if(!row&&box&&!box.contains(drag.item))box.insertBefore(drag.item,box.querySelector(".mempty"));
+    else if(!row){const g=el.closest(".areagroup");if(g&&!g.contains(drag.item)){const b=g.querySelector(".mbox");b.insertBefore(drag.item,b.querySelector(".mempty"))}}
+    syncEmpty()}
+  else{const g=el.closest(".areagroup[data-group]");if(g&&g!==drag.item){const r=g.getBoundingClientRect();g.parentNode.insertBefore(drag.item,e.clientY<r.top+r.height/2?g:g.nextSibling)}}
+},{passive:false});
+document.addEventListener("pointerup",()=>{if(!drag)return;const d=drag;drag=null;d.item.classList.remove("dragging");commitOrder()});
+document.addEventListener("pointercancel",()=>{if(!drag)return;drag.item.classList.remove("dragging");drag=null;render()});
+document.addEventListener("keydown",e=>{const h=e.target.closest&&e.target.closest("[data-drag]");if(!h||!manage||(e.key!=="ArrowUp"&&e.key!=="ArrowDown"))return;e.preventDefault();
+  const up=e.key==="ArrowUp";
+  if(h.dataset.drag==="group"){const g=h.closest(".areagroup");const sib=up?g.previousElementSibling:g.nextElementSibling;if(!sib)return;up?sib.before(g):sib.after(g)}
+  else{const row=h.closest(".mrow");const sib=up?row.previousElementSibling:row.nextElementSibling;
+    if(sib&&sib.matches(".mrow[data-slug]")){up?sib.before(row):sib.after(row)}
+    else{const g=row.closest(".areagroup"),og=up?g.previousElementSibling:g.nextElementSibling;if(!og)return;const b=og.querySelector(".mbox");if(up)b.insertBefore(row,b.querySelector(".mempty"));else b.prepend(row)}
+    syncEmpty()}
+  const slug=h.closest(".mrow")?.dataset.slug,grp=h.closest(".areagroup")?.dataset.group;
+  commitOrder().then(()=>{const t=slug?document.querySelector(`.mrow[data-slug="${CSS.escape(slug)}"] [data-drag]`):document.querySelector(`.areagroup[data-group="${CSS.escape(grp)}"] [data-drag="group"]`);if(t)t.focus()});
+});
+async function saveCfg(groups,areas){await cfgcol.doc("areas").set({groups,areas,updatedAt:new Date().toISOString()});GROUPS=groups;AREAS=areas;applyAreas();render()}
+const cloneA=()=>AREAS.map(a=>Object.assign({},a));
+const slugify=n=>(n.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"area").slice(0,40);
+function uniqSlug(n){let b=slugify(n),s=b,i=2;while(AMAP[s])s=b+"-"+(i++);return s}
+$("#mg-toggle").addEventListener("click",()=>{manage=!manage;renderAreas()});
+$("#mg-addgroup").addEventListener("click",()=>openT("Add group",[{k:"name",l:"Group name",v:""}],async v=>{if(!v.name)throw 0;if(GROUPS.includes(v.name))throw 0;await saveCfg(GROUPS.concat([v.name]),cloneA())}));
+async function moveRefs(from,to){
+  for(const t of tasks.filter(t=>t.area===from))await col.doc(t.id).update({area:to});
+  for(const f of fins.filter(f=>f.area===from))await fcol.doc(f.id).update({area:to});
+  for(const d of docsR.filter(d=>d.area===from))await dcol.doc(d.id).update({area:to});
+}
+document.addEventListener("keydown",e=>{const m=e.target.closest&&e.target.closest(".mlink");if(m&&(e.key==="Enter"||e.key===" ")){e.preventDefault();m.click()}});
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-gadd],[data-gren],[data-grm],[data-aed],[data-arm]");if(!b||!cfgcol)return;
+  const gOpts=GROUPS.map(g=>[g,g]);
+  if(b.dataset.gadd!=null){const g=GROUPS[+b.dataset.gadd];
+    openT("Add area",[{k:"name",l:"Area name",v:""},{k:"group",l:"Group",t:"select",o:gOpts,v:g},{k:"now",l:"Now (optional)",t:"textarea",v:""},{k:"sale",l:"Goals for sale (optional)",t:"textarea",v:""}],
+      async v=>{if(!v.name)throw 0;await saveCfg(GROUPS.slice(),cloneA().concat([{slug:uniqSlug(v.name),name:v.name,group:v.group,now:v.now,sale:v.sale}]))});return}
+  if(b.dataset.gren!=null){const old=GROUPS[+b.dataset.gren];
+    openT("Rename group",[{k:"name",l:"Group name",v:old}],async v=>{if(!v.name)throw 0;if(v.name!==old&&GROUPS.includes(v.name))throw 0;await saveCfg(GROUPS.map(g=>g===old?v.name:g),cloneA().map(a=>a.group===old?Object.assign(a,{group:v.name}):a))});return}
+  if(b.dataset.grm!=null){const old=GROUPS[+b.dataset.grm],others=GROUPS.filter(g=>g!==old),inside=AREAS.filter(a=>a.group===old);
+    if(!others.length){showState("Keep at least one group.");return}
+    openT("Remove group "+old,inside.length?[{t:"note",v:`${inside.length} area${inside.length>1?"s":""} in this group will move to the group you pick.`},{k:"to",l:"Move its areas to",t:"select",o:others.map(g=>[g,g]),v:others[0]}]:[{t:"note",v:"This group is empty, so nothing else changes."}],
+      async v=>{await saveCfg(others,cloneA().map(a=>a.group===old?Object.assign(a,{group:v.to}):a))});return}
+  if(b.dataset.aed!=null){const a=AMAP[b.dataset.aed];if(!a)return;
+    openT("Edit area",[{k:"name",l:"Area name",v:a.name},{k:"group",l:"Group",t:"select",o:gOpts,v:a.group},{k:"now",l:"Now",t:"textarea",v:(adoc(a.slug).now||a.now||"")},{k:"sale",l:"Goals for sale",t:"textarea",v:(adoc(a.slug).sale||a.sale||"")}],
+      async v=>{if(!v.name)throw 0;await saveCfg(GROUPS.slice(),cloneA().map(x=>x.slug===a.slug?Object.assign(x,{name:v.name,group:v.group,now:v.now,sale:v.sale}):x));
+        const d=adoc(a.slug);if(acol&&(d.now!=null||d.sale!=null)){const n=JSON.parse(JSON.stringify(d));n.now=v.now;n.sale=v.sale;await saveArea(a.slug,n)}});return}
+  if(b.dataset.arm!=null){const a=AMAP[b.dataset.arm];if(!a)return;const others=AREAS.filter(x=>x.slug!==a.slug);if(!others.length){showState("Keep at least one area.");return}
+    const n=tasks.filter(t=>t.area===a.slug).length+fins.filter(f=>f.area===a.slug).length+docsR.filter(d=>d.area===a.slug).length;
+    const def=AMAP.general&&a.slug!=="general"?"general":others[0].slug;
+    openT("Remove "+a.name,n?[{t:"note",v:`It has ${n} task${n>1?"s":""}, finish or document record${n>1?"s":""}. They move to the area you pick. Its photos are kept in storage but no longer shown.`},{k:"to",l:"Move them to",t:"select",o:others.map(x=>[x.slug,x.name+" ("+x.group+")"]),v:def}]:[{t:"note",v:"Nothing is linked to this area. Its photos, if any, are kept in storage but no longer shown."}],
+      async v=>{if(n)await moveRefs(a.slug,v.to);await saveCfg(GROUPS.slice(),cloneA().filter(x=>x.slug!==a.slug));if(curArea===a.slug)location.hash="#areas"});return}
+});
+
+/* small text dialog */
+const tdlg=$("#tdlg");let tSave=null;
+function openT(title,fields,save){
+  if(!acol){showState("Saving needs the saved data, which isn't available in this view.");return}
+  $("#tt-title").textContent=title;tSave={fields,save};$("#tt-msg").textContent="";
+  $("#tt-fields").innerHTML=fields.map((f,i)=>f.t==="note"?`<p class="note">${esc(f.v)}</p>`:f.t==="select"?`<label>${esc(f.l)}<select id="tt-${i}">${f.o.map(([v,l])=>`<option value="${esc(v)}"${v===f.v?" selected":""}>${esc(l)}</option>`).join("")}</select></label>`:f.t==="textarea"?`<label>${esc(f.l)}<textarea id="tt-${i}" maxlength="4000" style="min-height:140px">${esc(f.v)}</textarea></label>`:`<label>${esc(f.l)}<input id="tt-${i}" maxlength="200" value="${esc(f.v)}"></label>`).join("");
+  tdlg.showModal();
+}
+$("#tt-cancel").addEventListener("click",()=>tdlg.close());
+$("#tform").addEventListener("submit",async e=>{e.preventDefault();if(!tSave)return;const v={};tSave.fields.forEach((f,i)=>{if(f.k)v[f.k]=$("#tt-"+i).value.trim()});
+  $("#tt-save").disabled=true;try{await tSave.save(v);tdlg.close()}catch(err){$("#tt-msg").textContent=err===0?"Check the name: it can't be blank or match an existing group.":"Couldn't save. Try again."}finally{$("#tt-save").disabled=false}});
+
+/* DIY item rows */
+function irow(kind,it){
+  it=it||{};
+  return `<div class="irow"><input class="i-name" maxlength="160" placeholder="${kind==="links"?"Title":kind==="tools"?"Tool":"Material"}" value="${esc(it.name||it.title||"")}">${kind==="mats"?`<input class="i-qty" maxlength="40" placeholder="Qty" value="${esc(it.qty||"")}">`:""}${kind==="links"?`<input class="i-url" type="url" maxlength="500" placeholder="https://www.youtube.com/..." value="${esc(it.url||"")}">`:`<input class="i-cost" type="number" min="0" step="1" inputmode="numeric" placeholder="$ to buy" value="${it.cost||""}"><label class="i-have"><input type="checkbox"${it.have?" checked":""}>Have it</label>`}<button type="button" class="linkbtn" data-irm aria-label="Remove">×</button></div>`;
+}
+function readRows(kind){return [...$("#e-"+kind).children].map(r=>{const name=r.querySelector(".i-name").value.trim();if(kind==="links"){const url=r.querySelector(".i-url").value.trim();return url?{title:name||url,url}:null}
+  if(!name)return null;const o={name,have:r.querySelector(".i-have input").checked,cost:+r.querySelector(".i-cost").value||0};if(kind==="mats")o.qty=r.querySelector(".i-qty").value.trim();return o}).filter(Boolean)}
+function buyNote(){if($("#e-who").value==="Trade"){$("#e-buy").textContent="";return}
+  const tl=readRows("tools").filter(i=>!i.have).reduce((s,i)=>s+i.cost,0),ml=readRows("mats").filter(i=>!i.have).reduce((s,i)=>s+i.cost,0);
+  $("#e-buy").textContent=tl+ml?`To buy: ${money(tl+ml)} (tools ${money(tl)}, materials ${money(ml)}). This is added on top of the estimate, so use the estimate only for anything else, such as hire or tip fees.`:"Anything you need to buy goes in the lists above with a cost, and it's added to the estimate.";}
+$("#e-diy").addEventListener("input",buyNote);$("#e-diy").addEventListener("change",buyNote);
+
+/* task detail */
+const ddlg=$("#detail");let detailId=null;
+function openDetail(id){
+  const t=tasks.find(x=>x.id===id);if(!t)return;detailId=id;
+  $("#dt-num").textContent=t.num?"Task #"+t.num:"Task";$("#dt-title").textContent=t.title;
+  const tb=(rows,kind)=>`<div class="tablewrap"><table><thead><tr><th>${kind==="mats"?"Material":"Tool"}</th>${kind==="mats"?"<th>Qty</th>":""}<th></th><th class="r">To buy</th></tr></thead><tbody>${rows.map(i=>`<tr><td>${esc(i.name)}</td>${kind==="mats"?`<td>${esc(i.qty||"")}</td>`:""}<td>${i.have?'<span class="tag t-have">Have it</span>':'<span class="tag t-need">Buy</span>'}</td><td class="r num">${!i.have&&i.cost?money(i.cost):""}</td></tr>`).join("")}</tbody></table></div>`;
+  const bl=blockers(t),afterAll=(Array.isArray(t.after)?t.after:[]).map(i=>tasks.find(x=>x.id===i)).filter(Boolean);
+  const buy=buyOf(t),lo=estLo(t),hi=estHi(t);
+  let h=`<div class="tmeta" style="font-size:.85rem"><span class="pill s-${t.status}" style="cursor:default">${STATUS[t.status]}</span><span class="tag t-${t.tier}">${TIERS[t.tier]||""}</span>${t.type?`<span class="ttype">${esc(t.type)}</span>`:""}<a class="alink" href="#area-${esc(t.area)}">${esc(aname(t.area))}</a><span>${esc(t.who)}</span><span>Due ${monthLabel(t.due)}</span>${t.repeat&&REPEAT[t.repeat]?`<span>${REPEAT[t.repeat]}</span>`:""}${tagsOf(t).length?`<span class="ttags">${esc(tagsOf(t).join(", "))}</span>`:""}</div>`;
+  h+=`<div class="dsec"><h4>Cost and time</h4><div class="tablewrap"><table><tbody>
+    ${buy?`<tr><td>Tools and materials to buy</td><td class="r num">${money(buy)}</td></tr><tr><td>Other costs</td><td class="r num">${+t.costLow==+(t.costHigh||t.costLow)?money(+t.costLow||0):money(+t.costLow||0)+" to "+money(+t.costHigh||0)}</td></tr>`:""}
+    <tr><td><b>Estimate</b></td><td class="r num"><b>${lo==hi?money(lo):money(lo)+" to "+money(hi)}</b></td></tr>
+    <tr><td>Actual spent</td><td class="r num" style="${+t.actual>hi?"color:var(--crit);font-weight:700":""}">${money(+t.actual||0)}</td></tr>
+    ${+t.estHours||+t.actHours?`<tr><td>Hours, estimate and actual</td><td class="r num">${+t.estHours||0}h and ${+t.actHours||0}h</td></tr>`:""}</tbody></table></div></div>`;
+  if(t.contactId&&contactName(t.contactId)||(t.quotes||[]).length)h+=`<div class="dsec"><h4>Trade and quotes</h4>${t.contactId&&contactName(t.contactId)?`<p>${esc(contactName(t.contactId))}</p>`:""}${(t.quotes||[]).map(q=>`<div class="note">${money(+q.amount||0)} from ${esc(contactName(q.contactId)||q.from||"")}${q.accepted?", accepted":""}${q.date?", "+fmtDate(q.date):""}${q.file?` <a href="${blob(q.file.id)}" target="_blank" rel="noopener">${esc(q.file.name||"file")}</a>`:""}</div>`).join("")}</div>`;
+  if(afterAll.length)h+=`<div class="dsec"><h4>Do this after</h4>${afterAll.map(b=>`<button type="button" class="linkbtn" data-detail="${esc(b.id)}">${b.num?"#"+b.num+" ":""}${esc(b.title)} (${esc(aname(b.area))})${open(b)?"":" ✓ done"}</button>`).join("")}${bl.length?`<p class="note">Still waiting on ${bl.length}.</p>`:'<p class="note">Ready to start.</p>'}</div>`;
+  if(t.who!=="Trade"&&(t.skills||t.conf||items(t,"tools").length||items(t,"mats").length||items(t,"links").length||t.steps||t.materials)){
+    h+=`<div class="dsec"><h4>DIY</h4>${t.skills||t.conf?`<p>${t.skills?"Skills: "+esc(t.skills)+". ":""}${t.conf?"You: "+esc(CONF[t.conf]||t.conf)+".":""}</p>`:""}
+      ${items(t,"tools").length?tb(items(t,"tools"),"tools"):""}${items(t,"mats").length?tb(items(t,"mats"),"mats"):""}${t.materials&&!items(t,"mats").length?`<p class="pre note">${esc(t.materials)}</p>`:""}
+      ${items(t,"links").length?`<div style="display:grid;gap:4px">${items(t,"links").map(l=>`<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.title||l.url)}</a>`).join("")}</div>`:""}
+      ${t.steps?`<ol style="margin:0;padding-left:1.2em;display:grid;gap:4px">${t.steps.split(/\n+/).filter(x=>x.trim()).map(x=>`<li>${esc(x.replace(/^\s*\d+[.)]\s*/,""))}</li>`).join("")}</ol>`:""}</div>`}
+  if(t.notes)h+=`<div class="dsec"><h4>Notes</h4><p class="pre">${esc(t.notes)}</p></div>`;
+  $("#dt-body").innerHTML=h;$("#dt-edit").hidden=!col;
+  if(!ddlg.open)ddlg.showModal();
+}
+$("#dt-close").addEventListener("click",()=>ddlg.close());
+$("#dt-edit").addEventListener("click",()=>{const id=detailId;ddlg.close();openEditor(id)});
+
+async function maybeRepeat(t){
+  const k=+t.repeat;if(!k||t.nextMade||!col)return;
+  const due=addMonth(t.due||nowMonth(),k);if(due>"2028-12")return;
+  await col.add({num:nextNum(),tags:tagsOf(t),skills:t.skills||"",conf:t.conf||"",tools:items(t,"tools").map(i=>Object.assign({},i,{have:true})),mats:items(t,"mats"),links:items(t,"links"),steps:t.steps||"",estHours:+t.estHours||0,title:t.title,area:t.area,type:t.type,tier:t.tier,who:t.who,status:"todo",due,costLow:+t.costLow||0,costHigh:+t.costHigh||0,actual:0,notes:t.notes||"",repeat:t.repeat,contactId:t.contactId||"",after:[],quotes:[],updatedAt:new Date().toISOString()});
+  await col.doc(t.id).update({nextMade:true});
+}
+function renderDeps(){
+  $("#e-depchips").innerHTML=edDeps.length?edDeps.map(id=>{const d=tasks.find(x=>x.id===id);return `<span class="chip"><span>${esc(d?d.title+" ("+aname(d.area)+")":"Deleted task")}${d&&!open(d)?" ✓":""}</span><button type="button" data-depx="${esc(id)}" aria-label="Remove">×</button></span>`}).join(""):'<span class="note">Nothing. It can start any time.</span>';
+  const sel=$("#e-depsel");sel.innerHTML='<option value="">Choose a task</option>';
+  GROUPS.forEach(g=>{const og=document.createElement("optgroup");og.label=g;
+    tasks.filter(t=>t.id!==editingId&&!edDeps.includes(t.id)&&t.status!=="dropped"&&AMAP[t.area]&&AMAP[t.area].group===g).sort((a,b)=>aname(a.area).localeCompare(aname(b.area))||a.title.localeCompare(b.title))
+      .forEach(t=>og.appendChild(new Option(aname(t.area)+": "+t.title,t.id)));if(og.children.length)sel.appendChild(og)});
+}
+$("#e-depadd").addEventListener("click",()=>{const v=$("#e-depsel").value;if(v&&!edDeps.includes(v)){edDeps.push(v);renderDeps()}});
+function quoteRange(){const live=edQuotes.filter(q=>+q.amount);return live.length?[Math.min(...live.map(q=>+q.amount)),Math.max(...live.map(q=>+q.amount))]:null}
+function renderQuotes(){
+  const r=quoteRange();
+  $("#e-qlist").innerHTML=edQuotes.length?edQuotes.map((q,i)=>`<div class="q${q.accepted?" acc":""}"><div><b class="num">${money(+q.amount||0)}</b> ${esc(contactName(q.contactId)||q.from||"")}${q.accepted?' <span class="tag t-have">Accepted</span>':(r&&edQuotes.length>1&&+q.amount===r[0]?' <span class="note">cheapest</span>':"")}
+    <div class="note">${q.date?fmtDate(q.date):""}${q.date&&q.note?" · ":""}${esc(q.note||"")}</div>${q.file?`<a class="note" href="${blob(q.file.id)}" target="_blank" rel="noopener">${esc(q.file.name||"Quote file")}</a>`:""}</div>
+    <div class="qa">${q.accepted?`<button type="button" data-qun="${i}">Unaccept</button>`:`<button type="button" data-qacc="${i}">Accept</button>`}<button type="button" data-qrm="${i}">Remove</button></div></div>`).join(""):'<span class="note">No quotes logged yet. The estimate follows the quotes once you add them.</span>';
+}
+async function saveQuotes(extra){
+  const acc=edQuotes.find(q=>q.accepted),r=quoteRange();const data=Object.assign({quotes:edQuotes,updatedAt:new Date().toISOString()},extra||{});
+  if(acc){data.costLow=data.costHigh=+acc.amount;data.who="Trade";if(acc.contactId)data.contactId=acc.contactId}else if(r){data.costLow=r[0];data.costHigh=r[1]}
+  await col.doc(editingId).update(data);
+  if(data.costLow!=null){$("#e-lo").value=data.costLow;$("#e-hi").value=data.costHigh}
+  if(data.who)$("#e-who").value=data.who;if(data.contactId){fillContacts(data.contactId)}
+}
+async function quoteAction(b){
+  const i=+(b.dataset.qacc??b.dataset.qun??b.dataset.qrm);const q=edQuotes[i];if(!q)return;
+  try{
+    if(b.dataset.qacc!=null){edQuotes.forEach((x,k)=>x.accepted=k===i);await saveQuotes();$("#e-qnote").textContent="Accepted. The estimate is now this quote.";}
+    else if(b.dataset.qun!=null){q.accepted=false;await saveQuotes();$("#e-qnote").textContent="Unaccepted. The estimate is back to the range of quotes.";}
+    else{if(b.textContent!=="Tap again"){b.textContent="Tap again";return}
+      edQuotes.splice(i,1);await saveQuotes();if(q.file&&assets){try{await assets.delete(q.file.id)}catch(_){}}$("#e-qnote").textContent="Quote removed.";}
+  }catch(err){$("#e-qnote").textContent="Couldn't save that change. Try again."}
+  renderQuotes();
+}
+$("#q-add").addEventListener("click",async()=>{
+  const from=$("#q-from").value.trim(),amt=+$("#q-amt").value;
+  if(!from||!amt){$("#e-qnote").textContent="Add who the quote is from and the amount.";return}
+  $("#q-add").disabled=true;$("#e-qnote").textContent="Saving quote…";
+  try{
+    const lc=from.toLowerCase();const c=contacts.find(x=>(x.name||"").toLowerCase()===lc||(x.company||"").toLowerCase()===lc);
+    let cid=c?c.id:"",made=false;
+    if(!c&&ccol){const ref=await ccol.add({name:from,role:"Trade",updatedAt:new Date().toISOString()});cid=ref.id;made=true}
+    let file=null;const f=$("#q-file").files[0];if(f&&assets)file=await upFile(f);
+    edQuotes.push({id:Math.random().toString(36).slice(2,10),contactId:cid,from,amount:amt,date:$("#q-date").value||"",note:$("#q-note").value.trim(),file,accepted:false});
+    await saveQuotes();["#q-from","#q-amt","#q-date","#q-note","#q-file"].forEach(s=>$(s).value="");
+    $("#e-qnote").textContent=made?`Quote saved, and ${from} added to Contacts.`:"Quote saved.";renderQuotes();
+  }catch(err){$("#e-qnote").textContent="Couldn't save the quote. Try again."}
+  finally{$("#q-add").disabled=false}
+});
+function fillContacts(sel){const s=$("#e-contact");s.innerHTML='<option value="">Not chosen yet</option>'+contacts.slice().sort((a,b)=>(a.name||"").localeCompare(b.name||"")).map(c=>`<option value="${esc(c.id)}">${esc(c.name)}${c.trade?" ("+esc(c.trade)+")":""}</option>`).join("");s.value=sel&&contacts.some(c=>c.id===sel)?sel:""}
+function diyVis(){$("#e-diy").hidden=$("#e-who").value==="Trade";if(typeof buyNote==="function")buyNote()}
+$("#e-who").addEventListener("change",diyVis);
+function openEditor(id,presetArea,presetType){
+  if(!col){showState("Editing needs the saved task list, which isn't available in this view.");return}
+  editingId=id;const t=tasks.find(x=>x.id===id)||{title:"",area:presetArea||"general",type:presetType||"Repair",tier:"must",who:"DIY",status:"todo",due:nowMonth(),costLow:"",costHigh:"",actual:"",notes:""};
+  $("#ed-title").textContent=id?"Edit task":"Add task";
+  $("#e-areas-multi").hidden=!!id;$("#e-area-single").hidden=!id;
+  document.querySelectorAll("#e-checks input").forEach(i=>i.checked=!id&&i.value===(presetArea||""));
+  if(id)$("#e-area").value=AMAP[t.area]?t.area:"general";
+  $("#e-title").value=t.title;$("#e-type").value=TYPES.includes(t.type)?t.type:"Repair";$("#e-tier").value=t.tier;$("#e-who").value=t.who;$("#e-status").value=t.status;$("#e-due").value=t.due||"";
+  $("#e-lo").value=t.costLow||"";$("#e-hi").value=t.costHigh||"";$("#e-act").value=t.actual||"";$("#e-notes").value=t.notes||"";
+  $("#e-del").hidden=!id;$("#e-delyes").hidden=true;$("#e-msg").textContent="";
+  fillContacts(t.contactId);$("#e-esth").value=t.estHours||"";$("#e-acth").value=t.actHours||"";
+  $("#e-tags").value=tagsOf(t).join(", ");$("#e-skills").value=t.skills||"";$("#e-conf").value=CONF[t.conf]?t.conf:"";$("#e-steps").value=t.steps||"";
+  let mats=items(t,"mats");if(!mats.length&&t.materials)mats=t.materials.split(/\n|,(?![^(]*\))/).map(x=>x.trim()).filter(Boolean).map(name=>({name,have:false,cost:0}));
+  $("#e-tools").innerHTML=items(t,"tools").map(i=>irow("tools",i)).join("");$("#e-mats").innerHTML=mats.map(i=>irow("mats",i)).join("");$("#e-links").innerHTML=items(t,"links").map(i=>irow("links",i)).join("");
+  diyVis();buyNote();$("#e-repeat").value=REPEAT[t.repeat]?t.repeat||"":"";
+  edDeps=Array.isArray(t.after)?t.after.slice():[];renderDeps();
+  edQuotes=Array.isArray(t.quotes)?JSON.parse(JSON.stringify(t.quotes)):[];renderQuotes();
+  $("#e-qbody").hidden=!id;$("#q-filewrap").hidden=!assets;$("#e-qnote").textContent=id?"":"Save the task first, then open it again to log quotes.";
+  dlg.showModal();$("#e-title").focus();
+}
+$("#addbtn").addEventListener("click",()=>openEditor(null,MS.area.sel.size===1?[...MS.area.sel][0]:null));
+$("#a-add").addEventListener("click",()=>openEditor(null,curArea));
+$("#ps-add").addEventListener("click",()=>openEditor(null,"general","Pre-sale"));
+$("#c-add").addEventListener("click",()=>openRec("contacts",null));
+$("#d-add").addEventListener("click",()=>openRec("documents",null,{have:"need",category:"Compliance",area:"general"}));
+$("#fin-add").addEventListener("click",()=>openRec("finishes",null,{area:"general"}));
+$("#a-addfin").addEventListener("click",()=>openRec("finishes",null,{area:curArea}));
+$("#oh-add").addEventListener("click",()=>{const v=$("#oh-new").value.trim();if(!v)return;saveOh(ohItems().concat([{t:v,d:false}]));$("#oh-new").value=""});
+$("#oh-new").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();$("#oh-add").click()}});
+$("#oh-reset").addEventListener("click",()=>saveOh(ohItems().map(i=>({t:i.t,d:false}))));
+document.addEventListener("change",e=>{const c=e.target.closest("[data-oh]");if(c){const it=ohItems().map(i=>({t:i.t,d:!!i.d}));const k=+c.dataset.oh;if(it[k]){it[k].d=c.checked;saveOh(it)}}});
+
+/* records: contacts, documents, finishes */
+const REC={
+ contacts:{noun:"contact",col:()=>ccol,list:()=>contacts,fields:[
+  {k:"name",l:"Name",req:1},{k:"company",l:"Business"},{k:"role",l:"Type",t:"select",o:ROLES},{k:"trade",l:"Trade or service",ph:"Plumber, tiler, agent"},
+  {k:"phone",l:"Phone",t:"tel"},{k:"email",l:"Email",t:"email"},{k:"rating",l:"Rating",t:"select",o:[["","Not rated"],["5","5, excellent"],["4","4, good"],["3","3, OK"],["2","2, poor"],["1","1, avoid"]]},{k:"notes",l:"Notes",t:"textarea"}]},
+ documents:{noun:"document",col:()=>dcol,list:()=>docsR,files:1,fields:[
+  {k:"title",l:"Document",req:1},{k:"category",l:"Category",t:"select",o:DOCCATS},{k:"have",l:"Status",t:"select",o:[["need","Need it"],["have","Have it"]]},{k:"area",l:"Room or area",t:"select",o:"areas"},
+  {k:"issued",l:"Issued",t:"date"},{k:"expires",l:"Expires",t:"date"},{k:"notes",l:"Notes",t:"textarea"}]},
+ finishes:{noun:"finish",col:()=>fcol,list:()=>fins,fields:[
+  {k:"area",l:"Room or area",t:"select",o:"areas"},{k:"item",l:"Surface or item",req:1,list:"finitems",ph:"Walls, trim, floor tiles"},{k:"product",l:"Product or colour",ph:"Brand and colour name"},{k:"code",l:"Code"},
+  {k:"sheen",l:"Finish or sheen",ph:"Low sheen, matt"},{k:"supplier",l:"Supplier"},{k:"notes",l:"Notes",t:"textarea"}]}
+};
+const rdlg=$("#rec");let rKind=null,rId=null,rFiles=[],rNew=[],rGone=[],rSaved=false;
+function fieldHtml(f,v){
+  const id="r-"+f.k;v=v??"";
+  if(f.t==="textarea")return `<label class="full">${esc(f.l)}<textarea id="${id}" maxlength="2000">${esc(v)}</textarea></label>`;
+  if(f.t==="select"){const o=(f.o==="areas"?AREAS.map(a=>[a.slug,a.name]):f.o).map(x=>Array.isArray(x)?x:[x,x]);return `<label>${esc(f.l)}<select id="${id}">${o.map(([a,b])=>`<option value="${esc(a)}"${String(v)===a?" selected":""}>${esc(b)}</option>`).join("")}</select></label>`}
+  return `<label>${esc(f.l)}<input id="${id}" type="${f.t||"text"}" value="${esc(v)}" maxlength="200"${f.req?" required":""}${f.list?` list="${f.list}"`:""}${f.ph?` placeholder="${esc(f.ph)}"`:""}></label>`;
+}
+function renderRFiles(){$("#r-files").innerHTML=rFiles.length?rFiles.map((f,i)=>`<span class="chip"><a href="${blob(f.id)}" target="_blank" rel="noopener">${esc(f.name||"File")}</a>${assets?`<button type="button" data-rf="${i}" aria-label="Remove ${esc(f.name||"file")}">×</button>`:""}</span>`).join(""):'<span class="note">No files attached.</span>'}
+function openRec(kind,id,preset){
+  const def=REC[kind];if(!def)return;if(!def.col()){showState("Saving needs the saved data, which isn't available in this view.");return}
+  rKind=kind;rId=id;rSaved=false;const d=Object.assign({},preset||{},id?def.list().find(x=>x.id===id)||{}:{});
+  $("#r-title").textContent=(id?"Edit ":"Add ")+def.noun;
+  $("#r-fields").innerHTML=def.fields.map(f=>fieldHtml(f,d[f.k])).join("");
+  rFiles=Array.isArray(d.files)?d.files.slice():[];rNew=[];rGone=[];
+  $("#r-filesec").hidden=!def.files;$("#r-upwrap").hidden=!assets;renderRFiles();
+  $("#r-del").hidden=!id;$("#r-delyes").hidden=true;$("#r-msg").textContent="";
+  rdlg.showModal();
+}
+$("#r-up").addEventListener("change",async e=>{
+  const files=[...e.target.files];e.target.value="";if(!assets||!files.length)return;let bad=0;
+  for(let i=0;i<files.length;i++){$("#r-msg").textContent=`Uploading ${i+1} of ${files.length}…`;
+    try{const f=await upFile(files[i]);rFiles.push(f);rNew.push(f);renderRFiles()}catch(err){bad++}}
+  $("#r-msg").textContent=bad?`${bad} file${bad>1?"s":""} couldn't be uploaded. PDFs and photos work best.`:"Attached. Save to keep them.";
+});
+$("#r-cancel").addEventListener("click",()=>rdlg.close());
+rdlg.addEventListener("close",async()=>{if(!rSaved&&rNew.length&&assets){const gone=rNew;rNew=[];for(const f of gone){try{await assets.delete(f.id)}catch(_){}}}});
+$("#r-del").addEventListener("click",()=>{$("#r-delyes").hidden=false;$("#r-msg").textContent="This removes it for good"+(rFiles.length?", including attached files.":".")});
+$("#r-delyes").addEventListener("click",async()=>{
+  try{await REC[rKind].col().doc(rId).delete();rSaved=true;const all=rFiles.concat(rGone);rdlg.close();if(assets)for(const f of all){try{await assets.delete(f.id)}catch(_){}}}
+  catch(err){$("#r-msg").textContent="Couldn't delete. Try again."}
+});
+$("#recform").addEventListener("submit",async e=>{
+  e.preventDefault();const def=REC[rKind];const data={};
+  for(const f of def.fields){data[f.k]=String($("#r-"+f.k).value||"").trim()}
+  const miss=def.fields.find(f=>f.req&&!data[f.k]);if(miss){$("#r-msg").textContent=miss.l+" is needed.";return}
+  if(def.files)data.files=rFiles;data.updatedAt=new Date().toISOString();
+  $("#r-save").disabled=true;
+  try{if(rId)await def.col().doc(rId).update(data);else await def.col().add(data);rSaved=true;const gone=rGone;rGone=[];rdlg.close();if(assets)for(const f of gone){try{await assets.delete(f.id)}catch(_){}}}
+  catch(err){$("#r-msg").textContent="Couldn't save. Try again."}
+  finally{$("#r-save").disabled=false}
+});
+$("#e-cancel").addEventListener("click",()=>dlg.close());
+$("#e-del").addEventListener("click",()=>{$("#e-delyes").hidden=false;$("#e-msg").textContent="This removes the task for good."});
+$("#e-delyes").addEventListener("click",async()=>{try{await col.doc(editingId).delete();dlg.close()}catch(err){$("#e-msg").textContent="Couldn't delete. Try again."}});
+$("#edform").addEventListener("submit",async e=>{
+  e.preventDefault();const title=$("#e-title").value.trim();if(!title){$("#e-msg").textContent="Give the task a name.";return}
+  const lo=+$("#e-lo").value||0,hi=+$("#e-hi").value||lo;
+  if(hi<lo){$("#e-msg").textContent="The high estimate is below the low one.";return}
+  const base={tags:[...new Set($("#e-tags").value.split(",").map(x=>x.trim()).filter(Boolean))],skills:$("#e-skills").value.trim(),conf:$("#e-conf").value,tools:readRows("tools"),mats:readRows("mats"),links:readRows("links"),steps:$("#e-steps").value.trim(),materials:"",estHours:+$("#e-esth").value||0,actHours:+$("#e-acth").value||0,contactId:$("#e-contact").value,repeat:$("#e-repeat").value,after:edDeps.slice(),title,type:$("#e-type").value,tier:$("#e-tier").value,who:$("#e-who").value,status:$("#e-status").value,due:$("#e-due").value||"",costLow:lo,costHigh:hi,actual:+$("#e-act").value||0,notes:$("#e-notes").value.trim(),updatedAt:new Date().toISOString()};
+  let targets;
+  if(editingId)targets=[$("#e-area").value];
+  else{targets=[...document.querySelectorAll("#e-checks input:checked")].map(i=>i.value);if(!targets.length){$("#e-msg").textContent="Tick at least one room or area.";return}}
+  $("#e-save").disabled=true;
+  try{
+    const n0=nextNum();
+    if(editingId){await col.doc(editingId).update(Object.assign({area:targets[0]},base));const old=tasks.find(x=>x.id===editingId)||{};if(base.status==="done")await maybeRepeat(Object.assign({},old,base,{id:editingId,area:targets[0]}))}
+    else{for(let i=0;i<targets.length;i++){$("#e-msg").textContent=targets.length>1?`Adding ${i+1} of ${targets.length}…`:"";await col.add(Object.assign({area:targets[i],num:n0+i},base))}}
+    dlg.close();
+  }catch(err){$("#e-msg").textContent="Couldn't save everything. Check the list, then try again for anything missing."}
+  finally{$("#e-save").disabled=false}
+});
+function showState(msg){const b=$("#dbstate");b.textContent=msg;b.hidden=!msg}
+window.homeSeedStatus=showState;
+
+/* market */
+const COMPS=(()=>{try{return JSON.parse(document.getElementById("comps-data").textContent)}catch(e){return {sales:[],listings:[]}}})();
+const ST={Drive:"dr",Crescent:"cres",Street:"st",Circuit:"cct",Close:"cl",Court:"ct",Place:"pl",Way:"way",Avenue:"ave",Road:"rd",Terrace:"tce",Parade:"pde",Lane:"lane"};
+function reaUrl(addr){const m=addr.match(/^(\S+)\s+(.+)\s+(\w+)$/);if(!m)return"";const t=ST[m[3]]||m[3].toLowerCase();return "https://www.realestate.com.au/property/"+(m[1]+"-"+m[2]+"-"+t).toLowerCase().replace(/[^a-z0-9]+/g,"-")+"-seventeen-mile-rocks-qld-4073/"}
+const bbc=r=>[r.beds,r.baths,r.cars].map(x=>x==null?"?":x).join(", ");
+const links=r=>`${r.domainUrl?`<a href="${esc(r.domainUrl)}" target="_blank" rel="noopener">Domain</a>`:""} <a href="${esc(reaUrl(r.address))}" target="_blank" rel="noopener">REA</a>`;
+function renderComps(){
+  const minB=+$("#cs-beds").value,pool=$("#cs-pool").value,dist=+$("#cs-dist").value,since=$("#cs-since").value,sort=$("#cs-sort").value;
+  const list=COMPS.sales.filter(r=>(!minB||(+r.beds||0)>=minB)&&(!pool||r.pool===true)&&(r.distanceKm==null||r.distanceKm<=dist)&&(!since||r.date>=since));
+  list.sort(sort==="date"?(a,b)=>b.date.localeCompare(a.date):sort==="price"?(a,b)=>(b.price||0)-(a.price||0):(a,b)=>(a.distanceKm??9)-(b.distanceKm??9)||b.date.localeCompare(a.date));
+  const pr=list.map(r=>r.price).filter(Boolean).sort((a,b)=>a-b);const med=pr.length?pr[Math.floor(pr.length/2)]:0;
+  $("#cs-count").textContent=list.length?`${list.length} sales, ${kmoney(pr[0])} to ${kmoney(pr[pr.length-1])}, middle ${kmoney(med)}`:"";
+  $("#cs-body").innerHTML=list.length?list.map((r,i)=>{const hl=/Highland/.test(r.street);return `<tr${hl?' style="background:var(--accent-soft)"':""}><td><details><summary style="cursor:pointer">${esc(r.address)}</summary><span class="note">${esc(r.note||"")}</span></details></td><td class="num">${esc(monthLabel(r.date))}</td><td class="r num">${r.price?money(r.price):"Undisclosed"}</td><td class="num">${bbc(r)}</td><td class="r num">${r.land?r.land+" m²":""}</td><td>${r.pool===true?"Yes":r.pool===false?"No":""}</td><td class="r num">${r.distanceKm!=null?"~"+(r.distanceKm<1?Math.round(r.distanceKm*1000)+" m":r.distanceKm.toFixed(1)+" km"):""}</td><td style="white-space:nowrap">${links(r)}</td></tr>`}).join(""):'<tr><td colspan="8" class="note">No sales match these filters.</td></tr>';
+  $("#cl-body").innerHTML=COMPS.listings.map(r=>`<tr><td><details><summary style="cursor:pointer">${esc(r.address)}</summary><span class="note">${esc(r.note||"")}</span></details></td><td class="num">${bbc(r)}</td><td class="r num">${r.land?r.land+" m²":""}</td><td>${esc(r.asking||"")}</td><td style="white-space:nowrap">${links(r)}</td></tr>`).join("");
+}
+["#cs-beds","#cs-pool","#cs-dist","#cs-since","#cs-sort"].forEach(x=>$(x).addEventListener("change",renderComps));
+renderComps();
+
+route();render();
+function askName(force){return new Promise(res=>{const d=$("#who"),i=$("#who-name");const cur=window.homeStore.actor();
+  if(cur&&!force){res(cur);return}i.value=cur;d.showModal();
+  $("#whoform").onsubmit=e=>{e.preventDefault();const n=i.value.trim();if(!n)return;window.homeStore.setActor(n);d.close();res(n)};
+  d.oncancel=e=>{if(!window.homeStore.actor())e.preventDefault()}})}
+function showWho(){const n=window.homeStore.actor();const w=$("#whoami");w.hidden=!n;w.innerHTML=n?`Using as ${esc(n)} · <button type="button" id="whochange">Change</button>`:""}
+document.addEventListener("click",async e=>{if(e.target.id==="whochange"){const before=window.homeStore.actor();const n=await askName(true);if(n!==before)location.reload()}});
+const HNOUN={tasks:"task",areas:"area",area_groups:"group",contacts:"contact",documents:"document",finishes:"finish",checklists:"checklist",members:"member",invites:"invite"};
+const HSKIP=new Set(["updated_at","updated_by","updated_by_name","created_at","created_by","created_by_name","extra"]);
+function hLabel(r){const d=r.new_data||r.old_data||{};return d.title||d.name||d.item||(d.num?"#"+d.num:"")||r.row_id||""}
+function hChanges(r){if(r.action!=="update"||!r.old_data||!r.new_data)return"";const ch=Object.keys(r.new_data).filter(k=>!HSKIP.has(k)&&JSON.stringify(r.new_data[k])!==JSON.stringify(r.old_data[k]));
+  const ox=r.old_data.extra||{},nx=r.new_data.extra||{};Object.keys(Object.assign({},ox,nx)).forEach(k=>{if(JSON.stringify(ox[k])!==JSON.stringify(nx[k]))ch.push(k)});
+  const L={sort:"order",group_id:"group",now_text:"now",sale_text:"goals for sale",current_photos:"current photos",cost_low:"low estimate",cost_high:"high estimate",est_hours:"estimated hours",act_hours:"actual hours",after_ids:"waits on",contact_id:"contact",repeat_months:"repeat",next_made:"next repeat",desc_agreed:"description agreed",tasks_agreed:"tasks agreed",choice_notes:"choice notes",mats:"materials",conf:"confidence",have:"status"};
+  return ch.length?"Changed "+[...new Set(ch.map(k=>L[k]||k.replace(/_/g," ")))].join(", "):""}
+async function renderHistory(){const ul=$("#histlist");try{const rows=await window.homeStore.history(200);
+  if(!rows.length){ul.innerHTML='<li class="note">No changes yet.</li>';return}
+  const verb={insert:"added",update:"changed",delete:"removed"};
+  ul.innerHTML=rows.map(r=>{const t=new Date(r.at);const lbl=hLabel(r);const num=(r.new_data||r.old_data||{}).num;
+    return `<li><div><strong>${esc(r.actor||"Someone")}</strong> ${verb[r.action]} ${HNOUN[r.table_name]||r.table_name}${lbl?` <strong>${esc((num&&r.table_name==="tasks"?"#"+num+" ":"")+lbl)}</strong>`:""}</div>
+    <div class="chg">${esc(hChanges(r))}</div><div class="when">${t.toLocaleString("en-AU",{day:"numeric",month:"short",year:"numeric",hour:"numeric",minute:"2-digit"})}</div></li>`}).join("")}
+  catch(e){ul.innerHTML='<li class="note">Couldn\'t load the history. Reload to try again.</li>'}}
+(async()=>{
+  await askName(false);showWho();
+  try{db=window.claude&&await window.claude.use("db")}catch(e){console.error(e);db=null}
+  if(!db){loaded=true;showState("Couldn't connect to the database. Check your internet connection and reload. If it keeps happening, the site's config.js may be missing.");render();return}
+  col=db.collection("tasks");acol=db.collection("areas");
+  col.onSnapshot(snap=>{tasks=snap.docs.map(d=>Object.assign({id:d.id},d.data()));loaded=true;showState("");render()},
+    err=>{loaded=true;showState("The task list stopped updating. Reload the page to reconnect.");render()});
+  acol.onSnapshot(snap=>{const m={};snap.docs.forEach(d=>m[d.id]=d.data()||{});areaDocs=m;render()},()=>{});
+  cfgcol=db.collection("config");
+  cfgcol.onSnapshot(snap=>{const d=snap.docs.find(x=>x.id==="areas");const c=d&&d.data();
+    if(c&&Array.isArray(c.areas)&&c.areas.length&&Array.isArray(c.groups)&&c.groups.length){AREAS=c.areas;GROUPS=c.groups}else{AREAS=DEFAULT_AREAS.slice();GROUPS=DEFAULT_GROUPS.slice()}
+    applyAreas();route();render()},()=>{});
+  ccol=db.collection("contacts");dcol=db.collection("documents");fcol=db.collection("finishes");klcol=db.collection("checklists");
+  const rows=snap=>snap.docs.map(d=>Object.assign({id:d.id},d.data()));
+  ccol.onSnapshot(snap=>{contacts=rows(snap);render()},()=>{});
+  dcol.onSnapshot(snap=>{docsR=rows(snap);render()},()=>{});
+  fcol.onSnapshot(snap=>{fins=rows(snap);render()},()=>{});
+  klcol.onSnapshot(snap=>{const d=snap.docs.find(x=>x.id==="openhome");checklist=d?d.data():{items:[]};renderChecklist()},()=>{});
+  try{assets=window.claude&&await window.claude.use("assets")}catch(e){assets=null}
+  render();
+})();
+})();
+</script>
+
+</body>
+</html>

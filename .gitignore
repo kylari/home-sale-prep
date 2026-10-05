@@ -1,0 +1,4 @@
+# Holds the family database password. Upload it to Hostinger by hand; never commit it.
+config.js
+node_modules/
+.DS_Store
