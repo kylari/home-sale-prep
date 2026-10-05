@@ -254,17 +254,33 @@ dialog .full{grid-column:1/-1}
 .ask{background:var(--accent-soft);border-radius:10px;padding:10px 12px;font-size:.88rem}
 .itabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;background:var(--sunk);padding:4px;border-radius:10px}
 .itab{font:600 .86rem var(--body);border:0;background:none;color:var(--muted);padding:8px 2px;border-radius:7px;cursor:pointer;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}
-.itab small{font:500 .74rem var(--mono);margin-left:4px}
+.itab small{display:inline-block;font:600 .7rem var(--body);margin-left:6px;min-width:1.5em;padding:1px 6px;border-radius:999px;background:var(--line);color:var(--ink);vertical-align:1px}
+.itab[aria-selected="true"] small{background:var(--accent-soft)}
 @media (max-width:440px){.itab small{display:none}}
 .itab[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
 .ipanel{display:grid;gap:12px;min-width:0}
 .ihead{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
 .ihead .note{margin:0;flex:1 1 240px}
-.feel{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))}
-.feel>div{background:var(--sunk);border-radius:10px;padding:10px 12px;display:grid;gap:4px;align-content:start;overflow-wrap:anywhere}
-.feel b{font-size:.8rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
-.feel p{margin:0;font-size:.92rem;white-space:pre-wrap}
-.feel .empty{color:var(--muted);font-style:italic}
+.iwrap{display:grid;gap:14px;align-items:start}
+@media (min-width:760px){.iwrap{grid-template-columns:minmax(0,1fr) minmax(260px,340px)}}
+.flist{background:var(--sunk);border-radius:10px;padding:12px;display:grid;gap:8px;min-width:0}
+.flist h4{margin:0;font:600 .8rem var(--body);text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.flist ul{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.fi{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px;align-items:start;background:var(--surface);border-radius:8px;padding:6px 8px}
+.fi .ft{font-size:.9rem;overflow-wrap:anywhere;padding-top:3px}
+.fi .ft small{display:block;color:var(--muted);font-size:.72rem}
+.fi.sug{outline:1px dashed var(--line)}
+.face{border:0;background:none;padding:2px;border-radius:50%;cursor:pointer;line-height:0;color:var(--muted)}
+.face[disabled]{cursor:default}
+.face svg{width:24px;height:24px}
+.face.like{color:var(--ok)}.face.dislike{color:var(--crit)}.face.neutral{color:var(--muted)}
+.fact{display:flex;gap:2px;align-items:center}
+.fact button{border:0;background:none;color:var(--muted);font:600 .75rem var(--body);cursor:pointer;padding:4px 5px;border-radius:6px}
+.fact button.ok{color:var(--ok)}
+.fadd{display:flex;gap:4px;align-items:center}
+.fadd input{flex:1;min-width:0;padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font:inherit;font-size:.9rem}
+.fkey{display:flex;gap:10px;flex-wrap:wrap;font-size:.75rem;color:var(--muted);align-items:center}
+.fkey span{display:inline-flex;align-items:center;gap:3px}.fkey svg{width:16px;height:16px}
 .askc{display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:var(--accent-soft);border-radius:10px;padding:10px 12px}
 .askc p{margin:0;flex:1 1 240px;font-size:.88rem}
 .gate{background:var(--sunk);border-radius:10px;padding:10px 12px;font-size:.88rem;margin:0}
@@ -1126,22 +1142,24 @@ function renderArea(){
   document.querySelectorAll("[data-aedit]").forEach(b=>b.hidden=!w);
   const p=photosOf(a.slug),ch=d.chosen&&LVL[d.chosen]?d.chosen:"",feel=d.feel||{};
   const hasOpt=LEVELS.some(([k])=>optOf(a.slug,k).summary||listOf(a.slug,"opt-"+k).length);
-  const liked=Object.values(feel).some(f=>f&&(f.likes||f.dislikes));
+  const liked=["before","inspiration"].some(k=>feelItems(d,k).length);
   const st=[["Photos",p.current.length>0],["Likes",!!(d.style||d.ivSummary||liked)],["Visions",hasOpt],["Chosen",!!ch],["Plan",!!d.descAgreed],["Tasks",!!d.tasksAgreed]];
   $("#a-steps").innerHTML=st.map(([l,ok],i)=>`<li class="${ok?"ok":""}"><b>${ok?"✓":i+1}</b>${esc(l)}</li>`).join("");
   $("#a-pagree").hidden=$("#a-tagree").hidden=!w;$("#a-pagree").textContent=d.descAgreed?"Undo agreed":"Mark plan agreed";$("#a-tagree").textContent=d.tasksAgreed?"Undo tasks agreed":"Mark tasks agreed";
   /* image tabs */
   const IT=[["before","Before",p.current.length],["inspiration","Inspiration",p.vision.length],["vision","Vision",LEVELS.filter(([k])=>optOf(a.slug,k).summary||listOf(a.slug,"opt-"+k).length).length],["after","After",listOf(a.slug,"after").length]];
   let it="before";try{it=localStorage.getItem("hd-itab-"+a.slug)||it}catch(_){}if(!IT.some(x=>x[0]===it))it="before";
-  $("#a-itabs").innerHTML=IT.map(([k,l,n])=>`<button type="button" class="itab" role="tab" id="itab-${k}" aria-controls="a-ipanel" aria-selected="${k===it}" tabindex="${k===it?0:-1}" data-itab="${k}">${l}${n?`<small>${n}</small>`:""}</button>`).join("");
+  $("#a-itabs").innerHTML=IT.map(([k,l,n])=>`<button type="button" class="itab" role="tab" id="itab-${k}" aria-controls="a-ipanel" aria-selected="${k===it}" tabindex="${k===it?0:-1}" data-itab="${k}">${l}${n?`<small aria-label="${n} items">${n}</small>`:""}</button>`).join("");
   $("#a-ipanel").setAttribute("aria-labelledby","itab-"+it);
-  const fe=feel[it]||{},FQ={before:["What I like about it now","What I don't like"],inspiration:["What I like in these","What I'd avoid"],vision:["What I like in the visions","What I'd change"],after:["What worked","What I'd do differently"]}[it];
-  const feelBox=`<div class="feel"><div><b>${FQ[0]}</b><p class="${fe.likes?"":"empty"}">${esc(fe.likes||"Nothing noted yet.")}</p></div><div><b>${FQ[1]}</b><p class="${fe.dislikes?"":"empty"}">${esc(fe.dislikes||"Nothing noted yet.")}</p></div></div>${w?`<button type="button" class="linkbtn" style="justify-self:start" data-feel="${it}">Edit likes and dislikes</button>`:""}`;
+  const fitems=feelItems(d,it),FT={before:"Likes and dislikes",inspiration:"What appeals",vision:"Thoughts on the visions",after:"How it turned out"}[it];
+  const feelBox=`<aside class="flist" aria-label="${FT}"><h4>${FT}</h4><div class="fkey">${["like","neutral","dislike"].map(k=>`<span class="face ${k}" style="padding:0">${faceSvg(k)}${FLAB[k]}</span>`).join("")}${w?"<span>Tap an icon to change it</span>":""}</div>
+    ${fitems.length?`<ul>${fitems.map((x,i)=>{const s0=FLAB[x.s]?x.s:"neutral";return `<li class="fi${x.ok?"":" sug"}"><button type="button" class="face ${s0}" ${w?`data-fs="${i}"`:"disabled"} aria-label="${FLAB[s0]}${w?", tap to change":""}" title="${FLAB[s0]}">${faceSvg(s0)}</button><span class="ft">${esc(x.t)}${x.ok?"":"<small>Suggested by Claude</small>"}</span>${w?`<span class="fact">${x.ok?"":`<button type="button" class="ok" data-fok="${i}" aria-label="Confirm">Confirm</button>`}<button type="button" data-fe="${i}" aria-label="Edit">Edit</button><button type="button" data-fx="${i}" aria-label="Remove">×</button></span>`:""}</li>`}).join("")}</ul>`:'<p class="note" style="margin:0">Nothing yet.</p>'}
+    ${w?`<form class="fadd" id="fadd"><input id="fadd-t" maxlength="200" placeholder="Add something" aria-label="Add something, then pick tick, dash or cross"><button type="submit" class="face like" data-fadd="like" aria-label="Add as a like">${faceSvg("like")}</button><button type="submit" class="face neutral" data-fadd="neutral" aria-label="Add as neutral">${faceSvg("neutral")}</button><button type="submit" class="face dislike" data-fadd="dislike" aria-label="Add as a dislike">${faceSvg("dislike")}</button></form>`:""}</aside>`;
   const up=(kind,label,id)=>assets?`<label class="btn ghost filebtn">${label}<input type="file"${id?` id="${id}"`:""} data-up="${kind}" accept="image/*" multiple></label>`:"";
   let ip="";
-  if(it==="before")ip=`<div class="ihead"><p class="note">Wide shots from each doorway or corner, plus close-ups of anything worn, broken or dated. Daylight is best.</p>${up("current","Add current photos","up-current")}</div><div class="gallery">${gallery(p.current,"current")}</div>${feelBox}`;
-  else if(it==="inspiration")ip=`<div class="ihead"><p class="note">Paste a link to a Pinterest pin or any page you like. On Pinterest, open the pin, tap Share, then Copy link.</p><div style="display:flex;gap:8px;flex-wrap:wrap">${w?`<button type="button" class="btn ghost" id="a-addlink">Add a link</button>`:""}${up("vision","Upload a picture","up-vision")}</div></div><div class="gallery sm">${gallery(p.vision,"vision")}</div>${feelBox}`;
-  else if(it==="after")ip=`<div class="ihead"><p class="note">Photos once the work is done, from the same spots as the Before photos, so you can compare and use them for the listing.</p>${up("after","Add after photos","")}</div><div class="gallery">${gallery(listOf(a.slug,"after"),"after")}</div>${feelBox}`;
+  if(it==="before")ip=`<div class="ihead"><p class="note">Wide shots from each doorway or corner, plus close-ups of anything worn, broken or dated. Daylight is best.</p>${up("current","Add current photos","up-current")}</div><div class="iwrap"><div style="min-width:0"><div class="gallery">${gallery(p.current,"current")}</div></div>${feelBox}</div>`;
+  else if(it==="inspiration")ip=`<div class="ihead"><p class="note">Paste a link to a Pinterest pin or any page you like. On Pinterest, open the pin, tap Share, then Copy link.</p><div style="display:flex;gap:8px;flex-wrap:wrap">${w?`<button type="button" class="btn ghost" id="a-addlink">Add a link</button>`:""}${up("vision","Upload a picture","up-vision")}</div></div><div class="iwrap"><div style="min-width:0"><div class="gallery sm">${gallery(p.vision,"vision")}</div></div>${feelBox}</div>`;
+  else if(it==="after")ip=`<div class="ihead"><p class="note">Photos once the work is done, from the same spots as the Before photos, so you can compare and use them for the listing.</p>${up("after","Add after photos","")}</div><div class="iwrap"><div style="min-width:0"><div class="gallery">${gallery(listOf(a.slug,"after"),"after")}</div></div>${feelBox}</div>`;
   else{
     const tabKey="hd-otab-"+a.slug;let cur=ch||"low";try{cur=localStorage.getItem(tabKey)||cur}catch(_){}if(!LVL[cur])cur="low";
     const [k,l,blurb]=LVL[cur],o=optOf(a.slug,cur),sel=ch===k,key=Array.isArray(o.items)?o.items.filter(Boolean):[],imgs=listOf(a.slug,"opt-"+k);
@@ -1149,14 +1167,14 @@ function renderArea(){
     ip=`<div class="askc"><p>${hasOpt?"Made from your Before photos, inspiration, likes and dislikes, and the summary. Add what you'd change below, then tap Get vision again.":"When the Before photos, likes and dislikes and summary are done, tap Get vision for the four options."} <button type="button" class="linkbtn" id="a-rules" aria-expanded="false">How the levels work</button></p>${w?`<button type="button" class="btn" id="a-askclaude">Get vision</button>`:""}<div id="a-rulebox" class="note" style="flex-basis:100%;margin:0" hidden>${LEVEL_RULES}</div><p class="note" id="a-askmsg" role="status" style="flex-basis:100%;margin:0" hidden></p></div>
     ${ch?`<p class="note" style="margin:0"><b>${LVL[ch][1]} chosen.</b>${d.choiceNotes?" Changes: "+esc(d.choiceNotes):""} ${w?`<button type="button" class="linkbtn" data-oedit="choice">Edit changes</button>`:""}</p>`:""}
     <div class="otabs" role="tablist" aria-label="Vision options" id="a-otabs">${LEVELS.map(([k2,l2])=>{const o2=optOf(a.slug,k2);return `<button type="button" class="otab" role="tab" id="otab-${k2}" aria-controls="a-opts" aria-selected="${k2===cur}" tabindex="${k2===cur?0:-1}" data-otab="${k2}"><span>${l2}${ch===k2?'<span class="dot" title="Chosen"></span>':""}</span><small>${esc(o2.cost||"Not costed")}</small></button>`}).join("")}</div>
-    <div id="a-opts" aria-labelledby="otab-${k}"><div class="opanel${sel?" sel":""}" role="tabpanel"><div class="secthead"><h4 style="margin:0;font:700 1.1rem var(--display)">${l}${sel?' <span class="tag t-have">Chosen</span>':""}</h4></div>
+    <div class="iwrap"><div id="a-opts" style="min-width:0" aria-labelledby="otab-${k}"><div class="opanel${sel?" sel":""}" role="tabpanel"><div class="secthead"><h4 style="margin:0;font:700 1.1rem var(--display)">${l}${sel?' <span class="tag t-have">Chosen</span>':""}</h4></div>
     <p class="note" style="margin:0">${esc(blurb)}.${k==="lux"?" The layout can change.":""}</p>
     <div class="ofacts"><div class="ofact"><span>Approx cost</span><b>${esc(o.cost||"Not set")}</b></div><div class="ofact"><span>Timeframe</span><b>${esc(o.time||"Not set")}</b></div></div>
     ${o.summary?`<p class="pre" style="margin:0">${esc(o.summary)}</p>`:""}
     ${key.length?`<div><b style="font-size:.9rem">Key things to be done</b><ul class="okey">${key.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`:""}
     ${imgs.length?`<div class="gallery">${gallery(imgs,"opt-"+k)}</div>`:""}
     ${ready?"":`<p class="note" style="margin:0">Not made yet.</p>`}
-    ${w?`<div class="acts">${up("opt-"+k,"Add images","")}<button type="button" class="btn ghost" data-oedit="${k}">Edit</button><button type="button" class="btn${sel?" ghost":""}" data-ochoose="${k}">${sel?"Unchoose":"Choose this"}</button></div>`:""}</div></div>${feelBox}`;
+    ${w?`<div class="acts">${up("opt-"+k,"Add images","")}<button type="button" class="btn ghost" data-oedit="${k}">Edit</button><button type="button" class="btn${sel?" ghost":""}" data-ochoose="${k}">${sel?"Unchoose":"Choose this"}</button></div>`:""}</div></div>${feelBox}</div>`;
   }
   $("#a-ipanel").innerHTML=ip;
   /* interview */
@@ -1207,6 +1225,18 @@ async function addPhotos(kind,files){
 }
 document.addEventListener("change",e=>{const u=e.target.closest("input[data-up]");if(u){addPhotos(u.dataset.up,[...u.files]);u.value=""}});
 
+/* likes and dislikes */
+const FACE={like:'<path d="M7.5 12.5l3 3 6-6.5"/>',neutral:'<path d="M8 12h8"/>',dislike:'<path d="M8.5 8.5l7 7M15.5 8.5l-7 7"/>'};
+const FLAB={like:"Like",neutral:"Neutral",dislike:"Don't like"},FNEXT={like:"dislike",dislike:"neutral",neutral:"like"};
+const faceSvg=k=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/>${FACE[k]}</svg>`;
+function feelItems(d,tab){const f=(d.feel||{})[tab]||{};if(Array.isArray(f.items))return f.items.filter(x=>x&&x.t);
+  const out=[];const split=v=>String(v||"").split(/\n+|\.\s+/).map(x=>x.trim().replace(/\.$/,"")).filter(Boolean);
+  split(f.likes).forEach(t=>out.push({t,s:"like",ok:true}));split(f.dislikes).forEach(t=>out.push({t,s:"dislike",ok:true}));return out}
+async function saveFeel(tab,items){const n=JSON.parse(JSON.stringify(adoc(curArea)));n.feel=n.feel||{};n.feel[tab]={items};await saveArea(curArea,n)}
+document.addEventListener("submit",e=>{if(e.target.id!=="fadd")return;e.preventDefault();addFeel((e.submitter&&e.submitter.dataset.fadd)||"neutral")});
+document.addEventListener("keydown",e=>{if(e.target.id==="fadd-t"&&e.key==="Enter"){e.preventDefault();addFeel("neutral")}});
+async function addFeel(st){const t=$("#fadd-t").value.trim();if(!t||!curArea)return;const tab=document.querySelector(".itab[aria-selected=true]").dataset.itab;
+  try{await saveFeel(tab,feelItems(adoc(curArea),tab).concat([{t,s:st,ok:true}]));const i=$("#fadd-t");if(i)i.focus()}catch(err){$("#a-upmsg").textContent="Couldn't save that. Try again."}}
 /* ask Claude for visions */
 let comments=null;
 function askText(slug){const a=AMAP[slug],d=adoc(slug),has=LEVELS.some(([k])=>optOf(slug,k).summary);
@@ -1244,9 +1274,12 @@ document.addEventListener("click",async e=>{
     const o=optOf(curArea,k);openT(LVL[k][1]+" option",[{k:"cost",l:"Approx cost",v:o.cost||""},{k:"time",l:"Timeframe",v:o.time||""},{k:"summary",l:"Description",t:"textarea",v:o.summary||""},{k:"items",l:"Key things to be done (one per line)",t:"textarea",v:(Array.isArray(o.items)?o.items:[]).join("\n")}],
       async v=>{const n=JSON.parse(JSON.stringify(d));n.options=n.options||{};v.items=String(v.items||"").split("\n").map(x=>x.trim()).filter(Boolean);n.options[k]=Object.assign({},n.options[k]||{},v);await saveArea(curArea,n)});return}
   const itb=e.target.closest("[data-itab]");if(itb&&curArea){try{localStorage.setItem("hd-itab-"+curArea,itb.dataset.itab)}catch(_){}renderArea();const nb=document.getElementById("itab-"+itb.dataset.itab);if(nb)nb.focus();return}
-  const fl=e.target.closest("[data-feel]");if(fl&&curArea){const k=fl.dataset.feel,d=adoc(curArea),f=(d.feel||{})[k]||{};
-    openT("Likes and dislikes: "+{before:"Before",inspiration:"Inspiration",vision:"Vision",after:"After"}[k],[{k:"likes",l:"What I like",t:"textarea",v:f.likes||""},{k:"dislikes",l:"What I don't like",t:"textarea",v:f.dislikes||""}],
-      async v=>{const n=JSON.parse(JSON.stringify(d));n.feel=n.feel||{};n.feel[k]={likes:v.likes,dislikes:v.dislikes};await saveArea(curArea,n)});return}
+  const fsb=e.target.closest("[data-fs],[data-fok],[data-fx],[data-fe]");if(fsb&&curArea){const tab=document.querySelector(".itab[aria-selected=true]").dataset.itab,l=feelItems(adoc(curArea),tab).map(x=>Object.assign({},x));
+    if(fsb.dataset.fe!=null){const i=+fsb.dataset.fe;openT("Edit",[{k:"t",l:"What it is",v:l[i].t},{k:"s",l:"How you feel",t:"select",o:[["like","Like"],["neutral","Neutral"],["dislike","Don't like"]],v:l[i].s}],async v=>{if(!v.t)throw "Write something first.";l[i]=Object.assign(l[i],{t:v.t,s:v.s,ok:true});await saveFeel(tab,l)});return}
+    if(fsb.dataset.fs!=null){const i=+fsb.dataset.fs;l[i].s=FNEXT[l[i].s]||"like";l[i].ok=true}
+    else if(fsb.dataset.fok!=null)l[+fsb.dataset.fok].ok=true;else l.splice(+fsb.dataset.fx,1);
+    try{await saveFeel(tab,l)}catch(err){$("#a-upmsg").textContent="Couldn't save that. Try again."}
+    if(fsb.dataset.fs!=null){const nb=document.querySelector(`[data-fs="${fsb.dataset.fs}"]`);if(nb)nb.focus()}return}
   const ivb=e.target.closest("[data-iv]");if(ivb&&curArea){const k=ivb.dataset.iv,d=adoc(curArea),f=k==="style"?"style":"ivSummary";
     openT(k==="style"?"Style direction":"What we talked about",[{k:"txt",l:k==="style"?"The look and feel you want":"Summary of the chat about this room",t:"textarea",v:d[f]||""}],async v=>{const n=JSON.parse(JSON.stringify(d));n[f]=v.txt;await saveArea(curArea,n)});return}
   if(e.target.id==="a-askclaude"&&curArea){askClaude(e.target);return}
