@@ -1220,7 +1220,7 @@ async function addPhotos(kind,files){
 }
 document.addEventListener("change",e=>{const u=e.target.closest("input[data-up]");if(u){addPhotos(u.dataset.up,[...u.files]);u.value=""}});
 
-function planText(a,d){if(d.plan)return d.plan;return [d.style?"Style: "+d.style:"",d.ivSummary||"",(d.now||a.now)?"Now: "+(d.now||a.now):"",(d.sale||a.sale)?"Goals for sale: "+(d.sale||a.sale):""].filter(Boolean).join("\n\n")}
+function planText(a,d){if(d.plan)return d.plan;return [d.ivSummary||"",d.ivSummary?"":(d.now||a.now||""),d.ivSummary?"":(d.sale||a.sale||"")].filter(Boolean).join(" ")}
 /* likes and dislikes */
 const FACE={like:'<path d="M7.5 12.5l3 3 6-6.5"/>',neutral:'<path d="M8 12h8"/>',dislike:'<path d="M8.5 8.5l7 7M15.5 8.5l-7 7"/>'};
 const FLAB={like:"Like",neutral:"Neutral",dislike:"Don't like"},FNEXT={like:"dislike",dislike:"neutral",neutral:"like"};
