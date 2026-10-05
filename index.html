@@ -752,8 +752,12 @@ dialog .full{grid-column:1/-1}
       <label>Steps<textarea id="e-steps" maxlength="4000" placeholder="One step per line"></textarea></label>
       <p class="note" id="e-buy"></p>
     </div>
+    <div style="display:grid;gap:6px">
+      <span style="font-weight:600;font-size:.9rem">Trades and suppliers</span>
+      <div class="chips" id="e-cchips"></div>
+      <label>Add a trade or supplier<select id="e-contact"></select></label>
+    </div>
     <div class="fgrid">
-      <label>Trade or supplier<select id="e-contact"></select></label>
       <label>Repeats<select id="e-repeat"></select></label>
     </div>
     <div style="display:grid;gap:6px">
@@ -997,7 +1001,7 @@ function row(t,hideArea){
   const area=hideArea?"":(AMAP[t.area]?`<a class="alink" href="#area-${t.area}">${esc(aname(t.area))}</a>`:`<span>${esc(aname(t.area))}</span>`);
   return `<div class="trow ${t.status}"><button type="button" class="pill s-${t.status}" data-cycle="${esc(t.id)}" aria-label="Status ${STATUS[t.status]}, tap to change">${STATUS[t.status]}</button>
   <div style="min-width:0"><button type="button" class="tname" data-edit="${esc(t.id)}">${t.num?`<span class="tnum">#${t.num}</span>`:""}${esc(t.title)}</button>
-  <div class="tmeta"><span class="tag t-${t.tier}">${TIERS[t.tier]||""}</span>${t.type?`<span class="ttype">${esc(t.type)}</span>`:""}${area}<span>${esc(t.who)}</span>${hrs}${tagsOf(t).length?`<span class="ttags">${esc(tagsOf(t).join(", "))}</span>`:""}${t.repeat&&REPEAT[t.repeat]?`<span>${esc(REPEAT[t.repeat])}</span>`:""}${t.contactId&&contactName(t.contactId)?`<span>${esc(contactName(t.contactId))}</span>`:""}${(t.quotes||[]).length?`<span>${t.quotes.length} quote${t.quotes.length>1?"s":""}</span>`:""}${open(t)&&blockers(t).length?`<span class="tag t-wait" title="Waits on: ${esc(blockers(t).map(b=>b.title).join("; "))}">Waits on ${blockers(t).length}</span>`:""}<span class="${over?"overdue":""}">${over?"Overdue, ":""}${monthLabel(t.due)}</span></div></div>
+  <div class="tmeta"><span class="tag t-${t.tier}">${TIERS[t.tier]||""}</span>${t.type?`<span class="ttype">${esc(t.type)}</span>`:""}${area}<span>${esc(t.who)}</span>${hrs}${tagsOf(t).length?`<span class="ttags">${esc(tagsOf(t).join(", "))}</span>`:""}${t.repeat&&REPEAT[t.repeat]?`<span>${esc(REPEAT[t.repeat])}</span>`:""}${cidsOf(t).map(contactName).filter(Boolean).length?`<span>${esc(cidsOf(t).map(contactName).filter(Boolean).join(", "))}</span>`:""}${(t.quotes||[]).length?`<span>${t.quotes.length} quote${t.quotes.length>1?"s":""}</span>`:""}${open(t)&&blockers(t).length?`<span class="tag t-wait" title="Waits on: ${esc(blockers(t).map(b=>b.title).join("; "))}">Waits on ${blockers(t).length}</span>`:""}<span class="${over?"overdue":""}">${over?"Overdue, ":""}${monthLabel(t.due)}</span></div></div>
   <div class="tcost"><span class="est">${cost}</span>${act}</div></div>`;
 }
 function photosOf(slug){const d=areaDocs[slug]||{};return {vision:Array.isArray(d.vision)?d.vision:[],current:Array.isArray(d.current)?d.current:[]}}
@@ -1031,7 +1035,7 @@ function render(){
   $("#contactnames").innerHTML=contacts.map(c=>`<option value="${esc(c.name)}">`).join("");
 }
 function contactCard(c){
-  const linked=tasks.filter(t=>t.contactId===c.id||(t.quotes||[]).some(q=>q.contactId===c.id));
+  const linked=tasks.filter(t=>cidsOf(t).includes(c.id)||(t.quotes||[]).some(q=>q.contactId===c.id));
   return `<div class="rec"><div class="secthead"><h4>${esc(c.name)}</h4><button type="button" class="linkbtn" data-rec="contacts:${esc(c.id)}">Edit</button></div>
   <div class="meta">${c.company?`<span>${esc(c.company)}</span>`:""}${c.trade?`<span>${esc(c.trade)}</span>`:""}${c.rating?`<span title="Rated ${esc(c.rating)} of 5">${stars(c.rating)}</span>`:""}</div>
   ${c.phone?`<div><a href="tel:${esc(String(c.phone).replace(/[^\d+]/g,""))}">${esc(c.phone)}</a></div>`:""}${c.email?`<div><a href="mailto:${esc(c.email)}">${esc(c.email)}</a></div>`:""}
@@ -1230,6 +1234,7 @@ document.addEventListener("click",async e=>{
     try{await col.doc(t.id).update({status:ns,updatedAt:new Date().toISOString()});if(ns==="done")await maybeRepeat(t)}catch(err){showState("That change didn't save. Check your connection and try again.")}return}
   const rc=e.target.closest("[data-rec]");if(rc){const[k,id]=rc.dataset.rec.split(":");openRec(k,id||null);return}
   const ohr=e.target.closest("[data-ohrm]");if(ohr){e.preventDefault();const it=ohItems().slice();it.splice(+ohr.dataset.ohrm,1);saveOh(it);return}
+  const cx=e.target.closest("[data-cx]");if(cx){edContacts=edContacts.filter(x=>x!==cx.dataset.cx);renderCChips();return}
   const dx=e.target.closest("[data-depx]");if(dx){edDeps=edDeps.filter(x=>x!==dx.dataset.depx);renderDeps();return}
   const qa=e.target.closest("[data-qacc],[data-qun],[data-qrm]");if(qa){quoteAction(qa);return}
   const rf=e.target.closest("[data-rf]");if(rf){const i=+rf.dataset.rf;const f=rFiles[i];if(!f)return;rFiles.splice(i,1);
@@ -1384,7 +1389,7 @@ function openDetail(id){
     <tr><td><b>Estimate</b></td><td class="r num"><b>${lo==hi?money(lo):money(lo)+" to "+money(hi)}</b></td></tr>
     <tr><td>Actual spent</td><td class="r num" style="${+t.actual>hi?"color:var(--crit);font-weight:700":""}">${money(+t.actual||0)}</td></tr>
     ${+t.estHours||+t.actHours?`<tr><td>Hours, estimate and actual</td><td class="r num">${+t.estHours||0}h and ${+t.actHours||0}h</td></tr>`:""}</tbody></table></div></div>`;
-  if(t.contactId&&contactName(t.contactId)||(t.quotes||[]).length)h+=`<div class="dsec"><h4>Trade and quotes</h4>${t.contactId&&contactName(t.contactId)?`<p>${esc(contactName(t.contactId))}</p>`:""}${(t.quotes||[]).map(q=>`<div class="note">${money(+q.amount||0)} from ${esc(contactName(q.contactId)||q.from||"")}${q.accepted?", accepted":""}${q.date?", "+fmtDate(q.date):""}${q.file?` <a href="${blob(q.file.id)}" target="_blank" rel="noopener">${esc(q.file.name||"file")}</a>`:""}</div>`).join("")}</div>`;
+  if(cidsOf(t).length||(t.quotes||[]).length)h+=`<div class="dsec"><h4>Trades and quotes</h4>${cidsOf(t).map(id=>contactName(id)?`<p style="margin:0">${esc(contactName(id))}${(contacts.find(c=>c.id===id)||{}).trade?" ("+esc(contacts.find(c=>c.id===id).trade)+")":""}</p>`:"").join("")}${(t.quotes||[]).map(q=>`<div class="note">${money(+q.amount||0)} from ${esc(contactName(q.contactId)||q.from||"")}${q.accepted?", accepted":""}${q.date?", "+fmtDate(q.date):""}${q.file?` <a href="${blob(q.file.id)}" target="_blank" rel="noopener">${esc(q.file.name||"file")}</a>`:""}</div>`).join("")}</div>`;
   if(afterAll.length)h+=`<div class="dsec"><h4>Do this after</h4>${afterAll.map(b=>`<button type="button" class="linkbtn" data-detail="${esc(b.id)}">${b.num?"#"+b.num+" ":""}${esc(b.title)} (${esc(aname(b.area))})${open(b)?"":" ✓ done"}</button>`).join("")}${bl.length?`<p class="note">Still waiting on ${bl.length}.</p>`:'<p class="note">Ready to start.</p>'}</div>`;
   if(t.who!=="Trade"&&(t.skills||t.conf||items(t,"tools").length||items(t,"mats").length||items(t,"links").length||t.steps||t.materials)){
     h+=`<div class="dsec"><h4>DIY</h4>${t.skills||t.conf?`<p>${t.skills?"Skills: "+esc(t.skills)+". ":""}${t.conf?"You: "+esc(CONF[t.conf]||t.conf)+".":""}</p>`:""}
@@ -1421,10 +1426,10 @@ function renderQuotes(){
 }
 async function saveQuotes(extra){
   const acc=edQuotes.find(q=>q.accepted),r=quoteRange();const data=Object.assign({quotes:edQuotes,updatedAt:new Date().toISOString()},extra||{});
-  if(acc){data.costLow=data.costHigh=+acc.amount;data.who="Trade";if(acc.contactId)data.contactId=acc.contactId}else if(r){data.costLow=r[0];data.costHigh=r[1]}
+  if(acc){data.costLow=data.costHigh=+acc.amount;data.who="Trade";if(acc.contactId){const l=edContacts.includes(acc.contactId)?edContacts.slice():edContacts.concat([acc.contactId]);data.contactIds=l;data.contactId=l[0]}}else if(r){data.costLow=r[0];data.costHigh=r[1]}
   await col.doc(editingId).update(data);
   if(data.costLow!=null){$("#e-lo").value=data.costLow;$("#e-hi").value=data.costHigh}
-  if(data.who)$("#e-who").value=data.who;if(data.contactId){fillContacts(data.contactId)}
+  if(data.who)$("#e-who").value=data.who;if(data.contactIds){fillContacts(data.contactIds)}
 }
 async function quoteAction(b){
   const i=+(b.dataset.qacc??b.dataset.qun??b.dataset.qrm);const q=edQuotes[i];if(!q)return;
@@ -1451,7 +1456,11 @@ $("#q-add").addEventListener("click",async()=>{
   }catch(err){$("#e-qnote").textContent="Couldn't save the quote. Try again."}
   finally{$("#q-add").disabled=false}
 });
-function fillContacts(sel){const s=$("#e-contact");s.innerHTML='<option value="">Not chosen yet</option>'+contacts.slice().sort((a,b)=>(a.name||"").localeCompare(b.name||"")).map(c=>`<option value="${esc(c.id)}">${esc(c.name)}${c.trade?" ("+esc(c.trade)+")":""}</option>`).join("");s.value=sel&&contacts.some(c=>c.id===sel)?sel:""}
+const cidsOf=t=>{const l=Array.isArray(t.contactIds)?t.contactIds.filter(Boolean):[];if(t.contactId&&!l.includes(t.contactId))l.unshift(t.contactId);return l};
+let edContacts=[];
+function renderCChips(){$("#e-cchips").innerHTML=edContacts.length?edContacts.map(id=>`<span class="chip"><span>${esc(contactName(id)||"Removed contact")}</span><button type="button" data-cx="${esc(id)}" aria-label="Remove">×</button></span>`).join(""):'<span class="note">None yet.</span>'}
+$("#e-contact").addEventListener("change",e=>{const v=e.target.value;if(v&&!edContacts.includes(v)){edContacts.push(v);renderCChips()}e.target.value=""});
+function fillContacts(sel){if(Array.isArray(sel))edContacts=sel.slice();else if(sel&&!edContacts.includes(sel))edContacts.push(sel);renderCChips();const s=$("#e-contact");s.innerHTML='<option value="">Choose one to add</option>'+contacts.slice().sort((a,b)=>(a.name||"").localeCompare(b.name||"")).map(c=>`<option value="${esc(c.id)}">${esc(c.name)}${c.trade?" ("+esc(c.trade)+")":""}</option>`).join("");s.value=""}
 function diyVis(){$("#e-diy").hidden=$("#e-who").value==="Trade";if(typeof buyNote==="function")buyNote()}
 $("#e-who").addEventListener("change",diyVis);
 function openEditor(id,presetArea,presetType){
@@ -1464,7 +1473,7 @@ function openEditor(id,presetArea,presetType){
   $("#e-title").value=t.title;$("#e-type").value=TYPES.includes(t.type)?t.type:"Repair";$("#e-tier").value=t.tier;$("#e-who").value=t.who;$("#e-status").value=t.status;$("#e-due").value=t.due||"";
   $("#e-lo").value=t.costLow||"";$("#e-hi").value=t.costHigh||"";$("#e-act").value=t.actual||"";$("#e-notes").value=t.notes||"";
   $("#e-del").hidden=!id;$("#e-delyes").hidden=true;$("#e-msg").textContent="";
-  fillContacts(t.contactId);$("#e-esth").value=t.estHours||"";$("#e-acth").value=t.actHours||"";
+  fillContacts(cidsOf(t));$("#e-esth").value=t.estHours||"";$("#e-acth").value=t.actHours||"";
   $("#e-tags").value=tagsOf(t).join(", ");$("#e-skills").value=t.skills||"";$("#e-conf").value=CONF[t.conf]?t.conf:"";$("#e-steps").value=t.steps||"";
   let mats=items(t,"mats");if(!mats.length&&t.materials)mats=t.materials.split(/\n|,(?![^(]*\))/).map(x=>x.trim()).filter(Boolean).map(name=>({name,have:false,cost:0}));
   $("#e-tools").innerHTML=items(t,"tools").map(i=>irow("tools",i)).join("");$("#e-mats").innerHTML=mats.map(i=>irow("mats",i)).join("");$("#e-links").innerHTML=items(t,"links").map(i=>irow("links",i)).join("");
@@ -1546,7 +1555,7 @@ $("#edform").addEventListener("submit",async e=>{
   e.preventDefault();const title=$("#e-title").value.trim();if(!title){$("#e-msg").textContent="Give the task a name.";return}
   const lo=+$("#e-lo").value||0,hi=+$("#e-hi").value||lo;
   if(hi<lo){$("#e-msg").textContent="The high estimate is below the low one.";return}
-  const base={tags:[...new Set($("#e-tags").value.split(",").map(x=>x.trim()).filter(Boolean))],skills:$("#e-skills").value.trim(),conf:$("#e-conf").value,tools:readRows("tools"),mats:readRows("mats"),links:readRows("links"),steps:$("#e-steps").value.trim(),materials:"",estHours:+$("#e-esth").value||0,actHours:+$("#e-acth").value||0,contactId:$("#e-contact").value,repeat:$("#e-repeat").value,after:edDeps.slice(),title,type:$("#e-type").value,tier:$("#e-tier").value,who:$("#e-who").value,status:$("#e-status").value,due:$("#e-due").value||"",costLow:lo,costHigh:hi,actual:+$("#e-act").value||0,notes:$("#e-notes").value.trim(),updatedAt:new Date().toISOString()};
+  const base={tags:[...new Set($("#e-tags").value.split(",").map(x=>x.trim()).filter(Boolean))],skills:$("#e-skills").value.trim(),conf:$("#e-conf").value,tools:readRows("tools"),mats:readRows("mats"),links:readRows("links"),steps:$("#e-steps").value.trim(),materials:"",estHours:+$("#e-esth").value||0,actHours:+$("#e-acth").value||0,contactId:edContacts[0]||"",contactIds:edContacts.slice(),repeat:$("#e-repeat").value,after:edDeps.slice(),title,type:$("#e-type").value,tier:$("#e-tier").value,who:$("#e-who").value,status:$("#e-status").value,due:$("#e-due").value||"",costLow:lo,costHigh:hi,actual:+$("#e-act").value||0,notes:$("#e-notes").value.trim(),updatedAt:new Date().toISOString()};
   let targets;
   if(editingId)targets=[$("#e-area").value];
   else{targets=[...document.querySelectorAll("#e-checks input:checked")].map(i=>i.value);if(!targets.length){$("#e-msg").textContent="Tick at least one room or area.";return}}
