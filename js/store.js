@@ -269,7 +269,16 @@
     return data;
   }
 
-  window.homeStore = { connect, collection, assets, blobUrl, actor, setActor, history, client, seedIfEmpty };
+  // Fetch a Pinterest pin's picture through the pin-image edge function.
+  async function pinImage(url) {
+    await connect();
+    const { data, error } = await sb.functions.invoke("pin-image", { body: { url } });
+    if (error) throw error;
+    if (!(data instanceof Blob) || !/^image\//.test(data.type)) throw new Error("No picture returned");
+    return data;
+  }
+
+  window.homeStore = { connect, collection, assets, blobUrl, actor, setActor, history, client, seedIfEmpty, pinImage };
   // Same entry point the page already calls.
   window.claude = {
     use: async n => { await connect(); if (n === "db") await seedIfEmpty(window.homeSeedStatus); return n === "db" ? { collection } : n === "assets" ? assets : null; }

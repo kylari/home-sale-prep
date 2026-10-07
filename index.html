@@ -1131,10 +1131,23 @@ function renderAreas(){
 }
 function linkHost(u){try{return new URL(u).hostname.replace(/^www\./,"")}catch(_){return""}}
 const isImgUrl=u=>/\.(jpe?g|png|webp|gif|avif)(\?|#|$)/i.test(u)||/(^|\.)pinimg\.com$/i.test(linkHost(u));
-function linkTile(p,kind,i){const h=linkHost(p.url),pin=/pinterest\.|(^|\.)pin\.it$|pinimg\.com/i.test(h);
+const isPin=u=>/pinterest\.|(^|\.)pin\.it$|pinimg\.com/i.test(linkHost(u));
+function linkTile(p,kind,i){const h=linkHost(p.url),pin=isPin(p.url);
   const rmb=acol?`<button type="button" data-rm="${kind}:${i}">Remove</button>`:"";
+  if(p.id)return `<div class="tile"><img src="${blob(p.id)}" alt="${esc(p.caption||"Inspiration")}" loading="lazy" data-view="${kind}:${i}"><div class="tbar"><a href="${esc(p.url)}" target="_blank" rel="noopener">${pin?"Pinterest":"Open"}</a>${rmb}</div></div>`;
+  const gp=pin&&acol&&assets&&kind==="vision"?`<button type="button" class="linkbtn" data-pinget="${i}">${p.pending?"Asked Claude":"Get picture"}</button>`:"";
   if(isImgUrl(p.url))return `<div class="tile"><img src="${esc(p.url)}" alt="${esc(p.caption||"Inspiration")}" loading="lazy" referrerpolicy="no-referrer" data-view="${kind}:${i}" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'ghostdrop',textContent:'Picture can\'t be shown here. Tap Open.'}))"><div class="tbar"><a href="${esc(p.url)}" target="_blank" rel="noopener">Open</a>${rmb}</div></div>`;
-  return `<div class="tile"><a class="ltile" href="${esc(p.url)}" target="_blank" rel="noopener"><span class="lsrc">${pin?"Pinterest":esc(h||"Link")}</span><span class="lcap">${esc(p.caption||"No note")}</span><span class="lgo">Open</span></a><div class="tbar"><span>${esc(p.addedAt?new Date(p.addedAt).toLocaleDateString("en-AU",{day:"numeric",month:"short"}):"")}</span>${rmb}</div></div>`}
+  return `<div class="tile"><a class="ltile" href="${esc(p.url)}" target="_blank" rel="noopener"><span class="lsrc">${pin?"Pinterest":esc(h||"Link")}</span><span class="lcap">${esc(p.caption||"No note")}</span><span class="lgo">Open</span></a><div class="tbar">${gp||`<span>${esc(p.addedAt?new Date(p.addedAt).toLocaleDateString("en-AU",{day:"numeric",month:"short"}):"")}</span>`}${rmb}</div></div>`}
+async function getPin(slug,i,btn){const msg=$("#a-upmsg"),l=listOf(slug,"vision"),p=l[i];if(!p||!p.url)return;const hs=window.homeStore;
+  const setItem=async ch=>{const cur=listOf(slug,"vision").slice(),k=cur.findIndex(x=>x.url===p.url&&x.addedAt===p.addedAt);if(k<0)return;cur[k]=Object.assign({},cur[k],ch);await saveArea(slug,withList(slug,"vision",cur))};
+  if(hs&&hs.pinImage){if(btn)btn.disabled=true;msg.textContent="Getting the picture from Pinterest…";
+    try{const b=await hs.pinImage(p.url);const r=await assets.upload(b,{type:b.type||"image/jpeg"});await setItem({id:r.id,pending:false});msg.textContent=""}
+    catch(e){msg.textContent="Couldn't get that picture. Check the link opens the pin, or save the image and upload it.";if(btn)btn.disabled=false}return}
+  const text=`Get the Pinterest picture for ${AMAP[slug]?AMAP[slug].name:slug} (${slug}) and add it to the inspiration link tile: ${p.url}`;
+  try{if(comments&&await comments.canSendToClaude()==="available"){if(btn)btn.disabled=true;await comments.sendToClaude({anchor:await comments.anchorFor(btn),text});await setItem({pending:true});msg.textContent="Asked Claude. The picture replaces the link tile when it's ready.";return}}
+  catch(err){if(btn)btn.disabled=false;if(err&&err.code==="rate_limited"){msg.textContent="Sent recently. Give it a moment before asking again.";return}}
+  try{await navigator.clipboard.writeText(text);msg.textContent="Claude can't be reached from here right now, so the request is copied. Paste it into the project chat."}
+  catch(_){msg.textContent="Paste this into the project chat: "+text}}
 function gallery(list,kind){
   if(!list.length)return `<div class="ghostdrop">${kind==="vision"?"No inspiration yet.":kind==="current"?"No current photos yet. Use the button above to add some.":kind==="after"?"No after photos yet.":"No images yet."}</div>`;
   return list.map((p,i)=>p.url?linkTile(p,kind,i):`<div class="tile"><img src="${blob(p.id)}" alt="${esc(p.caption||(kind==="current"?"Current photo":"Vision image"))}" loading="lazy" data-view="${kind}:${i}"><div class="tbar"><span>${esc(p.addedAt?new Date(p.addedAt).toLocaleDateString("en-AU",{day:"numeric",month:"short",year:"numeric"}):"")}</span>${assets?`<button type="button" data-rm="${kind}:${i}">Remove</button>`:""}</div></div>`).join("");
@@ -1293,7 +1306,9 @@ document.addEventListener("click",async e=>{
   const ot=e.target.closest("[data-otab]");if(ot&&curArea){try{localStorage.setItem("hd-otab-"+curArea,ot.dataset.otab)}catch(_){}renderArea();const nb=document.getElementById("otab-"+ot.dataset.otab);if(nb)nb.focus();return}
   if(e.target.id==="a-addlink"&&curArea){const d=adoc(curArea);openT("Add an inspiration link",[{k:"url",l:"Link",v:""},{k:"caption",l:"What you like about it (optional)",v:""}],
       async v=>{let u=String(v.url||"").trim();if(!u)throw "Paste a link first.";if(!/^https?:\/\//i.test(u))u="https://"+u;try{new URL(u)}catch(_){throw "That doesn't look like a web link."}
-        const l=listOf(curArea,"vision").concat([{url:u,caption:String(v.caption||"").trim(),addedAt:new Date().toISOString()}]);await saveArea(curArea,withList(curArea,"vision",l))});return}
+        const slug=curArea,l=listOf(slug,"vision").concat([{url:u,caption:String(v.caption||"").trim(),addedAt:new Date().toISOString()}]);await saveArea(slug,withList(slug,"vision",l));
+        if(isPin(u)&&window.homeStore&&window.homeStore.pinImage)setTimeout(()=>getPin(slug,l.length-1,null),0)});return}
+  const pg=e.target.closest("[data-pinget]");if(pg&&curArea){if(!pg.disabled)getPin(curArea,+pg.dataset.pinget,pg);return}
   const oc=e.target.closest("[data-ochoose]");if(oc&&curArea){const k=oc.dataset.ochoose,n=JSON.parse(JSON.stringify(adoc(curArea)));n.chosen=n.chosen===k?"":k;try{await saveArea(curArea,n)}catch(err){$("#a-upmsg").textContent="Couldn't save that. Try again."}return}
   const sp=e.target.closest("[data-step]");if(sp&&curArea){const f=sp.dataset.step,n=JSON.parse(JSON.stringify(adoc(curArea)));n[f]=!n[f];try{await saveArea(curArea,n)}catch(err){$("#a-upmsg").textContent="Couldn't save that. Try again."}return}
   const v=e.target.closest("[data-view]");if(v){const[k,i]=v.dataset.view.split(":");const p=listOf(curArea,k)[+i];if(p){$("#v-img").src=p.url||blob(p.id);$("#v-img").alt=p.caption||"";$("#v-cap").textContent=p.caption||"";$("#viewer").showModal()}return}
