@@ -193,6 +193,8 @@ td.r,th.r{text-align:right}
 .upopt{position:relative;overflow:hidden;display:block;padding:10px 12px;border-radius:7px;font-size:.92rem;cursor:pointer;color:var(--ink)}
 .upopt:hover,.upopt:focus-within{background:var(--sunk)}
 .upopt input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.pastehint{display:none}
+@media (hover:hover) and (pointer:fine){.pastehint{display:inline}}
 .uphint{display:none;padding:6px 12px 8px;font-size:.8rem;color:var(--muted);max-width:240px}
 @media (hover:hover) and (pointer:fine){.upopt.cam,.upopt.lib{display:none}.uphint{display:block}}
 .checks{display:grid;gap:10px;max-height:260px;overflow:auto;border:1px solid var(--line);border-radius:8px;padding:10px;background:var(--bg)}
@@ -1175,9 +1177,9 @@ function renderArea(){
     ${w?`<form class="fadd" id="fadd"><input id="fadd-t" maxlength="200" placeholder="Add something" aria-label="Add something, then pick tick, dash or cross"><button type="submit" class="face like" data-fadd="like" aria-label="Add as a like">${faceSvg("like")}</button><button type="submit" class="face neutral" data-fadd="neutral" aria-label="Add as neutral">${faceSvg("neutral")}</button><button type="submit" class="face dislike" data-fadd="dislike" aria-label="Add as a dislike">${faceSvg("dislike")}</button></form>`:""}</aside>`;
   const up=(kind,label,id)=>assets?`<details class="upmenu"><summary class="btn ghost">${label}</summary><div class="upopts"><label class="upopt cam">Take a photo<input type="file" data-up="${kind}" accept="image/*" capture="environment"></label><label class="upopt lib">Choose from photos<input type="file"${id?` id="${id}"`:""} data-up="${kind}" accept="image/*" multiple></label><label class="upopt">Upload from files<input type="file" data-up="${kind}" accept="image/*,.heic,.heif" multiple></label><span class="uphint">On a Mac, click Photos in the left sidebar of the window that opens to pick from your photo library.</span></div></details>`:"";
   let ip="";
-  if(it==="before")ip=`<div class="ihead"><p class="note">Wide shots from each doorway or corner, plus close-ups of anything worn, broken or dated. Daylight is best.</p>${up("current","Add current photos","up-current")}</div><div class="iwrap"><div style="min-width:0"><div class="gallery">${gallery(p.current,"current")}</div></div>${feelBox}</div>`;
-  else if(it==="inspiration")ip=`<div class="ihead"><p class="note">Paste a link to a Pinterest pin or any page you like. On Pinterest, open the pin, tap Share, then Copy link.</p><div style="display:flex;gap:8px;flex-wrap:wrap">${w?`<button type="button" class="btn ghost" id="a-addlink">Add a link</button>`:""}${up("vision","Upload a picture","up-vision")}</div></div><div class="iwrap"><div style="min-width:0"><div class="gallery sm">${gallery(p.vision,"vision")}</div></div>${feelBox}</div>`;
-  else if(it==="after")ip=`<div class="ihead"><p class="note">Photos once the work is done, from the same spots as the Before photos, so you can compare and use them for the listing.</p>${up("after","Add after photos","")}</div><div class="iwrap"><div style="min-width:0"><div class="gallery">${gallery(listOf(a.slug,"after"),"after")}</div></div>${feelBox}</div>`;
+  if(it==="before")ip=`<div class="ihead"><p class="note">Wide shots from each doorway or corner, plus close-ups of anything worn, broken or dated. Daylight is best.${assets?`<span class="pastehint"> You can also copy a picture or screenshot and paste it here with Cmd+V.</span>`:""}</p>${up("current","Add current photos","up-current")}</div><div class="iwrap"><div style="min-width:0"><div class="gallery">${gallery(p.current,"current")}</div></div>${feelBox}</div>`;
+  else if(it==="inspiration")ip=`<div class="ihead"><p class="note">Paste a link to a Pinterest pin or any page you like. On Pinterest, open the pin, tap Share, then Copy link.${assets?`<span class="pastehint"> You can also copy a picture or screenshot and paste it here with Cmd+V.</span>`:""}</p><div style="display:flex;gap:8px;flex-wrap:wrap">${w?`<button type="button" class="btn ghost" id="a-addlink">Add a link</button>`:""}${up("vision","Upload a picture","up-vision")}</div></div><div class="iwrap"><div style="min-width:0"><div class="gallery sm">${gallery(p.vision,"vision")}</div></div>${feelBox}</div>`;
+  else if(it==="after")ip=`<div class="ihead"><p class="note">Photos once the work is done, from the same spots as the Before photos, so you can compare and use them for the listing.${assets?`<span class="pastehint"> You can also copy a picture or screenshot and paste it here with Cmd+V.</span>`:""}</p>${up("after","Add after photos","")}</div><div class="iwrap"><div style="min-width:0"><div class="gallery">${gallery(listOf(a.slug,"after"),"after")}</div></div>${feelBox}</div>`;
   else{
     const tabKey="hd-otab-"+a.slug;let cur=ch||"low";try{cur=localStorage.getItem(tabKey)||cur}catch(_){}if(!LVL[cur])cur="low";
     const [k,l,blurb]=LVL[cur],o=optOf(a.slug,cur),sel=ch===k,key=Array.isArray(o.items)?o.items.filter(Boolean):[],imgs=listOf(a.slug,"opt-"+k);
@@ -1241,6 +1243,13 @@ async function addPhotos(kind,files){
   msg.textContent=failed?`${added.length} added. ${failed} couldn't be read or uploaded; save them as JPEG and try again.`:`${added.length} added.`;
 }
 document.addEventListener("change",e=>{const u=e.target.closest("input[data-up]");if(u){const m=u.closest("details.upmenu");if(m)m.open=false;addPhotos(u.dataset.up,[...u.files]);u.value=""}});
+document.addEventListener("paste",e=>{if(!curArea||!assets||!acol||location.hash!=="#area-"+curArea)return;
+  const t=e.target;if(t&&t.closest&&t.closest("input,textarea,[contenteditable],dialog[open]"))return;
+  const fs=[...(e.clipboardData&&e.clipboardData.files||[])].filter(f=>/^image\//.test(f.type));if(!fs.length)return;
+  let it="before";try{it=localStorage.getItem("hd-itab-"+curArea)||it}catch(_){}
+  const kind={before:"current",inspiration:"vision",after:"after"}[it];
+  if(!kind){$("#a-upmsg").textContent="Open the Before, Inspiration or After tab, then paste.";return}
+  e.preventDefault();addPhotos(kind,fs.map((f,i)=>new File([f],(fs.length>1?"Pasted picture "+(i+1):"Pasted picture")+"."+(f.type.split("/")[1]||"png"),{type:f.type})))});
 document.addEventListener("click",e=>{document.querySelectorAll("details.upmenu[open]").forEach(m=>{if(!m.contains(e.target))m.open=false})});
 
 function planText(a,d){if(d.plan)return d.plan;return [d.ivSummary||"",d.ivSummary?"":(d.now||a.now||""),d.ivSummary?"":(d.sale||a.sale||"")].filter(Boolean).join(" ")}
