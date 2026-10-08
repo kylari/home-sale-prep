@@ -313,11 +313,19 @@ dialog .full{grid-column:1/-1}
 .tcost .est{display:block}
 .tcost .act{display:block;color:var(--ok)}
 .tcost .act.over{color:var(--crit);font-weight:700}
-.tmain{min-width:0}
-/* phone: number and title across the top, details below, status and estimate stacked on the right */
-@media (max-width:640px){.trow{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"name name" "meta pill" "meta cost";gap:6px 12px}
-.trow .tmain{display:contents}.trow .tname{grid-area:name}.trow .tmeta{grid-area:meta;margin-top:0;align-self:start}
-.trow .pill{grid-area:pill;justify-self:end}.trow .tcost{grid-area:cost;align-self:start;font-size:.76rem}}
+/* task rows: number and title across the top, details below, due month with status icon and estimates on the right */
+.trow{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"name side" "meta side";gap:4px 14px}
+.trow .tname{grid-area:name}.trow .tmeta{grid-area:meta}
+.tside{grid-area:side;display:grid;gap:3px;justify-items:end;align-content:start}
+.tdue{display:flex;align-items:center;gap:6px;font-size:.8rem;color:var(--muted);white-space:nowrap}
+.tside .tcost{display:flex;gap:10px;font-size:.76rem}
+.mone{display:inline-flex;align-items:center;white-space:nowrap}.mone .mi{margin-right:.25em}
+.sbtn{display:inline-grid;place-items:center;width:30px;height:30px;margin:-4px -6px -4px 0;padding:0;border:0;background:none;border-radius:50%;cursor:pointer}
+.sbtn:focus-visible{outline:2px solid var(--accent);outline-offset:0}
+.sti{width:22px;height:22px}
+.sbtn.s-todo,.sbtn.s-dropped{background:none;border:0;text-decoration:none}.sbtn.s-todo{color:var(--muted)}.sbtn.s-doing{background:none;color:var(--warn)}.sbtn.s-done{background:none;color:var(--ok)}.sbtn.s-dropped{color:var(--muted)}
+.skey{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:center;margin:0;font-size:.8rem;color:var(--muted)}.ski{display:inline-flex;align-items:center}.skey .sbtn{width:auto;height:auto;margin:0 4px 0 0;cursor:default}.skey .sti{width:16px;height:16px}
+@media (max-width:640px){.trow{grid-template-areas:"name name" "meta side"}}
 .grp{display:grid;gap:8px}
 #tsum td,#tsum th{white-space:nowrap}
 #tsum tfoot td{font-weight:700;background:var(--sunk)}
@@ -501,6 +509,7 @@ dialog .full{grid-column:1/-1}
       <input id="f-q" type="search" placeholder="Search tasks" aria-label="Search tasks">
     </div>
     <div id="dbstate" class="banner" hidden></div>
+    <p class="skey" id="skey" aria-label="Status key"></p>
     <div id="tasklist" style="display:grid;gap:18px"><div class="empty">Loading your task list…</div></div>
     <p class="note">Tap a status to move it along (to do, in progress, done). Tap a task name to edit costs, time, materials, quotes and notes. A red actual means it went over the high estimate. Cost ranges are rough guides for Brisbane in 2026 and need confirming with quotes.</p>
   </div>
@@ -1014,19 +1023,28 @@ function filtered(){
     &&(!q||(/^\d+$/.test(qn)?String(t.num||"")===qn:(t.title+" "+(t.notes||"")+" "+aname(t.area)+" "+tagsOf(t).join(" ")).toLowerCase().includes(q))))
    .sort((x,y)=>(x.due||"9999").localeCompare(y.due||"9999")||(+x.num||0)-(+y.num||0));
 }
+const STI={todo:'<circle cx="12" cy="12" r="9"/>',
+ doing:'<circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/>',
+ done:'<circle cx="12" cy="12" r="10" fill="currentColor" stroke="none"/><path d="m7.5 12.5 3 3 6-6.5" stroke="var(--surface)" stroke-width="2.4"/>',
+ dropped:'<circle cx="12" cy="12" r="9"/><path d="m5.7 5.7 12.6 12.6"/>'};
+const stIcon=s=>`<svg class="sti" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${STI[s]||STI.todo}</svg>`;
+const ICLOCK='<svg class="svi mi" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>';
+const IMONEY='<svg class="svi mi" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>';
 function row(t,hideArea){
   const nm=nowMonth();const over=t.due&&t.due<nm&&open(t);
   const lo=estLo(t),hi=estHi(t);
-  const cost=(hi||lo)?"Est "+(lo==hi?kmoney(lo):kmoney(lo)+" to "+kmoney(hi)):"No estimate";
+  const cost=(hi||lo)?`<span class="mone" title="Cost estimate">${IMONEY}${lo==hi?kmoney(lo):kmoney(lo)+" to "+kmoney(hi)}</span>`:"";
   const hiC=hi;
   const act=+t.actual?`<span class="act${+t.actual>hiC?" over":""}">Actual ${kmoney(+t.actual)}</span>`:(t.status==="done"?`<span class="act">Actual $0</span>`:"");
-  const hrs=(+t.estHours||+t.actHours)?`<span>${+t.estHours?(+t.estHours)+"h est":""}${+t.estHours&&+t.actHours?", ":""}${+t.actHours?(+t.actHours)+"h actual":""}</span>`:"";
+  const hrs=(+t.estHours||+t.actHours)?`<span class="mone" title="Time estimate">${ICLOCK}${+t.estHours?(+t.estHours)+"h":""}${+t.estHours&&+t.actHours?", ":""}${+t.actHours?(+t.actHours)+"h actual":""}</span>`:"";
   const area=hideArea?"":(AMAP[t.area]?`<a class="alink" href="#area-${t.area}">${esc(aname(t.area))}</a>`:`<span>${esc(aname(t.area))}</span>`);
-  return `<div class="trow ${t.status}"><button type="button" class="pill s-${t.status}" data-cycle="${esc(t.id)}" aria-label="Status ${STATUS[t.status]}, tap to change">${STATUS[t.status]}</button>
-  <div class="tmain"><button type="button" class="tname" data-edit="${esc(t.id)}">${t.num?`<span class="tnum">#${t.num}</span>`:""}${esc(t.title)}</button>
-  <div class="tmeta"><span class="tag t-${t.tier}">${TIERS[t.tier]||""}</span>${t.type?`<span class="ttype">${esc(t.type)}</span>`:""}${area}<span>${esc(t.who)}</span>${hrs}${tagsOf(t).length?`<span class="ttags">${esc(tagsOf(t).join(", "))}</span>`:""}${t.repeat&&REPEAT[t.repeat]?`<span>${esc(REPEAT[t.repeat])}</span>`:""}${cidsOf(t).map(contactName).filter(Boolean).length?`<span>${esc(cidsOf(t).map(contactName).filter(Boolean).join(", "))}</span>`:""}${(t.quotes||[]).length?`<span>${t.quotes.length} quote${t.quotes.length>1?"s":""}</span>`:""}${open(t)&&blockers(t).length?`<span class="tag t-wait" title="Waits on: ${esc(blockers(t).map(b=>b.title).join("; "))}">Waits on ${blockers(t).length}</span>`:""}<span class="${over?"overdue":""}">${over?"Overdue, ":""}${monthLabel(t.due)}</span></div></div>
-  <div class="tcost"><span class="est">${cost}</span>${act}</div></div>`;
+  return `<div class="trow ${t.status}">
+  <button type="button" class="tname" data-edit="${esc(t.id)}">${t.num?`<span class="tnum">${String(+t.num||0).padStart(3,"0")}</span>`:""}${esc(t.title)}</button>
+  <div class="tmeta"><span class="tag t-${t.tier}">${TIERS[t.tier]||""}</span>${t.type?`<span class="ttype">${esc(t.type)}</span>`:""}${area}<span>${esc(t.who)}</span>${tagsOf(t).length?`<span class="ttags">${esc(tagsOf(t).join(", "))}</span>`:""}${t.repeat&&REPEAT[t.repeat]?`<span>${esc(REPEAT[t.repeat])}</span>`:""}${cidsOf(t).map(contactName).filter(Boolean).length?`<span>${esc(cidsOf(t).map(contactName).filter(Boolean).join(", "))}</span>`:""}${(t.quotes||[]).length?`<span>${t.quotes.length} quote${t.quotes.length>1?"s":""}</span>`:""}${open(t)&&blockers(t).length?`<span class="tag t-wait" title="Waits on: ${esc(blockers(t).map(b=>b.title).join("; "))}">Waits on ${blockers(t).length}</span>`:""}</div>
+  <div class="tside"><div class="tdue"><span class="${over?"overdue":""}">${over?"Overdue, ":""}${monthLabel(t.due)}</span><button type="button" class="sbtn s-${t.status}" data-cycle="${esc(t.id)}" title="${STATUS[t.status]}" aria-label="Status ${STATUS[t.status]}, tap to change">${stIcon(t.status)}</button></div>
+  ${hrs||cost?`<div class="tcost">${hrs}${cost}</div>`:""}${act?`<div class="tcost">${act}</div>`:""}</div></div>`;
 }
+{const sk=document.getElementById("skey");if(sk)sk.innerHTML=["todo","doing","done","dropped"].map(k=>`<span class="ski"><span class="sbtn s-${k}">${stIcon(k)}</span>${STATUS[k]}</span>`).join("");}
 function photosOf(slug){const d=areaDocs[slug]||{};return {vision:Array.isArray(d.vision)?d.vision:[],current:Array.isArray(d.current)?d.current:[]}}
 const adoc=slug=>areaDocs[slug]||{};
 const optOf=(slug,k)=>(adoc(slug).options||{})[k]||{};
