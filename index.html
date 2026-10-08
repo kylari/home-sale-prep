@@ -816,7 +816,7 @@ dialog .full{grid-column:1/-1}
     </div>
     <p class="note" id="e-msg" role="status"></p>
     <div class="factions">
-      <div><button type="button" class="btn ghost" id="e-del">Delete</button><button type="button" class="btn danger" id="e-delyes" hidden>Yes, delete it</button></div>
+      <div><button type="button" class="btn ghost" id="e-del">Delete</button><button type="button" class="btn ghost" id="e-dup">Duplicate</button><button type="button" class="btn danger" id="e-delyes" hidden>Yes, delete it</button></div>
       <div><button type="button" class="btn ghost" id="e-cancel">Cancel</button><button type="submit" class="btn" id="e-save">Save</button></div>
     </div>
   </form>
@@ -845,7 +845,7 @@ dialog .full{grid-column:1/-1}
     <div class="secthead"><span class="eyebrow" id="dt-num"></span><button type="button" class="btn ghost" id="dt-close">Close</button></div>
     <h3 id="dt-title"></h3>
     <div id="dt-body" style="display:grid;gap:12px"></div>
-    <div class="factions"><div></div><div><button type="button" class="btn" id="dt-edit">Edit task</button></div></div>
+    <div class="factions"><div><button type="button" class="btn ghost" id="dt-dup">Duplicate</button></div><div><button type="button" class="btn" id="dt-edit">Edit task</button></div></div>
   </div>
 </dialog>
 <dialog id="tdlg" aria-labelledby="tt-title">
@@ -1305,8 +1305,8 @@ document.addEventListener("keydown",e=>{const t=e.target.closest&&e.target.close
 let armed=null;
 document.addEventListener("click",async e=>{
   const c=e.target.closest("[data-cycle]");
-  if(c){const t=tasks.find(x=>x.id===c.dataset.cycle);if(!t||!col)return;const ns=NEXT[t.status]||"todo";t.status=ns;render();
-    try{await col.doc(t.id).update({status:ns,updatedAt:new Date().toISOString()});if(ns==="done")await maybeRepeat(t)}catch(err){showState("That change didn't save. Check your connection and try again.")}return}
+  if(c){const t=tasks.find(x=>x.id===c.dataset.cycle);if(!t||!col)return;const ns=NEXT[t.status]||"todo";const sd=stDates(t,ns);t.status=ns;Object.assign(t,sd);render();
+    try{await col.doc(t.id).update(Object.assign({status:ns,updatedAt:new Date().toISOString()},sd));if(ns==="done")await maybeRepeat(t)}catch(err){showState("That change didn't save. Check your connection and try again.")}return}
   const rc=e.target.closest("[data-rec]");if(rc){const[k,id]=rc.dataset.rec.split(":");openRec(k,id||null);return}
   const ohr=e.target.closest("[data-ohrm]");if(ohr){e.preventDefault();const it=ohItems().slice();it.splice(+ohr.dataset.ohrm,1);saveOh(it);return}
   const cx=e.target.closest("[data-cx]");if(cx){edContacts=edContacts.filter(x=>x!==cx.dataset.cx);renderCChips();return}
@@ -1462,7 +1462,7 @@ function openDetail(id){
   const tb=(rows,kind)=>`<div class="tablewrap"><table><thead><tr><th>${kind==="mats"?"Material":"Tool"}</th>${kind==="mats"?"<th>Qty</th>":""}<th></th><th class="r">To buy</th></tr></thead><tbody>${rows.map(i=>`<tr><td>${esc(i.name)}</td>${kind==="mats"?`<td>${esc(i.qty||"")}</td>`:""}<td>${i.have?'<span class="tag t-have">Have it</span>':'<span class="tag t-need">Buy</span>'}</td><td class="r num">${!i.have&&i.cost?money(i.cost):""}</td></tr>`).join("")}</tbody></table></div>`;
   const bl=blockers(t),afterAll=(Array.isArray(t.after)?t.after:[]).map(i=>tasks.find(x=>x.id===i)).filter(Boolean);
   const buy=buyOf(t),lo=estLo(t),hi=estHi(t);
-  let h=`<div class="tmeta" style="font-size:.85rem"><span class="pill s-${t.status}" style="cursor:default">${STATUS[t.status]}</span><span class="tag t-${t.tier}">${TIERS[t.tier]||""}</span>${t.type?`<span class="ttype">${esc(t.type)}</span>`:""}<a class="alink" href="#area-${esc(t.area)}">${esc(aname(t.area))}</a><span>${esc(t.who)}</span><span>Due ${monthLabel(t.due)}</span>${t.repeat&&REPEAT[t.repeat]?`<span>${REPEAT[t.repeat]}</span>`:""}${tagsOf(t).length?`<span class="ttags">${esc(tagsOf(t).join(", "))}</span>`:""}</div>`;
+  let h=`<div class="tmeta" style="font-size:.85rem"><span class="pill s-${t.status}" style="cursor:default">${STATUS[t.status]}</span><span class="tag t-${t.tier}">${TIERS[t.tier]||""}</span>${t.type?`<span class="ttype">${esc(t.type)}</span>`:""}<a class="alink" href="#area-${esc(t.area)}">${esc(aname(t.area))}</a><span>${esc(t.who)}</span><span>Due ${monthLabel(t.due)}</span>${t.startedAt?`<span>Started ${dayLabel(t.startedAt)}</span>`:""}${t.doneAt?`<span>Done ${dayLabel(t.doneAt)}</span>`:""}${t.repeat&&REPEAT[t.repeat]?`<span>${REPEAT[t.repeat]}</span>`:""}${tagsOf(t).length?`<span class="ttags">${esc(tagsOf(t).join(", "))}</span>`:""}</div>`;
   h+=`<div class="dsec"><h4>Cost and time</h4><div class="tablewrap"><table><tbody>
     ${buy?`<tr><td>Tools and materials to buy</td><td class="r num">${money(buy)}</td></tr><tr><td>Other costs</td><td class="r num">${+t.costLow==+(t.costHigh||t.costLow)?money(+t.costLow||0):money(+t.costLow||0)+" to "+money(+t.costHigh||0)}</td></tr>`:""}
     <tr><td><b>Estimate</b></td><td class="r num"><b>${lo==hi?money(lo):money(lo)+" to "+money(hi)}</b></td></tr>
@@ -1476,12 +1476,28 @@ function openDetail(id){
       ${items(t,"links").length?`<div style="display:grid;gap:4px">${items(t,"links").map(l=>`<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.title||l.url)}</a>`).join("")}</div>`:""}
       ${t.steps?`<ol style="margin:0;padding-left:1.2em;display:grid;gap:4px">${t.steps.split(/\n+/).filter(x=>x.trim()).map(x=>`<li>${esc(x.replace(/^\s*\d+[.)]\s*/,""))}</li>`).join("")}</ol>`:""}</div>`}
   if(t.notes)h+=`<div class="dsec"><h4>Notes</h4><p class="pre">${esc(t.notes)}</p></div>`;
-  $("#dt-body").innerHTML=h;$("#dt-edit").hidden=!col;
+  $("#dt-body").innerHTML=h;$("#dt-edit").hidden=!col;$("#dt-dup").hidden=!col;
   if(!ddlg.open)ddlg.showModal();
 }
 $("#dt-close").addEventListener("click",()=>ddlg.close());
 $("#dt-edit").addEventListener("click",()=>{const id=detailId;ddlg.close();openEditor(id)});
+$("#dt-dup").addEventListener("click",()=>{const id=detailId;ddlg.close();dupTask(id)});
+$("#e-dup").addEventListener("click",()=>{const id=editingId;if(!id)return;dlg.close();dupTask(id)});
 
+/* started and done dates: set when a task moves forward, cleared when it moves back */
+const todayISO=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+function stDates(old,ns){const d=todayISO(),sa=old.startedAt||"",da=old.doneAt||"";
+  if(ns==="todo")return {startedAt:"",doneAt:""};
+  if(ns==="doing")return {startedAt:sa||d,doneAt:""};
+  if(ns==="done")return {startedAt:sa||d,doneAt:da||d};
+  return {startedAt:sa,doneAt:""}}
+const dayLabel=x=>{if(!x)return"";const[y,m,dd]=x.split("-").map(Number);return new Date(y,m-1,dd).toLocaleDateString("en-AU",{day:"numeric",month:"short",year:"numeric"})};
+async function dupTask(id){const t=tasks.find(x=>x.id===id);if(!t||!col)return;
+  const c=JSON.parse(JSON.stringify(t));delete c.id;
+  Object.assign(c,{num:nextNum(),status:"todo",startedAt:"",doneAt:"",actual:0,actHours:0,nextMade:false,updatedAt:new Date().toISOString()});
+  try{const ref=await col.add(c);for(let i=0;i<30&&!tasks.some(x=>x.id===ref.id);i++)await new Promise(r=>setTimeout(r,100));
+    if(tasks.some(x=>x.id===ref.id))openEditor(ref.id);showState("")}
+  catch(_){showState("The copy didn't save. Check your connection and try again.")}}
 async function maybeRepeat(t){
   const k=+t.repeat;if(!k||t.nextMade||!col)return;
   const due=addMonth(t.due||nowMonth(),k);if(due>"2028-12")return;
@@ -1545,7 +1561,7 @@ $("#e-who").addEventListener("change",diyVis);
 function openEditor(id,presetArea,presetType){
   if(!col){showState("Editing needs the saved task list, which isn't available in this view.");return}
   editingId=id;const t=tasks.find(x=>x.id===id)||{title:"",area:presetArea||"general",type:presetType||"Repair",tier:"must",who:"DIY",status:"todo",due:nowMonth(),costLow:"",costHigh:"",actual:"",notes:""};
-  $("#ed-title").textContent=id?"Edit task":"Add task";
+  $("#ed-title").textContent=id?"Edit task":"Add task";$("#e-dup").hidden=!id;
   $("#e-areas-multi").hidden=!!id;$("#e-area-single").hidden=!id;
   document.querySelectorAll("#e-checks input").forEach(i=>i.checked=!id&&i.value===(presetArea||""));
   if(id)$("#e-area").value=AMAP[t.area]?t.area:"general";
@@ -1641,8 +1657,8 @@ $("#edform").addEventListener("submit",async e=>{
   $("#e-save").disabled=true;
   try{
     const n0=nextNum();
-    if(editingId){await col.doc(editingId).update(Object.assign({area:targets[0]},base));const old=tasks.find(x=>x.id===editingId)||{};if(base.status==="done")await maybeRepeat(Object.assign({},old,base,{id:editingId,area:targets[0]}))}
-    else{for(let i=0;i<targets.length;i++){$("#e-msg").textContent=targets.length>1?`Adding ${i+1} of ${targets.length}…`:"";await col.add(Object.assign({area:targets[i],num:n0+i},base))}}
+    if(editingId){const old=tasks.find(x=>x.id===editingId)||{};const sd=old.status!==base.status?stDates(old,base.status):{};await col.doc(editingId).update(Object.assign({area:targets[0]},base,sd));if(base.status==="done")await maybeRepeat(Object.assign({},old,base,{id:editingId,area:targets[0]}))}
+    else{const sd=stDates({},base.status);for(let i=0;i<targets.length;i++){$("#e-msg").textContent=targets.length>1?`Adding ${i+1} of ${targets.length}…`:"";await col.add(Object.assign({area:targets[i],num:n0+i},base,sd))}}
     dlg.close();
   }catch(err){$("#e-msg").textContent="Couldn't save everything. Check the list, then try again for anything missing."}
   finally{$("#e-save").disabled=false}
