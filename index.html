@@ -313,6 +313,11 @@ dialog .full{grid-column:1/-1}
 .tcost .est{display:block}
 .tcost .act{display:block;color:var(--ok)}
 .tcost .act.over{color:var(--crit);font-weight:700}
+.tmain{min-width:0}
+/* phone: number and title across the top, details below, status and estimate stacked on the right */
+@media (max-width:640px){.trow{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"name name" "meta pill" "meta cost";gap:6px 12px}
+.trow .tmain{display:contents}.trow .tname{grid-area:name}.trow .tmeta{grid-area:meta;margin-top:0;align-self:start}
+.trow .pill{grid-area:pill;justify-self:end}.trow .tcost{grid-area:cost;align-self:start;font-size:.76rem}}
 .grp{display:grid;gap:8px}
 #tsum td,#tsum th{white-space:nowrap}
 #tsum tfoot td{font-weight:700;background:var(--sunk)}
@@ -1018,7 +1023,7 @@ function row(t,hideArea){
   const hrs=(+t.estHours||+t.actHours)?`<span>${+t.estHours?(+t.estHours)+"h est":""}${+t.estHours&&+t.actHours?", ":""}${+t.actHours?(+t.actHours)+"h actual":""}</span>`:"";
   const area=hideArea?"":(AMAP[t.area]?`<a class="alink" href="#area-${t.area}">${esc(aname(t.area))}</a>`:`<span>${esc(aname(t.area))}</span>`);
   return `<div class="trow ${t.status}"><button type="button" class="pill s-${t.status}" data-cycle="${esc(t.id)}" aria-label="Status ${STATUS[t.status]}, tap to change">${STATUS[t.status]}</button>
-  <div style="min-width:0"><button type="button" class="tname" data-edit="${esc(t.id)}">${t.num?`<span class="tnum">#${t.num}</span>`:""}${esc(t.title)}</button>
+  <div class="tmain"><button type="button" class="tname" data-edit="${esc(t.id)}">${t.num?`<span class="tnum">#${t.num}</span>`:""}${esc(t.title)}</button>
   <div class="tmeta"><span class="tag t-${t.tier}">${TIERS[t.tier]||""}</span>${t.type?`<span class="ttype">${esc(t.type)}</span>`:""}${area}<span>${esc(t.who)}</span>${hrs}${tagsOf(t).length?`<span class="ttags">${esc(tagsOf(t).join(", "))}</span>`:""}${t.repeat&&REPEAT[t.repeat]?`<span>${esc(REPEAT[t.repeat])}</span>`:""}${cidsOf(t).map(contactName).filter(Boolean).length?`<span>${esc(cidsOf(t).map(contactName).filter(Boolean).join(", "))}</span>`:""}${(t.quotes||[]).length?`<span>${t.quotes.length} quote${t.quotes.length>1?"s":""}</span>`:""}${open(t)&&blockers(t).length?`<span class="tag t-wait" title="Waits on: ${esc(blockers(t).map(b=>b.title).join("; "))}">Waits on ${blockers(t).length}</span>`:""}<span class="${over?"overdue":""}">${over?"Overdue, ":""}${monthLabel(t.due)}</span></div></div>
   <div class="tcost"><span class="est">${cost}</span>${act}</div></div>`;
 }
