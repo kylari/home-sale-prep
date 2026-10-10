@@ -15,6 +15,8 @@ JavaScript with no build step.
 | Hostinger | Serves the site at https://home.sabav2v.com behind a Hostinger password, and pulls updates from this repo |
 | `.github/workflows/backup.yml` | Every 3 days, copies every table into `backups/` and commits it. This also stops the free Supabase project from pausing. |
 | `db/migrations/` | Every change made to the database, in order |
+| `scripts/port_from_artifact.py` | Turns a saved copy of the Claude page into `index.html`, putting the website's extras back in. See `MOVING.md`. |
+| `db/migrate_from_artifact.py` | Turns the Claude page's exported data into one SQL file that replaces the website's data. |
 | `seed/initial-data.json` | The data copied from the first version of the page. Loaded once, the first time the app opens on an empty database. |
 
 ## Who did what

@@ -1,0 +1,7 @@
+.whoami{margin-left:auto;font-size:.82rem;color:var(--muted)}
+.whoami button{font:inherit;color:var(--accent);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline}
+.hist{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.hist li{padding:10px 0;border-top:1px solid var(--line)}
+.hist li:first-child{border-top:0}
+.hist .when{color:var(--muted);font-size:.82rem}
+.hist .chg{color:var(--muted);font-size:.85rem}
