@@ -23,11 +23,15 @@
       ["expires","expires"],["notes","notes"],["files","files","json"]],
     finishes: [["area","area","nullable"],["item","item"],["product","product"],["code","code"],["sheen","sheen"],["supplier","supplier"]],
     checklists: [["items","items","json"]],
+    // Furniture and decor
+    items: [["area","area","nullable"],["name","name"],["category","category"],["action","action"],["toArea","to_area"],
+      ["status","status"],["ok","ok","bool"],["task","task"],["cost","cost"],["value","value"],["perMonth","per_month"],
+      ["notes","notes"],["photo","photo","json"]],
     // Room page details, stored on the areas table
     areas: [["descAgreed","desc_agreed","bool"],["tasksAgreed","tasks_agreed","bool"],["chosen","chosen","nullable"],
       ["choiceNotes","choice_notes"],["options","options","json"],["current","current_photos","json"],["inspiration","inspiration","json"]]
   };
-  const KEY = { tasks: "id", contacts: "id", documents: "id", finishes: "id", checklists: "id", areas: "slug" };
+  const KEY = { tasks: "id", contacts: "id", documents: "id", finishes: "id", checklists: "id", areas: "slug", items: "id" };
   const UUID_KEYS = { contacts: 1, finishes: 1 };
   const SKIP = new Set(["id", "updatedAt", "createdAt", "updatedBy", "createdBy"]);
 
